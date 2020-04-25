@@ -1,5 +1,6 @@
 import React, {FC, useState} from 'react'
 import {LoginModel} from "../shared/interface";
+import {FormInput} from "../shared/utils/FormInput";
 
 
 export const LoginPage: FC = () => {
@@ -24,34 +25,19 @@ export const LoginPage: FC = () => {
 
 
     return (
-        <form>
-            <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input
-                    onChange={changeHandler}
-                    value={form.email}
-                    name="email"
-                    placeholder="Email"
-                    className="form-control item"
-                    type="email"/>
+        <>
+            <div className="block-heading">
+                <h2 className="text-info">Вход</h2>
+                <p>Пожауйста войдите в систему</p>
             </div>
-            <div className="form-group">
-                <label htmlFor="password">
-                    Password
-                </label>
-                <input
-                    onChange={changeHandler}
-                    name="password"
-                    placeholder="Password"
-                    type="password"
-                    value={form.password}
-                    className="form-control"
-                />
-            </div>
-            <button
-                onSubmit={loginHandler}
-                className="btn btn-primary btn-block" type="submit">Log In
-            </button>
-        </form>
+            <form>
+                <FormInput onChange={changeHandler} name={"email"} formValue={form.email}/>
+                <FormInput onChange={changeHandler} type={"password"} name={"password"} formValue={form.password}/>
+                <button
+                    onSubmit={loginHandler}
+                    className="btn btn-primary btn-block" type="submit">Log In
+                </button>
+            </form>
+        </>
     )
 }

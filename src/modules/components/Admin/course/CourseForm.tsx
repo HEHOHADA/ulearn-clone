@@ -3,7 +3,6 @@ import {FormInput} from "../../../shared/utils/FormInput"
 import {ICourse} from "../../../shared/interface"
 import {Textarea} from "../../../shared/utils/Textarea"
 import {SelectInput} from "../../../shared/utils/SelectInput"
-import {defaultSubscriptionFormValues} from "./SubscriptionForm";
 
 export const defaultCourseValue = {
     name: "",

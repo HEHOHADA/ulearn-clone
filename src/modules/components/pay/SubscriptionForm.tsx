@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
-import {ISubscription} from "../../../shared/interface";
-import {FormInput} from "../../../shared/utils/FormInput";
+import {ISubscription} from "../../shared/interface";
+import {FormInput} from "../../shared/utils/FormInput";
 
 
 interface Props {

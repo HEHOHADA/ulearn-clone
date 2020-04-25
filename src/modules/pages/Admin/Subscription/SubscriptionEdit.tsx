@@ -1,6 +1,6 @@
 import React from 'react'
 // import {useHistory, useParams} from 'react-router-dom'
-import {defaultSubscriptionFormValues, SubscriptionForm} from "../shared/SubscriptionForm";
+import {defaultSubscriptionFormValues, SubscriptionForm} from "../../../components/pay/SubscriptionForm";
 
 export const SubscriptionEdit = () => {
 

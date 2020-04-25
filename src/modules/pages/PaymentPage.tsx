@@ -2,9 +2,6 @@ import React from 'react'
 
 export const PaymentPage = () => {
 
-
-
-
     return (
         <main className="page payment-page">
             <section className="clean-block payment-form dark">
