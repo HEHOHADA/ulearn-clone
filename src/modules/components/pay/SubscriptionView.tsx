@@ -9,7 +9,6 @@ interface Props {
 
 
 export const SubscriptionView = (props: Props) => {
-
     const {onClick, text} = props
 
     const subscriptionHandler = () => {

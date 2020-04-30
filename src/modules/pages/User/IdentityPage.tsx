@@ -37,7 +37,7 @@ export const IdentityPage = () => {
                 <div className="row mb-3">
                     <div className="col-lg-4">
                         <div className="card mb-3">
-                            <div className="card-body text-center shadow"><img className="rounded-circle mb-3 mt-4"
+                            <div className="card-body text-center shadow"><img alt="/" className="rounded-circle mb-3 mt-4"
                                                                                width="160"
                                                                                height="160"/>
                                 <div className="mb-3">
