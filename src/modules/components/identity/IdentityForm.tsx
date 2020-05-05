@@ -1,36 +1,36 @@
-import React, {useState} from 'react'
+import React from 'react'
 import {FormInput} from "../../shared/utils/FormInput";
+import {useForm} from "../../hooks/form.hook";
+import {ObjectKeys} from "../../shared/interface";
+import {getKeyValue} from "../../shared/utils/getKeyValue";
 
 interface Props {
     formNames: Array<string>
 }
 
+
 export const IdentityForm = (props: Props) => {
 
     const {formNames} = props
 
-    const initialValues = formNames.reduce(function (result, item) {
-        // @ts-ignore
+    const initialValues = formNames.reduce(function (result: ObjectKeys, item: string) {
         result[item] = ''
         return result
     }, {})
 
-    const [form, setForm] = useState<any>(initialValues)
 
-    const changeHandler = (event: any) => {
-        setForm({...form, [event.target.name]: event.target.value})
-    }
-
+    const {form, changeHandler} = useForm(initialValues)
 
 
     return (
         <div className="card-body">
-            <form onSubmit={()=>{
+            <form onSubmit={() => {
 
             }}>
                 {formNames.map((formValue, index) => (
                     <div className="col" key={`${formValue}-${index}`}>
-                        <FormInput onChange={changeHandler} name={formValue} formValue={form[formValue]}/>
+                        <FormInput onChange={changeHandler} name={formValue}
+                                   formValue={getKeyValue<ObjectKeys, string>(formValue)(form)}/>
                     </div>
                 ))}
 

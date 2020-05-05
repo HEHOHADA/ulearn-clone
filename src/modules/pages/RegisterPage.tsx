@@ -1,28 +1,32 @@
-import React, {FC, useState} from 'react'
+import React, {FC} from 'react'
 import {RegisterModel} from "../shared/interface";
-import {FormInput} from "../shared/utils/FormInput";
+import {useHttp} from "../hooks/http.hook";
+import {useHistory} from 'react-router-dom'
+import {useForm} from "../hooks/form.hook";
 
 
 export const RegisterPage: FC = () => {
 
-    const [form, setForm] = useState<RegisterModel>({
-        username: '',
+    const history = useHistory()
+    const initialValues = {
         email: '',
+        username: '',
         password: ''
-    })
-
-
-    const changeHandler = (event: any) => {
-        setForm({...form, [event.target.name]: event.target.value})
     }
+    const {loading, request} = useHttp()
+
+    const {form, generateInputs} = useForm<RegisterModel>(initialValues)
+
 
     const registerHandler = async () => {
         try {
-            //Login with api
+            await request('api/auth/register', "POST", {form})
+            history.push('/login')
         } catch (e) {
-
+            console.log(e)
         }
     }
+
 
     return (
         <>
@@ -31,11 +35,15 @@ export const RegisterPage: FC = () => {
                 <p>Пожалуйста зарегистрируйтесь</p>
             </div>
             <form>
-                <FormInput onChange={changeHandler} name={"username"} formValue={form.username}/>
-                <FormInput onChange={changeHandler} name={"email"} formValue={form.email}/>
-                <FormInput onChange={changeHandler} type={"password"} name={"password"} formValue={form.password}/>
+                {generateInputs( (key: string) => {
+                    if (key === 'password') {
+                        return 'password'
+                    }
+                    return 'text'
+                })}
 
                 <button
+                    disabled={loading}
                     onSubmit={registerHandler}
                     className="btn btn-primary btn-block" type="submit">Register
                 </button>

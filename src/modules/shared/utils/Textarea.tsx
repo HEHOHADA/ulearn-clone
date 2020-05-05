@@ -2,8 +2,10 @@ import React from 'react'
 
 
 export const Textarea = (props: any) => {
-    const {description, onChange} = props
+    const {name, formValue, onChange} = props
     return (
-        <textarea value={description} onChange={onChange} cols={40} rows={10}/>
+        <div className="form-group">
+            <textarea className="md-textarea form-control" value={formValue} name={name} onChange={onChange} rows={3}/>
+        </div>
     )
 }

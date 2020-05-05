@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
+import React from 'react'
 import {ISubscription} from "../../shared/interface";
-import {FormInput} from "../../shared/utils/FormInput";
+import {useForm} from "../../hooks/form.hook";
 
 
 interface Props {
@@ -21,18 +21,17 @@ export const SubscriptionForm = (props: Props) => {
     }
     const {initialValues = defaultSubscriptionFormValues} = props
 
-    const [form, setForm] = useState<ISubscription>(initialValues)
-
-    const changeHandler = (event: any) => {
-        setForm({...form, [event.target.name]: event.target.value})
+    const {
+        form, generateInputs
     }
-
+        = useForm<ISubscription>(initialValues)
 
     return (
         <form>
-            <FormInput onChange={changeHandler} name={"name"} formValue={form.name}/>
-            <FormInput onChange={changeHandler} name={"Price"} formValue={form.price}/>
-            <FormInput onChange={changeHandler} name={"Benefits"} formValue={form.benefits}/>
+            {generateInputs((key: string) => {
+                if (key === "price") return 'number'
+                return 'text'
+            })}
             <button
                 onSubmit={submit}
                 className="btn btn-primary btn-block" type="submit">Edit

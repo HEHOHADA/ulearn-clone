@@ -1,3 +1,5 @@
+import exp from "constants";
+
 export interface ILink {
     name: string
     link: string
@@ -58,5 +60,28 @@ export interface ITest {
     question: string
     rightAnswer: Array<number> | number
     answer: Array<string>
-    points:number
+    points: number
+}
+
+export interface IGroup {
+    name: string
+    courseName: string
+    participants?: Array<string>
+}
+
+
+export interface ObjectKeys {
+    [key: string]: string
+}
+
+type picture = "image/png" | "image/jped"
+
+export interface Picture {
+    lastModified: number
+    lastModifiedDate: Date
+    name: string
+    path: string
+    size: number
+    type: picture
+    webkitRelativePath: string
 }

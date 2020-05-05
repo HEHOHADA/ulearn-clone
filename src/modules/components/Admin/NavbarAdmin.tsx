@@ -11,7 +11,10 @@ export const NavbarAdmin = () => {
     }
 
     const navbarHandler = () => {
-        const links: ILink[] = [{name: "Dashboard", link: "/admin/"},{name:"Subscription",link:"/admin/subscription"},{name:"Course",link:"/admin/course"}]
+        const links: ILink[] = [{name: "Dashboard", link: "/admin/"}, {
+            name: "Subscription",
+            link: "/admin/subscription"
+        }, {name: "Course", link: "/admin/course"}]
 
         return (
             <ul className="navbar-nav">

@@ -6,12 +6,13 @@ import {Link} from "react-router-dom";
 interface Props {
     courses: Course[]
     onClick: (link: string) => void
+    loading: boolean
 }
 
 // `course/${course.id}`
 export const HomeCourses = (props: Props) => {
 
-    const {courses, onClick} = props
+    const {courses, onClick, loading} = props
 
     const courseHandler = (course: Course) =>
         (
@@ -26,7 +27,8 @@ export const HomeCourses = (props: Props) => {
                         <div className="">{course.time.toLocaleDateString()}</div>
                     </div>
                     <div className="btn-block">
-                        <button onClick={() => onClick(`course/${course.id}`)} className="btn btn-primary">Перейти
+                        <button disabled={loading} onClick={() => onClick(`course/${course.id}`)}
+                                className="btn btn-primary">Перейти
                         </button>
                     </div>
                 </div>

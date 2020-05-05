@@ -1,28 +1,46 @@
-import React, {FC, useState} from 'react'
+import React, {FC, useContext} from 'react'
 import {LoginModel} from "../shared/interface";
-import {FormInput} from "../shared/utils/FormInput";
-
+import {AuthContext} from "../context/AuthContext";
+import {useHttp} from "../hooks/http.hook";
+import jwt from 'jsonwebtoken'
+import {useHistory} from "react-router-dom"
+import {useForm} from "../hooks/form.hook";
 
 export const LoginPage: FC = () => {
 
-    const [form, setForm] = useState<LoginModel>({
+    const auth = useContext(AuthContext)
+    const history = useHistory()
+    const {loading, request} = useHttp()
+    const initialValues = {
         email: '',
         password: ''
-    })
-
-
-    const changeHandler = (event: any) => {
-        setForm({...form, [event.target.name]: event.target.value})
     }
+
+    const {form, generateInputs} = useForm<LoginModel>(initialValues)
 
     const loginHandler = async () => {
         try {
-            //Login with api
-        } catch (e) {
+            let role = ''
+            const data = await request('/api/auth/login', 'POST', {form})
+            jwt.verify(data.token,
+                process.env.ACCESS_TOKEN_KEY as string,
+                function (err: any, decoded: any) {
+                    if (err) {
+                        return null
+                    }
+                    if (decoded) {
 
+                        role = decoded.role
+                    }
+                })
+            auth.login(data.token, data.userId, role)
+            if (auth.role === 'admin') {
+                history.push('/admin/')
+            } else history.push('/')
+        } catch (e) {
+            console.log(e)
         }
     }
-
 
     return (
         <>
@@ -31,9 +49,14 @@ export const LoginPage: FC = () => {
                 <p>Пожауйста войдите в систему</p>
             </div>
             <form>
-                <FormInput onChange={changeHandler} name={"email"} formValue={form.email}/>
-                <FormInput onChange={changeHandler} type={"password"} name={"password"} formValue={form.password}/>
+                {generateInputs((key: string) => {
+                    if (key === 'password') {
+                        return 'password'
+                    }
+                    return 'text'
+                })}
                 <button
+                    disabled={loading}
                     onSubmit={loginHandler}
                     className="btn btn-primary btn-block" type="submit">Log In
                 </button>

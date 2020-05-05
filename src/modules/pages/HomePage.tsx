@@ -2,15 +2,28 @@ import React, {useCallback, useEffect} from 'react'
 import {HomeCourses} from "../components/home/HomeCourse/HomeCourses"
 import {Course} from "../shared/interface"
 import {RouteComponentProps} from "react-router-dom";
+import {useHttp} from "../hooks/http.hook";
+import {useAuth} from "../hooks/auth.hook";
 
 export const HomePage = (props: RouteComponentProps) => {
 
     const {history} = props
-
+    const {loading, request} = useHttp()
+    const {userId} = useAuth()
     const onClickHandler = (link: string) => {
+        if (!userId) {
+            history.push('/login')
+        }
+
+        const courseId = link.split("/")[1]
+        //substype
+        const data = request(`/api/user/subscription/`,
+            'GET',
+            {id: courseId})
+
 
         //if have subscription redirect to course page
-        if (true) {
+        if (data) {
 
             history.push(link)
 
@@ -53,7 +66,7 @@ export const HomePage = (props: RouteComponentProps) => {
                             <div className="col-md-9">
                                 <div className="products">
                                     <div className="row no-gutters">
-                                        <HomeCourses courses={courses} onClick={onClickHandler}/>
+                                        <HomeCourses courses={courses} onClick={onClickHandler} loading={loading}/>
                                     </div>
                                     <nav>
                                         <ul className="pagination"/>
