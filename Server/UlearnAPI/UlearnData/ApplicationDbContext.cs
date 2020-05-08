@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace UlearnAPI.Data
+namespace UlearnData
 {
     public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
