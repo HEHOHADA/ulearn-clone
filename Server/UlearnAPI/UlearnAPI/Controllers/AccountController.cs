@@ -5,9 +5,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -30,15 +32,41 @@ namespace UlearnAPI.Controllers
         [HttpPost]
         public async Task<object> Login([FromBody] LoginDto model)
         {
-            var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
+            if (model.Login.IndexOf('@') > -1)
+            {
+                if (!new Regex(@"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
+                               @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
+                               @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$")
+                    .IsMatch(model.Login))
+                {
+                    return BadRequest(new {Message = new[] {"Email is not valid"}});
+                }
+
+                var user = await _userManager.FindByEmailAsync(model.Login);
+                if (user == null)
+                {
+                    return BadRequest(new {Message = new[] {"Invalid UserName or password"}});
+                }
+
+                model.Login = user.UserName;
+            }
+            else
+            {
+                if (!new Regex(@"^[a-zA-Z0-9]*$").IsMatch(model.Login))
+                {
+                    return BadRequest(new {Message = new[] {"Username is not valid"}});
+                }
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(model.Login, model.Password, false, false);
 
             if (result.Succeeded)
             {
-                var user = _userManager.Users.SingleOrDefault(r => r.UserName == model.UserName);
+                var user = _userManager.Users.SingleOrDefault(r => r.UserName == model.Login);
                 return Json(new {Token = await GenerateJwtToken(user)});
             }
 
-            return BadRequest("Invalid UserName or password");
+            return BadRequest(new {Message = new[] {"Invalid UserName or password"}});
         }
 
         [HttpPost]
@@ -58,9 +86,12 @@ namespace UlearnAPI.Controllers
                 return Json(new {Token = await GenerateJwtToken(user)});
             }
 
-            return BadRequest(result.Errors
-                .Select(x => x.Description)
-                .Aggregate((a, b) => $"{a}, {b}"));
+            return BadRequest(new
+            {
+                Message = result.Errors
+                    .Select(x => x.Description)
+                    .ToList()
+            });
         }
 
         private async Task<object> GenerateJwtToken(IdentityUser user)
@@ -94,7 +125,7 @@ namespace UlearnAPI.Controllers
 
         public class LoginDto
         {
-            [Required] public string UserName { get; set; }
+            [Required] public string Login { get; set; }
 
             [Required] public string Password { get; set; }
         }
@@ -103,7 +134,7 @@ namespace UlearnAPI.Controllers
         {
             [Required] public string UserName { get; set; }
 
-            [Required] public string Email { get; set; }
+            [Required] [EmailAddress] public string Email { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "PASSWORD_MIN_LENGTH", MinimumLength = 6)]
