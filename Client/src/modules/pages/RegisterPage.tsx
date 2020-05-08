@@ -1,68 +1,53 @@
-import React, {FC, useState} from 'react'
-import { RegisterModel} from "../shared/interface";
+import React, {FC} from 'react'
+import {RegisterModel} from "../shared/interface";
+import {useHttp} from "../hooks/http.hook";
+import {useHistory} from 'react-router-dom'
+import {useForm} from "../hooks/form.hook";
 
 
 export const RegisterPage: FC = () => {
 
-
-    const [form, setForm] = useState<RegisterModel>({
-        username: '',
+    const history = useHistory()
+    const initialValues = {
         email: '',
+        username: '',
         password: ''
-    })
-
-
-    const changeHandler = (event: any) => {
-        setForm({...form, [event.target.name]: event.target.value})
     }
+    const {loading, request} = useHttp()
+
+    const {form, generateInputs} = useForm<RegisterModel>(initialValues)
+
 
     const registerHandler = async () => {
         try {
-            //Login with api
+            await request('api/auth/register', "POST", {form})
+            history.push('/login')
         } catch (e) {
-
+            console.log(e)
         }
     }
 
+
     return (
-        <form>
-            <div className="form-group">
-                <label htmlFor="userName">Username</label>
-                <input
-                    onChange={changeHandler}
-                    value={form.username}
-                    name="userName"
-
-                    placeholder="Username"
-                    className="form-control item"
-                    type="userName"/></div>
-            <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input
-                    onChange={changeHandler}
-                    value={form.email}
-                    name="email"
-
-                    placeholder="Email"
-                    className="form-control item"
-                    type="email"/></div>
-            <div className="form-group">
-                <label htmlFor="password">
-                    Password
-                </label>
-                <input
-                    onChange={changeHandler}
-                    name="password"
-                    placeholder="Password"
-                    type="password"
-                    value={form.password}
-                    className="form-control"
-                />
+        <>
+            <div className="block-heading">
+                <h2 className="text-info">Регистрация</h2>
+                <p>Пожалуйста зарегистрируйтесь</p>
             </div>
-            <button
-                onSubmit={registerHandler}
-                className="btn btn-primary btn-block" type="submit">Log In
-            </button>
-        </form>
+            <form>
+                {generateInputs( (key: string) => {
+                    if (key === 'password') {
+                        return 'password'
+                    }
+                    return 'text'
+                })}
+
+                <button
+                    disabled={loading}
+                    onSubmit={registerHandler}
+                    className="btn btn-primary btn-block" type="submit">Register
+                </button>
+            </form>
+        </>
     )
 }

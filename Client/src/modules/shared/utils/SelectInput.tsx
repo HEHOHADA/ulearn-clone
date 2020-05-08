@@ -1,33 +1,31 @@
 import React from 'react'
 
 interface Props {
-    onSelect: (event:any) => void
-    options: [{
-        value: string
-        text: string
-    }]
-
+    onSelect: (event: any) => void
+    options: Array<string>
     label: string
-    value: string
+    name: string,
+    value:string
 }
 
 export const SelectInput = (props: Props) => {
-    const {onSelect, options} = props
+    const {onSelect, options, name,value} = props
     const htmlFor = `${props.label}-${Math.random()}`
     return (
         <div>
             <label htmlFor={htmlFor}>{props.label}</label>
             <select
+                value={value}
+                name={name}
                 className="custom-select custom-select-lg mb-3"
                 id={htmlFor}
-                value={props.value}
                 onChange={onSelect}
             >
-                {options.map((option, index) => {
+                {options && options.map((option, index) => {
                     return <option
-                        key={option.value + index}
-                        value={option.value}>
-                        {option.text}
+                        key={option + index}
+                        value={option}>
+                        {option}
                     </option>
                 })}
             </select>

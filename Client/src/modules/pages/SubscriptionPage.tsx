@@ -3,7 +3,7 @@ import {SubscriptionView} from "../components/pay/SubscriptionView";
 
 export const SubscriptionPage = () => {
 
-    const onClickSubscription = () => {
+    const onClickSubscription = (subName:string) => {
 
     }
 

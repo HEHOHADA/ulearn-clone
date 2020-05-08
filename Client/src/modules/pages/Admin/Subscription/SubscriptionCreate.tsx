@@ -1,5 +1,5 @@
 import React from 'react'
-import {SubscriptionForm} from "../shared/SubscriptionForm";
+import {SubscriptionForm} from "../../../components/pay/SubscriptionForm";
 
 export const SubscriptionCreate = () => {
 

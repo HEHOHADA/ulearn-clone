@@ -1,5 +1,5 @@
 import React from 'react'
-import {CourseForm} from "../shared/CourseForm";
+import {CourseForm} from "../../../components/Admin/course/CourseForm";
 
 export const CourseCreate = () => {
 

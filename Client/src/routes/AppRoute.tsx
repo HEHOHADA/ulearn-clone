@@ -2,10 +2,9 @@ import React, {FC} from 'react'
 import {Route} from "react-router-dom";
 import {RouteProps} from "react-router";
 
-//
 // interface Props {
-//     component: React.Component
-//     layout:
+//     component: React.FC
+//     layout: any
 // }
 
 
@@ -18,5 +17,4 @@ export const AppRoute: FC<any | RouteProps> = ({component: Component, layout: La
         )
     }}
     />
-
 )

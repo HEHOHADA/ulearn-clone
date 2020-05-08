@@ -16,6 +16,6 @@ export const CoursePage = () => {
     }
 
     return (
-        <HomeCourses onClick={onClickEditHandler} courses={courses}/>
+        <HomeCourses onClick={onClickEditHandler} courses={courses} loading/>
     )
 }
