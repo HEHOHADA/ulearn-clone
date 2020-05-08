@@ -37,7 +37,10 @@ namespace UlearnAPI
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+                {
+                    options.User.RequireUniqueEmail = true;
+                })
                 .AddRoles<IdentityRole>()
                 .AddRoleManager<RoleManager<IdentityRole>>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -73,7 +76,7 @@ namespace UlearnAPI
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
-            
+
             if (env.IsDevelopment())
             {
                 app.UseCors(builder => builder.WithOrigins("http:/localhost:3000").AllowAnyMethod().AllowAnyHeader());
