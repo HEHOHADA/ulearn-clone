@@ -17,7 +17,7 @@ export const HomePage = (props: RouteComponentProps) => {
 
         const courseId = link.split("/")[1]
         //substype
-        const data = request(`/api/user/subscription/`,
+        const data = request(`${process.env.API}/api/user/subscription/`,
             'GET',
             {id: courseId})
 
