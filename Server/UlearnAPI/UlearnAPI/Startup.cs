@@ -73,11 +73,10 @@ namespace UlearnAPI
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
-
-            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             
             if (env.IsDevelopment())
             {
+                app.UseCors(builder => builder.WithOrigins("http:/localhost:3000").AllowAnyMethod().AllowAnyHeader());
                 app.UseDeveloperExceptionPage();
             }
 
