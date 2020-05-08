@@ -7,7 +7,7 @@ function noop() {
 interface IAuthContext {
     token: string | null
     userId: string | null
-    login: (jwtToken: any, id: any, role: any) => void
+    login: (jwtToken: any, id: any, role?: any) => void
     logout: () => void
     isAuth: boolean
     role?: string | null

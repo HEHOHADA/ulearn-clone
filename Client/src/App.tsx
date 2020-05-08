@@ -1,5 +1,5 @@
 import React, {FC} from 'react'
-import {BrowserRouter, Switch,} from "react-router-dom"
+import {BrowserRouter, Switch, Route,} from "react-router-dom"
 import {MainLayout} from "./modules/shared/layout/MainLayout"
 import {AppRoute} from "./routes/AppRoute"
 import {HomePage} from "./modules/pages/HomePage"
@@ -12,16 +12,15 @@ import {UserCoursePage} from "./modules/pages/User/course/UserCoursePage"
 import {AuthContext} from "./modules/context/AuthContext"
 import {useAuth} from "./modules/hooks/auth.hook"
 import {useTeacherRoute} from "./routes/TeacherRoute";
+import {LogoutPage} from "./modules/pages/LogoutPage";
 
 const App: FC = () => {
-    const {token, login, logout, userId} = useAuth()
-    let isAdmin = true
+    const {token, login, logout, userId, role} = useAuth()
+    let isAdmin = role === "admin"
     let isAuth = !!token
-    let isTeacher = true
-    let role = isTeacher ? "teacher" : isAdmin ? "admin" : "user"
+    let isTeacher = role === "teacher"
     const adminRoutes = useAdminRoute()
     const teacherRoutes = useTeacherRoute()
-
     return (
         <AuthContext.Provider value={{
             token, login, logout, userId, isAuth, role
@@ -33,8 +32,9 @@ const App: FC = () => {
                     <AppRoute exact path={"/account"} component={IdentityPage} layout={MainLayout}/>
                     {!isAuth && <AppRoute exact path={"/login"} component={LoginPage} layout={AuthLayout}/>}
                     {!isAuth && <AppRoute exact path={"/register"} component={RegisterPage} layout={AuthLayout}/>}
+                    {isAuth &&<Route exact path={"/logout"} component={LogoutPage} />}
                     {isAdmin && adminRoutes}
-                    {isTeacher && teacherRoutes}
+                    {(isTeacher || isAdmin) && teacherRoutes}
                 </Switch>
             </BrowserRouter>
         </AuthContext.Provider>
