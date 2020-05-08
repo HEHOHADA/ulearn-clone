@@ -34,15 +34,15 @@ namespace UlearnAPI.Controllers
 
             if (result.Succeeded)
             {
-                var appUser = _userManager.Users.SingleOrDefault(r => r.UserName == model.UserName);
-                return await GenerateJwtToken(appUser);
+                var user = _userManager.Users.SingleOrDefault(r => r.UserName == model.UserName);
+                return Json(new {Token = await GenerateJwtToken(user)});
             }
 
             return BadRequest("Invalid UserName or password");
         }
 
         [HttpPost]
-        public async Task<object> Register([FromBody] RegisterDto model)
+        public async Task<IActionResult> Register([FromBody] RegisterDto model)
         {
             var user = new IdentityUser
             {
@@ -55,7 +55,7 @@ namespace UlearnAPI.Controllers
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, false);
-                return await GenerateJwtToken(user);
+                return Json(new {Token = await GenerateJwtToken(user)});
             }
 
             return BadRequest(result.Errors
