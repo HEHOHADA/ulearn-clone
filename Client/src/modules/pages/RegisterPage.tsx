@@ -3,7 +3,7 @@ import {RegisterModel} from "../shared/interface";
 import {useHttp} from "../hooks/http.hook";
 import {useHistory} from 'react-router-dom'
 import {useForm} from "../hooks/form.hook";
-
+import jwt from 'jsonwebtoken'
 
 export const RegisterPage: FC = () => {
 
@@ -18,12 +18,13 @@ export const RegisterPage: FC = () => {
     const {form, generateInputs} = useForm<RegisterModel>(initialValues)
 
 
-    const registerHandler = async () => {
+    const registerHandler = async (event: any) => {
+        event.preventDefault()
         try {
-            await request('api/auth/register', "POST", {form})
-            history.push('/login')
+            const response = await request('https://localhost:5001/api/account/register', "POST", {...form})
+
         } catch (e) {
-            console.log(e)
+            console.log('HERE ERROR', e)
         }
     }
 
@@ -34,8 +35,10 @@ export const RegisterPage: FC = () => {
                 <h2 className="text-info">Регистрация</h2>
                 <p>Пожалуйста зарегистрируйтесь</p>
             </div>
-            <form>
-                {generateInputs( (key: string) => {
+            <form
+                onSubmit={registerHandler}
+            >
+                {generateInputs((key: string) => {
                     if (key === 'password') {
                         return 'password'
                     }
@@ -44,7 +47,7 @@ export const RegisterPage: FC = () => {
 
                 <button
                     disabled={loading}
-                    onSubmit={registerHandler}
+
                     className="btn btn-primary btn-block" type="submit">Register
                 </button>
             </form>
