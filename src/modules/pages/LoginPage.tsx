@@ -15,7 +15,6 @@ export const LoginPage: FC = () => {
         email: '',
         password: ''
     }
-
     const {form, generateInputs} = useForm<LoginModel>(initialValues)
 
     const loginHandler = async () => {
