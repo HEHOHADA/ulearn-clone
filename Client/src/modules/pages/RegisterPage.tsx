@@ -3,7 +3,7 @@ import {RegisterModel} from "../shared/interface";
 import {useHttp} from "../hooks/http.hook";
 import {useHistory} from 'react-router-dom'
 import {useForm} from "../hooks/form.hook";
-
+import jwt from 'jsonwebtoken'
 
 export const RegisterPage: FC = () => {
 
@@ -18,14 +18,13 @@ export const RegisterPage: FC = () => {
     const {form, generateInputs} = useForm<RegisterModel>(initialValues)
 
 
-    const registerHandler = async (event:any) => {
+    const registerHandler = async (event: any) => {
         event.preventDefault()
         try {
-            console.log(process.env.API + 'api/auth/register')
-            await request(process.env.API + 'api/auth/register', "POST", {form})
-            history.push('/login')
+            const response = await request('https://localhost:5001/api/account/register', "POST", {...form})
+
         } catch (e) {
-            console.log(e)
+            console.log('HERE ERROR', e)
         }
     }
 
