@@ -1,5 +1,5 @@
 import React, {FC, useContext} from 'react'
-import {LoginModel} from "../shared/interface";
+import {LoginModel, Token} from "../shared/interface";
 import {AuthContext} from "../context/AuthContext";
 import {useHttp} from "../hooks/http.hook";
 import jwt from 'jsonwebtoken'
@@ -19,20 +19,16 @@ export const LoginPage: FC = () => {
 
     const loginHandler = async () => {
         try {
-            let role = ''
-            const data = await request('/api/auth/login', 'POST', {form})
-            jwt.verify(data.token,
-                process.env.ACCESS_TOKEN_KEY as string,
-                function (err: any, decoded: any) {
-                    if (err) {
-                        return null
-                    }
-                    if (decoded) {
+            const data: { token: string } = await request('/api/auth/login', 'POST', {form})
 
-                        role = decoded.role
-                    }
-                })
-            auth.login(data.token, data.userId, role)
+            const decoded = jwt.decode(data.token)
+            if (!decoded) {
+                return
+            }
+            const token = decoded as Token
+
+            auth.login(data.token, token.sub, token.role ? token.role : null)
+
             if (auth.role === 'admin') {
                 history.push('/admin/')
             } else history.push('/')
