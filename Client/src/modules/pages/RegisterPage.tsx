@@ -18,9 +18,11 @@ export const RegisterPage: FC = () => {
     const {form, generateInputs} = useForm<RegisterModel>(initialValues)
 
 
-    const registerHandler = async () => {
+    const registerHandler = async (event:any) => {
+        event.preventDefault()
         try {
-            await request('api/auth/register', "POST", {form})
+            console.log(process.env.API + 'api/auth/register')
+            await request(process.env.API + 'api/auth/register', "POST", {form})
             history.push('/login')
         } catch (e) {
             console.log(e)
@@ -34,8 +36,10 @@ export const RegisterPage: FC = () => {
                 <h2 className="text-info">Регистрация</h2>
                 <p>Пожалуйста зарегистрируйтесь</p>
             </div>
-            <form>
-                {generateInputs( (key: string) => {
+            <form
+                onSubmit={registerHandler}
+            >
+                {generateInputs((key: string) => {
                     if (key === 'password') {
                         return 'password'
                     }
@@ -44,7 +48,7 @@ export const RegisterPage: FC = () => {
 
                 <button
                     disabled={loading}
-                    onSubmit={registerHandler}
+
                     className="btn btn-primary btn-block" type="submit">Register
                 </button>
             </form>

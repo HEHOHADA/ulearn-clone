@@ -21,7 +21,7 @@ export const LoginPage: FC = () => {
     const loginHandler = async () => {
         try {
             let role = ''
-            const data = await request('/api/auth/login', 'POST', {form})
+            const data = await request(process.env.API + '/api/auth/login', 'POST', {form})
             jwt.verify(data.token,
                 process.env.ACCESS_TOKEN_KEY as string,
                 function (err: any, decoded: any) {

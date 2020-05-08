@@ -39,8 +39,8 @@ export const CourseForm = (props: Props) => {
         <form onSubmit={submit}>
             <FormInput onChange={changeHandler} name={"name"} formValue={form.name}/>
             <SelectInput label={"Subscription type"} onSelect={changeHandler}
-                         options={[{value: "1", text: "1"}]}
-                         value={form.subscriptionType}/>
+                         options={[]}
+                         value={form.subscriptionType} name={''}/>
             <Textarea value={form.description} onChange={onSelectHandler}/>
 
             <button
