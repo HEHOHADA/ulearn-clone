@@ -1,4 +1,5 @@
 import React from 'react'
+import {CourseViewModel} from "../../view-models/CourseViewModel";
 
 interface Props {
     selected:boolean

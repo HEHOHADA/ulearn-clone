@@ -1,4 +1,5 @@
 import React, {ReactComponentElement} from 'react'
+import {CourseViewModel, ViewModelField} from "../../view-models/CourseViewModel";
 
 interface Props {
     onChange: (event: any) => void
@@ -6,12 +7,11 @@ interface Props {
     formValue: any
     type?: string
 }
-export const FormInput = (props: Props) => {
+export const FormField = (props: Props) => {
 
     const {onChange, name, formValue, type = "text"} = props
     const label = name.charAt(0).toUpperCase() + name.slice(1)
     const htmlFor = `${name}-${Math.random()}`
-
     return (
         <div className="form-group">
             <label htmlFor={htmlFor}>{label}</label>

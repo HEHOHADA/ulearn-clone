@@ -6,7 +6,6 @@ export const useForm = <T extends {}>(initialValues: T) => {
     const [form, setForm] = useState<T>(initialValues)
     const keys = Object.keys(initialValues)
 
-
     const generateInputs = (condition?: (key: string) => string, array: Array<string> = keys) =>
         array.map((key, index) => {
 
@@ -23,7 +22,8 @@ export const useForm = <T extends {}>(initialValues: T) => {
         setForm({...form, [event.target.name]: event.target.value})
     }
 
-    const clearForm = () => {
+    const clearForm = (defaultValues:T) => {
+        setForm(defaultValues)
     }
 
     return {form, changeHandler, generateInputs, setForm, clearForm}
