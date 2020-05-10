@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, {useState} from "react";
 import {FormInput} from "../shared/utils/FormInput";
 import {getKeyValue} from "../shared/utils/getKeyValue";
 import {ObjectKeys} from "../shared/interface";
@@ -50,6 +50,7 @@ export const useForm = <T extends {}>(initialValues: T) => {
 
 
     const generateInputs = (condition?: (key: string) => string, array: Array<keyof T> = keys) =>
+
         array.map((key, index) => {
 
             let type = "text"

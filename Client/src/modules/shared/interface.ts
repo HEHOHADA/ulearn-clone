@@ -5,7 +5,7 @@ export interface Token {
     jti: string
     name: string
     sub: string
-    role?:string
+    role?: string
 }
 
 export interface ILink {
@@ -48,9 +48,10 @@ export interface ISubscription {
 }
 
 export interface ICourse {
-    name: string
+    name: string|null
     subscriptionType: string
     description: string
+    id?: string
     // themas: Array<ITheme>
 }
 

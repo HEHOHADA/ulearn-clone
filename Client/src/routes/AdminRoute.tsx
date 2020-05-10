@@ -4,8 +4,8 @@ import {AppRoute} from "./AppRoute"
 import {SubscriptionPage} from "../modules/pages/Admin/Subscription/SubscriptionPage"
 import {SubscriptionEdit} from "../modules/pages/Admin/Subscription/SubscriptionEdit"
 import {SubscriptionCreate} from "../modules/pages/Admin/Subscription/SubscriptionCreate"
-import {CoursePage} from "../modules/pages/Admin/Course/CoursePage";
-import {CourseCreate} from "../modules/pages/Admin/Course/CourseCreate";
+import {CoursePage} from "../modules/pages/Admin/Courses/CoursePage";
+import {CourseCreate} from "../modules/pages/Admin/Courses/CourseCreate";
 
 
 export const useAdminRoute = () => {

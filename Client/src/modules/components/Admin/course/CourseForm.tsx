@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {FC} from 'react'
 import {FormInput} from "../../../shared/utils/FormInput"
 import {ICourse} from "../../../shared/interface"
 import {SelectInput} from "../../../shared/utils/SelectInput"
@@ -10,20 +10,16 @@ export const defaultCourseValue = {
     description: ""
 }
 
-interface Props {
+interface IProps {
     initialValues?: ICourse
 }
 
-export const CourseForm = (props: Props) => {
+export const CourseForm:FC<IProps>= (props:IProps) => {
 
     const {initialValues = defaultCourseValue} = props
 
 
     const {form, changeHandler} = useForm<ICourse>(initialValues)
-
-    // const onSelectHandler = ({description}: any) => {
-    //     setForm({...form, description})
-    // }
 
     const submit = (event: any) => {
         event.preventDefault()
