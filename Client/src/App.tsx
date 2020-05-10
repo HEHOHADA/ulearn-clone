@@ -16,7 +16,7 @@ import {LogoutPage} from "./modules/pages/LogoutPage";
 
 const App: FC = () => {
     const {token, login, logout, userId, role} = useAuth()
-    let isAdmin = role === "admin"
+    let isAdmin = role === "Admin"
     let isAuth = !!token
     let isTeacher = role === "teacher"
     const adminRoutes = useAdminRoute()

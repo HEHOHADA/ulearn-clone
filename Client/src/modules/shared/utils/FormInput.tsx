@@ -16,6 +16,7 @@ export const FormInput = (props: Props) => {
         <div className="form-group">
             <label htmlFor={htmlFor}>{label}</label>
             <input
+                required
                 id={htmlFor}
                 onChange={onChange}
                 value={formValue}

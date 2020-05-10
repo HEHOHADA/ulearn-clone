@@ -12,7 +12,6 @@ export const useAdminRoute = () => {
 
     return (
         <>
-            {/*<AppRoute layout={AdminLayout} component={CreatePage} exact={true} path={"/admin/create"} />*/}
             <AppRoute exact path={"/admin/subscription"} layout={AdminLayout} component={SubscriptionPage}/>
             <AppRoute exact path={"/admin/course"} layout={AdminLayout} component={CoursePage}/>
             <AppRoute exact path={"/admin/course/create"} layout={AdminLayout} component={CourseCreate}/>

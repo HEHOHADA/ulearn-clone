@@ -20,7 +20,7 @@ export interface Footer {
 }
 
 export interface LoginModel {
-    email: string
+    login: string
     password: string
 }
 
@@ -30,7 +30,10 @@ export interface RegisterModel {
     email: string
     password: string
 }
-
+export interface IData {
+    token?: string
+    message?: Array<string>
+}
 export interface Course {
     name: string
     id: string
