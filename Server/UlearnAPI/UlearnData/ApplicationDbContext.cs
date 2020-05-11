@@ -10,22 +10,22 @@ namespace UlearnData
 {
     public class ApplicationDbContext : IdentityDbContext<User>
     {
-        private DbSet<CodeTask> CodeTasks { get; set; }
-        private DbSet<CodeTaskResult> CodeTaskResults { get; set; }
-        private DbSet<CodeTaskReview> CodeTaskReviews { get; set; }
+        public DbSet<CodeTask> CodeTasks { get; set; }
+        public DbSet<CodeTaskResult> CodeTaskResults { get; set; }
+        public DbSet<CodeTaskReview> CodeTaskReviews { get; set; }
         
-        private DbSet<TestTask> TestTasks { get; set; }
-        private DbSet<TestQuestion> TestQuestions { get; set; }
-        private DbSet<TestQuestionAnswer> TestQuestionAnswers { get; set; }
-        private DbSet<TestQuestionAnswerResult> QuestionAnswerResults { get; set; }
+        public DbSet<TestTask> TestTasks { get; set; }
+        public DbSet<TestQuestion> TestQuestions { get; set; }
+        public DbSet<TestQuestionAnswer> TestQuestionAnswers { get; set; }
+        public DbSet<TestQuestionAnswerResult> QuestionAnswerResults { get; set; }
         
-        private DbSet<VideoTask> VideoTasks { get; set; }
-        private DbSet<VideoTaskResult> VideoTaskResults { get; set; }
+        public DbSet<VideoTask> VideoTasks { get; set; }
+        public DbSet<VideoTaskResult> VideoTaskResults { get; set; }
         
-        private DbSet<Subscription> Subscriptions { get; set; }
-        private DbSet<Course> Courses { get; set; }
-        private DbSet<Module> Modules { get; set; }
-        private DbSet<Group> Groups { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Module> Modules { get; set; }
+        public DbSet<Group> Groups { get; set; }
         
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {

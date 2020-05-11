@@ -72,6 +72,8 @@ namespace UlearnAPI
             services.AddAuthorization();
 
             services.AddControllers();
+            
+            services.AddSwaggerDocument();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -96,6 +98,9 @@ namespace UlearnAPI
             {
                 endpoints.MapControllerRoute("DefaultRoute", "api/{controller}/{action}/{id?}");
             });
+            
+            app.UseOpenApi();  
+            app.UseSwaggerUi3(); 
 
             using var scope = app.ApplicationServices.CreateScope();
             CreateRoles(scope.ServiceProvider.GetService<IServiceProvider>()).Wait();
