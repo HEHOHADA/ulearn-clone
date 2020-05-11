@@ -57,20 +57,20 @@ export interface ICourse {
     // themas: Array<ITheme>
 }
 
-export interface ITheme {
+export interface IModule {
     name: string
     maxPoints: string
-    modules: Array<IModule>
+    modules: Array<ITheme>
 }
 
-export interface IModule {
+export interface ITheme {
     name: string
     video?: any
     code?: any
-    test?: Array<ITest>
+    test?: Array<IQuestion>
 }
 
-export interface ITest {
+export interface IQuestion {
     question: string
     answers: Array<IAnswer>
     points: number

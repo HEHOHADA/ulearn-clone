@@ -1,9 +1,9 @@
 import React from 'react'
-import {ModuleForm} from "../../../components/Admin/module/ModuleForm";
+import {ThemeForm} from "../../../components/Admin/module/ThemeForm";
 
 export const ModuleCreate = () => {
     return (
-        <ModuleForm/>
+        <ThemeForm/>
     )
 
 }
