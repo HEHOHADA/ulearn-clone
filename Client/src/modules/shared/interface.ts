@@ -30,10 +30,12 @@ export interface RegisterModel {
     email: string
     password: string
 }
+
 export interface IData {
     token?: string
     message?: Array<string>
 }
+
 export interface Course {
     name: string
     id: string
@@ -48,7 +50,7 @@ export interface ISubscription {
 }
 
 export interface ICourse {
-    name: string|null
+    name: string | null
     subscriptionType: string
     description: string
     id?: string
@@ -70,9 +72,13 @@ export interface IModule {
 
 export interface ITest {
     question: string
-    rightAnswer: Array<number> | number
-    answer: Array<string>
+    answers: Array<IAnswer>
     points: number
+}
+
+export interface IAnswer {
+    answerText: string
+    isCorrect: boolean
 }
 
 export interface IGroup {

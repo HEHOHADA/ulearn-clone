@@ -1,9 +1,14 @@
 import React from 'react'
 import {CourseForm, defaultCourseValue} from "../../../components/Admin/course/CourseForm";
 
+const initialValuesMock = {
+    name: "mock",
+    subscriptionType: "mock",
+    description: "mock"
+}
 export const CourseEdit = () => {
 
     return (
-<div>i</div>        // <CourseForm initialValues={defaultCourseValue}/>
+        <CourseForm initialValues={initialValuesMock}/>
     )
 }

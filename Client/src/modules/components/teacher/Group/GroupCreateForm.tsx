@@ -42,9 +42,9 @@ export const GroupCreateForm = (props: Props) => {
             onSubmit={onSubmit}
             className="form-group">
             <FormInput onChange={changeHandler} name={'name'} formValue={form.name}/>
-            <SelectInput name={'courseName'} onSelect={changeHandler} value={form.courseName}
+            {/*<SelectInput name={'courseName'} onSelect={changeHandler} value={form.courseName}
                          options={["course1", 'course2']}
-                         label={'chose course'}/>
+                         label={'chose course'}/>*/}
             <TagField selectedTags={selectedTags} tags={form.participants ? form.participants : []}/>
             <button
                 className="btn btn-primary btn-block mt-3" type="submit">Send
