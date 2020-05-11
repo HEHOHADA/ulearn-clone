@@ -19,6 +19,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using UlearnData;
 using UlearnData.Models;
+using UlearnServices.Services;
 
 namespace UlearnAPI
 {
@@ -70,10 +71,11 @@ namespace UlearnAPI
                 });
 
             services.AddAuthorization();
-
             services.AddControllers();
-            
             services.AddSwaggerDocument();
+
+
+            services.AddTransient<SubscriptionsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
