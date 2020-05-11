@@ -8,6 +8,7 @@ namespace UlearnData.Models.Tasks.CodeTask
         
         public string Text { get; set; }
         
+        public int CodeTaskResultId { get; set; }
         public CodeTaskResult Result { get; set; }
         public User Teacher { get; set; }
     }

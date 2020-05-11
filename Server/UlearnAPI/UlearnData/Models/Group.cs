@@ -10,6 +10,6 @@ namespace UlearnData.Models
         
         public Course Course { get; set; }
 
-        public List<User> Users { get; set; }
+        public List<UserGroup> UserGroups { get; set; }
     }
 }

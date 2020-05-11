@@ -5,7 +5,7 @@ namespace UlearnData.Models
 {
     public class User : IdentityUser
     {
-        public List<Group> Groups { get; set; }
+        public List<UserGroup> UserGroups { get; set; }
         public Subscription Subscription { get; set; }
     }
 }

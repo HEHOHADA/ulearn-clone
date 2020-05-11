@@ -36,7 +36,8 @@ namespace UlearnAPI
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("DefaultConnection"), 
+                    b => b.MigrationsAssembly("UlearnAPI")));
 
             services.AddIdentity<User, IdentityRole>(options =>
                 {
