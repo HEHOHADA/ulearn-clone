@@ -17,7 +17,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using UlearnAPI.Data;
+using UlearnData;
+using UlearnData.Models;
 
 namespace UlearnAPI
 {
@@ -35,9 +36,10 @@ namespace UlearnAPI
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("DefaultConnection"), 
+                    b => b.MigrationsAssembly("UlearnAPI")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddIdentity<User, IdentityRole>(options =>
                 {
                     options.User.RequireUniqueEmail = true;
                 })
@@ -101,7 +103,7 @@ namespace UlearnAPI
 
         private async Task CreateRoles(IServiceProvider serviceProvider)
         {
-            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             string[] roleNames = {"Admin"};
 
@@ -113,11 +115,11 @@ namespace UlearnAPI
                 }
             }
 
-            IdentityUser user = await userManager.FindByEmailAsync("admin@mail.ru");
+            User user = await userManager.FindByEmailAsync("admin@mail.ru");
 
             if (user == null)
             {
-                var admin = new IdentityUser()
+                var admin = new User()
                 {
                     UserName = "Admin",
                     Email = "admin@mail.ru",

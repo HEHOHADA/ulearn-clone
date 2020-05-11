@@ -12,16 +12,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using UlearnData.Models;
 
 namespace UlearnAPI.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager,
             IConfiguration configuration)
         {
             _userManager = userManager;
@@ -72,7 +73,7 @@ namespace UlearnAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterDto model)
         {
-            var user = new IdentityUser
+            var user = new User
             {
                 UserName = model.UserName,
                 Email = model.Email
@@ -94,7 +95,7 @@ namespace UlearnAPI.Controllers
             });
         }
 
-        private async Task<object> GenerateJwtToken(IdentityUser user)
+        private async Task<object> GenerateJwtToken(User user)
         {
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(
                 new List<Claim>

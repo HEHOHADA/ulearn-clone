@@ -1,6 +1,7 @@
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
 import {NavLink} from "react-router-dom";
 import {ILink} from "../interface";
+import {AuthContext} from "../../context/AuthContext";
 
 
 interface Props {
@@ -11,14 +12,19 @@ interface Props {
 export const Navbar = (props: any) => {
 
     // const history = useHistory()
-
+    const auth = useContext(AuthContext)
     const [navbarOpen, setNavbarOpen] = useState(false)
 
     const navbarHandler = () => {
-        const links: ILink[] = [{name: "home", link: "/"}, {name: "login", link: "/login"}, {
-            name: "register",
-            link: "/register"
-        }, {name: "account", link: "/account"}]
+        let links: ILink[] = []
+        if (!auth.isAuth) {
+            links = [{name: "home", link: "/"}, {name: "login", link: "/login"}, {
+                name: "register",
+                link: "/register"
+            }]
+        } else {
+            links = [{name: "home", link: "/"}, {name: "account", link: "/account"}, {name: "LOGOUT", link: "/logout"}]
+        }
 
         return (
             <ul className="nav navbar-nav ml-auto">

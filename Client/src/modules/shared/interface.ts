@@ -1,4 +1,12 @@
-import exp from "constants";
+export interface Token {
+    aud: string
+    exp: number
+    iss: string
+    jti: string
+    name: string
+    sub: string
+    role?:string
+}
 
 export interface ILink {
     name: string

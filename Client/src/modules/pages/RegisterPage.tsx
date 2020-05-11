@@ -1,9 +1,10 @@
-import React, {FC} from 'react'
-import {RegisterModel} from "../shared/interface";
+import React, {FC, useContext} from 'react'
+import {RegisterModel, Token} from "../shared/interface";
 import {useHttp} from "../hooks/http.hook";
 import {useHistory} from 'react-router-dom'
 import {useForm} from "../hooks/form.hook";
 import jwt from 'jsonwebtoken'
+import {AuthContext} from "../context/AuthContext";
 
 export const RegisterPage: FC = () => {
 
@@ -14,14 +15,23 @@ export const RegisterPage: FC = () => {
         password: ''
     }
     const {loading, request} = useHttp()
-
+    const auth = useContext(AuthContext)
     const {form, generateInputs} = useForm<RegisterModel>(initialValues)
 
 
     const registerHandler = async (event: any) => {
         event.preventDefault()
         try {
-            const response = await request('https://localhost:5001/api/account/register', "POST", {...form})
+            const data: { token: string } = await request('https://localhost:5001/api/account/register', "POST", {...form})
+            const decoded = jwt.decode(data.token)
+            if (!decoded) {
+                return
+            }
+            const token = decoded as Token
+
+            auth.login(data.token, token.sub)
+
+            history.push('/')
 
         } catch (e) {
             console.log('HERE ERROR', e)
