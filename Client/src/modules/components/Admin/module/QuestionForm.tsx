@@ -17,12 +17,12 @@ interface Props {
     init: Test
 }
 
-const renderTestForm:FC<Props> = (initialTest: Props) => {
-    const {init} = initialTest
-    const [test, setTest] = useState(init);
+const TestForm = (props: Props) => {
+    const {init} = props
+    const [test, setTest] = useState(init)
     const addNewAnsw = () => {
         test.answers.push(new Answer())
-        setTest(test);
+        setTest(test)
     }
     return (
         <form>
@@ -47,7 +47,7 @@ export const QuestionForm = () => {
             {
                 question.map(test => {
                     return (
-                        <renderTestForm initialTest={init:test}/>
+                        <TestForm init={test}/>
                     )
                 })
             }
