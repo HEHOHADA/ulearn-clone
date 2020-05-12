@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, {useEffect, useState} from "react";
 import {IAnswer, IQuestion} from "../../../shared/interface";
 import trash from "../../../shared/svgs/icons8-trash.svg"
 import {QuestionForm} from "./QuestionForm";
@@ -30,17 +30,24 @@ export const TestForm = (props: questProps) => {
 
     const [text, setText] = useState("")
 
+
     const addQuestion = (text: string) => {
         setText("")
-        const question = new Question();
+        const question = new Question()
         question.question = text
         setTest([...test, {...question}])
     }
+
+    const changeQuestion = (question: Question) => {
+        const newQuestions = test.filter(q => q.question !== question.question)
+        setTest([...newQuestions, question])
+    }
+
     const deleteQuestion = (deletedQuestion: Question) => {
         const newQuestions = test.filter(question => question !== deletedQuestion)
-        console.log(newQuestions)
         setTest([...newQuestions])
     }
+
     return (
         <div>
             <div className="input-group mb-3">
@@ -51,13 +58,14 @@ export const TestForm = (props: questProps) => {
 
             {
                 test.map((question, index) => {
+                    console.log("question: ", question)
                     return (
                         <div key={`${index}-${question.question}`}>
                             {index + 1}.
                             <button className={"btn btn-light"} onClick={() => deleteQuestion(question)}><img alt="/"
-                                src={trash}/>
+                                                                                                              src={trash}/>
                             </button>
-                            <QuestionForm init={question}/>
+                            <QuestionForm changeQuestion={changeQuestion} init={question}/>
                         </div>
 
                     )

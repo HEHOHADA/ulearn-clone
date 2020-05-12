@@ -26,6 +26,7 @@ const App: FC = () => {
     let isAuth = !!token
     let isTeacher = role === "teacher"
     const teacherRoutes = useTeacherRoute()
+
     return (
         <AuthContext.Provider value={{
             token, login, logout, userId, isAuth, role
@@ -36,7 +37,7 @@ const App: FC = () => {
                 <BrowserRouter>
                     <Switch>
                         <AppRoute exact path={"/"} component={HomePage} layout={MainLayout}/>
-                        <AppRoute exact path={"/course/:id"} component={UserCoursePage} layout={MainLayout}/>
+                        <AppRoute path={"/course/:id"} component={UserCoursePage} layout={MainLayout}/>
                         <AppRoute exact path={"/account"} component={IdentityPage} layout={MainLayout}/>
                         {!isAuth && <AppRoute exact path={"/login"} component={LoginPage} layout={AuthLayout}/>}
                         {!isAuth && <AppRoute exact path={"/register"} component={RegisterPage} layout={AuthLayout}/>}

@@ -10,22 +10,27 @@ class Answer implements IAnswer {
 
 interface Props {
     init: Question
+    changeQuestion: (question: Question) => void
 }
 
 export const QuestionForm = (props: Props) => {
 
-    const {init} = props
+    const {init, changeQuestion} = props
 
     const [question, setQuestion] = useState(init)
 
     const [testText, setText] = useState("")
 
+
     const addNewAnswer = (questionText: string) => {
         setText("")
         const answer = new Answer()
         answer.answerText = questionText
-        question.answers.push(answer)
-        setQuestion({...question})
+        const answers = question.answers.slice()
+        console.log('ВОТ ТУТ', question)
+        answers.push(answer)
+        setQuestion({...question, answers})
+        changeQuestion(question)
     }
 
     const deleteAnswer = (deletedAnswer: Answer) => {

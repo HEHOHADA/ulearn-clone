@@ -5,11 +5,13 @@ export const useUser = () => {
     const [thema, setThema] = useState(null)
     const [module, setModule] = useState(null)
     const [course, setCourse] = useState(null)
-
-    const chooseThema = useCallback((thema?, module?, course?) => {
-            setCourse(course)
-            setModule(module)
-            setThema(thema)
+    console.log({course, thema, module})
+    const chooseThema = useCallback((data: { thema?: any, module?: any, course?: any }) => {
+            const {thema, module, course} = data
+            console.log(thema, module, course)
+            course !== undefined && setCourse(course)
+            module !== undefined && setModule(module)
+            thema !== undefined && setThema(thema)
         }, [],
     )
 

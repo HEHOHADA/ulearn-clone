@@ -26,7 +26,7 @@ export const ThemeForm = () => {
     const submit = (event: any) => {
         event.preventDefault()
 
-        console.log(test, videoHref)
+        console.log('here', test, videoHref)
     }
     return (
         <div>
@@ -34,7 +34,6 @@ export const ThemeForm = () => {
             <SelectInput onSelect={onSelect} data={options} label={"Тип темы"} name={"sad"}
                          value={Options.Video.toString()}/>
             <form onSubmit={submit}>
-
                 {
                     selectedItem === Options.Code ?
                         <div><textarea className="form-control item"/></div>
