@@ -1,4 +1,4 @@
-import React, {ReactComponentElement} from 'react'
+import React from 'react'
 
 interface Props {
     onChange: (event: any) => void

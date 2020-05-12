@@ -3,7 +3,6 @@ import {IGroup} from "../../../shared/interface";
 import {useForm} from "../../../hooks/form.hook";
 import {TagField} from "../../../shared/utils/TagField";
 import {FormInput} from "../../../shared/utils/FormInput";
-import {SelectInput} from "../../../shared/utils/SelectInput";
 
 interface Props {
     initialValues?: IGroup

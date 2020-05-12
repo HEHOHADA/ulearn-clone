@@ -1,18 +1,17 @@
-import React, {useEffect} from 'react'
-import {useHttp} from "../../../hooks/http.hook";
-import {useForm} from "../../../hooks/form.hook";
-import {ThemaVideo} from "./ThemaTypes/ThemaVideo";
+import React from 'react'
+
 import {CodeThema} from "./ThemaTypes/CodeThema";
 
 interface Props {
-    id?: string
+    id?: any
+    onChooseThema:any
 }
 
 export const Thema = (props: Props) => {
+    // const {id} = props
     // const {request, loading} = useHttp()
     //
     // let themaType = ''
-    // const {form, changeHandler, generateInputs} = useForm('')
     // useEffect(() => {
     //     //request to server body api
     // }, [])

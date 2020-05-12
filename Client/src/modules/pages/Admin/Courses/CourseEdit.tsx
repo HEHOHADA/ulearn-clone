@@ -1,5 +1,5 @@
 import React from 'react'
-import {CourseForm, defaultCourseValue} from "../../../components/Admin/course/CourseForm";
+import {CourseForm} from "../../../components/Admin/course/CourseForm";
 
 const initialValuesMock = {
     name: "mock",

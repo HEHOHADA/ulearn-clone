@@ -1,14 +1,9 @@
-import {ITheme, IQuestion} from "../../../shared/interface";
-import React, {useReducer, useState} from "react";
-import ReactPlayer from "react-player";
-import {SelectInput} from "../../../shared/utils/SelectInput";
-import {Question, TestForm} from "./TestForm";
+import React, {useState} from "react"
+import {SelectInput} from "../../../shared/utils/SelectInput"
+import {Question, TestForm} from "./TestForm"
+import {VideoElement} from "../../../shared/utils/VideoElement"
 
-interface Props {
-    initialValues?: ITheme
-}
-
-const options = Array("video", "code", "test")
+const options = ["video", "code", "test"]
 
 enum Options {
     Video = "video",
@@ -16,32 +11,18 @@ enum Options {
     Test = "test"
 }
 
-const getVideoElement = (value: string, onChange: (newValue: string) => void) => {
-    const changeHandler = (event: any) => {
-        onChange(event.target.value)
-    }
-
-    return (
-        <div>
-
-            <input onChange={changeHandler} className="form-control item" value={value} required={true}
-                   placeholder={"Введите ссылку"}
-                   pattern={"^(http://|https://)\\S+"}/>
-            <br/>
-            <ReactPlayer url={value}/>
-
-        </div>
-
-    )
-}
 export const ThemeForm = () => {
+
     const onSelect = (selectedOption: string) => {
-        setSelected(selectedOption);
+        setSelectedItem(selectedOption)
     }
 
-    const [selectedItem, setSelected] = useState(Options.Video.toString());
+    const [selectedItem, setSelectedItem] = useState(Options.Video.toString())
+
     const [videoHref, setVideoHref] = useState("")
-    const [test,setTest]= useState<Array<Question>>([])
+
+    const [test, setTest] = useState<Array<Question>>([])
+
     const submit = (event: any) => {
         event.preventDefault()
 
@@ -56,14 +37,12 @@ export const ThemeForm = () => {
 
                 {
                     selectedItem === Options.Code ?
-                        <div><textarea className="form-control item"></textarea></div>
-                        : selectedItem === Options.Video ? getVideoElement(videoHref, setVideoHref) :
-                        <TestForm  setTest={setTest} test={test}/>
+                        <div><textarea className="form-control item"/></div>
+                        : selectedItem === Options.Video ? <VideoElement value={videoHref} onChange={setVideoHref}/> :
+                        <TestForm setTest={setTest} test={test}/>
                 }
-                <input className={"form-control item"} type={"submit"} value={"Создать модуль"}/>
+                <button className={"form-control item"} type={"submit"} value={"Создать модуль"}/>
             </form>
-
-
         </div>
 
     )

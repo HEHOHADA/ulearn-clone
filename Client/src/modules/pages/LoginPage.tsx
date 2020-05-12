@@ -1,4 +1,4 @@
-import React, {FC, useContext, useEffect} from 'react'
+import React, {FC, useContext} from 'react'
 import {IData, LoginModel, Token} from "../shared/interface";
 import {AuthContext} from "../context/AuthContext";
 import {useHttp} from "../hooks/http.hook";
@@ -7,7 +7,6 @@ import {useHistory} from "react-router-dom"
 import {useForm} from "../hooks/form.hook";
 import {loginRequest} from "../shared/request";
 import {validationAuthForm} from "../shared/validation/validationAuthForm";
-
 
 
 export const LoginPage: FC = () => {
@@ -29,8 +28,6 @@ export const LoginPage: FC = () => {
         if (errors && !isValid) {
             return
         }
-
-
         try {
             const data: IData = await request(loginRequest, 'POST', {...form})
             if (!data) {
@@ -45,7 +42,7 @@ export const LoginPage: FC = () => {
             const role = token.role
             auth.login(data.token, token.sub, role)
 
-            if (role == 'Admin') {
+            if (role === 'Admin') {
                 history.push('/admin/')
             } else history.push('/')
         } catch (e) {
@@ -67,16 +64,18 @@ export const LoginPage: FC = () => {
             <form
                 onSubmit={loginHandler}
             >
-                {generateInputs((key: string) => {
-                    if (key === 'password') {
-                        return 'password'
-                    }
-                    return 'text'
-                })}
-                <button
-                    disabled={loading}
-                    className="btn btn-primary btn-block" type="submit">Log In
-                </button>
+                <div className="form-group">
+                    {generateInputs((key: string) => {
+                        if (key === 'password') {
+                            return 'password'
+                        }
+                        return 'text'
+                    })}
+                    <button
+                        disabled={loading}
+                        className="btn btn-primary btn-block" type="submit">Log In
+                    </button>
+                </div>
             </form>
         </>
     )

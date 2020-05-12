@@ -1,10 +1,9 @@
 import React, {useCallback, useContext, useEffect} from 'react'
 import {HomeCourses} from "../components/home/HomeCourse/HomeCourses"
 import {Course} from "../shared/interface"
-import {RouteComponentProps} from "react-router-dom";
-import {useHttp} from "../hooks/http.hook";
-import {useAuth} from "../hooks/auth.hook";
-import {AuthContext} from "../context/AuthContext";
+import {RouteComponentProps} from "react-router-dom"
+import {useHttp} from "../hooks/http.hook"
+import {AuthContext} from "../context/AuthContext"
 
 export const HomePage = (props: RouteComponentProps) => {
 

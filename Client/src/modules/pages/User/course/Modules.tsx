@@ -1,24 +1,34 @@
 import React from 'react'
-import {Link, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
-export const Modules = () => {
+interface Props {
+    onChooseModule: any
+}
 
+export const Modules = (props: Props) => {
+
+    // const {onChooseModule} = props
     const history = useHistory()
 
-    const onClickHandler = () => {
+    const onClickBackHandler = () => {
         history.goBack()
     }
+
+    const onChooseModuleHandler = () => {
+
+    }
+
     return (
         <div className="col-md-4 col-xs-12">
             <header className="header-standard header-line">
-                <button type="button" className="btn btn-link" onClick={onClickHandler}>Назад</button>
+                <button type="button" className="btn btn-link" onClick={onClickBackHandler}>Назад</button>
                 <h3>Header</h3>
             </header>
             <div>
                 <li className="list-group-item module">
-                    <Link to={'/'}>
+                    <button className="btn btn-link" onClick={onChooseModuleHandler}>
                         <div>название</div>
-                    </Link>
+                    </button>
                     <span>5/5</span>
                 </li>
             </div>
