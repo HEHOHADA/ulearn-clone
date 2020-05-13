@@ -34,12 +34,15 @@ export const TestForm = (props: questProps) => {
     const addQuestion = (text: string) => {
         setText("")
         const question = new Question()
-        question.question = text
-        setTest([...test, {...question}])
+        test.every(q => q.question !== text)
+        {
+            question.question = text
+            setTest([...test, {...question}])
+        }
     }
 
     const changeQuestion = (question: Question) => {
-        const newQuestions = test.filter(q => q.question !== question.question)
+        const newQuestions = test.filter(q=> q.question !== question.question)
         setTest([...newQuestions, question])
     }
 
@@ -52,13 +55,18 @@ export const TestForm = (props: questProps) => {
         <div>
             <div className="input-group mb-3">
                 <input type="text" className="form-control" value={text}
+                       onKeyUp={(e) => {
+                           e.key === 'Enter' && addQuestion(text)
+                       }}
                        onChange={(event: any) => setText(event.target.value)}/>
-                <button className={"btn btn-light"} onClick={() => addQuestion(text)}>Добавить вопрос</button>
+                <button
+
+                    className={"btn btn-light"} onClick={() => addQuestion(text)}>Добавить вопрос
+                </button>
             </div>
 
             {
                 test.map((question, index) => {
-                    console.log("question: ", question)
                     return (
                         <div key={`${index}-${question.question}`}>
                             {index + 1}.

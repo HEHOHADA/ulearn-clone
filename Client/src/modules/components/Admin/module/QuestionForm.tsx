@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import trash from "../../../shared/svgs/icons8-trash.svg"
 import {Question} from "./TestForm"
 import {IAnswer} from "../../../shared/interface"
@@ -21,6 +21,9 @@ export const QuestionForm = (props: Props) => {
 
     const [testText, setText] = useState("")
 
+    useEffect(() => {
+        changeQuestion(question)
+    }, [question, changeQuestion])
 
     const addNewAnswer = (questionText: string) => {
         setText("")
@@ -30,7 +33,6 @@ export const QuestionForm = (props: Props) => {
         console.log('ВОТ ТУТ', question)
         answers.push(answer)
         setQuestion({...question, answers})
-        changeQuestion(question)
     }
 
     const deleteAnswer = (deletedAnswer: Answer) => {
@@ -48,8 +50,11 @@ export const QuestionForm = (props: Props) => {
             <div><textarea value={question.question} disabled={true} className="form-control"/></div>
             <br/>
             <div className="input-group mb-3">
-                <input type="text" className="form-control" value={testText}
-                       onChange={(event: any) => setText(event.target.value)}/>
+                <input
+                    autoFocus
+                    onKeyUp={(event: any) => event.key === 'Enter' && addNewAnswer(testText)}
+                    type="text" className="form-control" value={testText}
+                    onChange={(event: any) => setText(event.target.value)}/>
                 <button className={"btn btn-light"} onClick={() => addNewAnswer(testText)}>Добавить вариант ответа
                 </button>
             </div>
@@ -61,6 +66,7 @@ export const QuestionForm = (props: Props) => {
                                 <div className="input-group-prepend ml-2">
                                     <div className="input-group-text">
                                         <input type={"checkbox"}
+
                                                checked={answer.isCorrect}
                                                onChange={(event?: any) => setCorrect(question, answer, event)}/></div>
                                 </div>

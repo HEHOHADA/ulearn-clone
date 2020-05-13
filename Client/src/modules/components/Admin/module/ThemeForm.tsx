@@ -29,19 +29,28 @@ export const ThemeForm = () => {
         console.log('here', test, videoHref)
     }
     return (
-        <div>
-
-            <SelectInput onSelect={onSelect} data={options} label={"Тип темы"} name={"sad"}
-                         value={Options.Video.toString()}/>
-            <form onSubmit={submit}>
-                {
-                    selectedItem === Options.Code ?
-                        <div><textarea className="form-control item"/></div>
-                        : selectedItem === Options.Video ? <VideoElement value={videoHref} onChange={setVideoHref}/> :
-                        <TestForm setTest={setTest} test={test}/>
-                }
-                <button className={"form-control item"} type={"submit"} value={"Создать модуль"}/>
-            </form>
+        <div className="m-3">
+            <h2 className="header-standard p-4">Создать модуль</h2>
+            <div className="row">
+                <div className="col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">
+                    <SelectInput onSelect={onSelect} data={options} label={"Тип темы"} name={"sad"}
+                                 value={Options.Video.toString()}/>
+                    <form
+                        onKeyPress={(e) => {
+                            e.key === 'Enter' && e.preventDefault()
+                        }}
+                        onSubmit={submit}>
+                        {
+                            selectedItem === Options.Code ?
+                                <div><textarea className="form-control item"/></div>
+                                : selectedItem === Options.Video ?
+                                <VideoElement value={videoHref} onChange={setVideoHref}/> :
+                                <TestForm setTest={setTest} test={test}/>
+                        }
+                        <button className={"btn btn-block btn-primary"} type={"submit"}>Создать модуль</button>
+                    </form>
+                </div>
+            </div>
         </div>
 
     )

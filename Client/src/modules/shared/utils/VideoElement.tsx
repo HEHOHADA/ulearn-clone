@@ -21,7 +21,7 @@ export const VideoElement = (props: Props) => {
                    placeholder={"Введите ссылку"}
                    pattern={"^(http://|https://)\\S+"}/>
             <br/>
-            <ReactPlayer url={value}/>
+            {value && <ReactPlayer url={value}/>}
 
         </div>
 
