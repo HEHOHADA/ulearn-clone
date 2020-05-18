@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from "react";
-import {IAnswer, IQuestion} from "../../../shared/interface";
+import React, {useState} from "react"
+import {IAnswer, IQuestion} from "../../../shared/interface"
 import trash from "../../../shared/svgs/icons8-trash.svg"
-import {QuestionForm} from "./QuestionForm";
+import {QuestionForm} from "./QuestionForm"
 
 export class Question implements IQuestion {
     answers: Array<Answer> = []
@@ -33,16 +33,17 @@ export const TestForm = (props: questProps) => {
 
     const addQuestion = (text: string) => {
         setText("")
-        const question = new Question()
-        test.every(q => q.question !== text)
-        {
-            question.question = text
-            setTest([...test, {...question}])
+        if (test.some(q => q.question === text)) {
+            return
         }
+        const question = new Question()
+        question.question = text
+        setTest([...test, {...question}])
     }
 
     const changeQuestion = (question: Question) => {
-        const newQuestions = test.filter(q=> q.question !== question.question)
+        const newQuestions = test.filter(q => q.question !== question.question)
+
         setTest([...newQuestions, question])
     }
 
@@ -56,12 +57,14 @@ export const TestForm = (props: questProps) => {
             <div className="input-group mb-3">
                 <input type="text" className="form-control" value={text}
                        onKeyUp={(e) => {
-                           e.key === 'Enter' && addQuestion(text)
+
+                           e.key === 'Enter' && text.trim() && addQuestion(text) && e.preventDefault()
                        }}
+
                        onChange={(event: any) => setText(event.target.value)}/>
                 <button
 
-                    className={"btn btn-light"} onClick={() => addQuestion(text)}>Добавить вопрос
+                    className={"btn btn-light"} onClick={() => text.trim() && addQuestion(text)}>Добавить вопрос
                 </button>
             </div>
 

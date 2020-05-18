@@ -1,5 +1,5 @@
 import React from 'react'
-import {Link, Redirect} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
 interface Props {
     id?: string
@@ -14,8 +14,11 @@ interface Props {
 }
 
 export const Course = (props: Props) => {
+
     const {onChooseModule} = props
+
     const array = [{id: 1, name: '31321', points: 1, maxPoints: 5}]
+
     const onChooseModuleHandler = (id: any) => {
         console.log('here', id)
         onChooseModule({module: id})

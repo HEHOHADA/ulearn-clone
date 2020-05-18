@@ -3,6 +3,9 @@ import {SelectInput} from "../../../shared/utils/SelectInput"
 import {Question, TestForm} from "./TestForm"
 import {VideoElement} from "../../../shared/utils/VideoElement"
 
+
+import {CodeEditor} from "../../../shared/utils/CodeEditor"
+
 const options = ["video", "code", "test"]
 
 enum Options {
@@ -22,10 +25,11 @@ export const ThemeForm = () => {
     const [videoHref, setVideoHref] = useState("")
 
     const [test, setTest] = useState<Array<Question>>([])
+    const [code, setCode] = useState('')
 
     const submit = (event: any) => {
         event.preventDefault()
-
+        console.log(code)
         console.log('here', test, videoHref)
     }
     return (
@@ -37,12 +41,17 @@ export const ThemeForm = () => {
                                  value={Options.Video.toString()}/>
                     <form
                         onKeyPress={(e) => {
+                            selectedItem !== Options.Code &&
+                            e.key === 'Enter' && e.preventDefault()
+                        }}
+                        onKeyUp={(e) => {
+                            selectedItem === Options.Code &&
                             e.key === 'Enter' && e.preventDefault()
                         }}
                         onSubmit={submit}>
                         {
                             selectedItem === Options.Code ?
-                                <div><textarea className="form-control item"/></div>
+                                <CodeEditor code={code} onChangeHandler={setCode}/>
                                 : selectedItem === Options.Video ?
                                 <VideoElement value={videoHref} onChange={setVideoHref}/> :
                                 <TestForm setTest={setTest} test={test}/>

@@ -23,7 +23,8 @@ export const QuestionForm = (props: Props) => {
 
     useEffect(() => {
         changeQuestion(question)
-    }, [question, changeQuestion])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [question])
 
     const addNewAnswer = (questionText: string) => {
         setText("")
@@ -52,10 +53,11 @@ export const QuestionForm = (props: Props) => {
             <div className="input-group mb-3">
                 <input
                     autoFocus
-                    onKeyUp={(event: any) => event.key === 'Enter' && addNewAnswer(testText)}
+                    onKeyPress={(event: any) => event.key === 'Enter' && testText.trim() && addNewAnswer(testText) && event.stopPropagation()}
                     type="text" className="form-control" value={testText}
                     onChange={(event: any) => setText(event.target.value)}/>
-                <button className={"btn btn-light"} onClick={() => addNewAnswer(testText)}>Добавить вариант ответа
+                <button className={"btn btn-light"} onClick={() => testText.trim() && addNewAnswer(testText)}>Добавить
+                    вариант ответа
                 </button>
             </div>
             {

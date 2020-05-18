@@ -8,12 +8,16 @@ import {useParams, useHistory, Link} from 'react-router-dom';
 export const UserCoursePage = () => {
 
     const {module, chooseThema, thema, course} = useContext(UserContext)
+
     const {id} = useParams()
+
     const history = useHistory()
+
     const themaUrl = history.location.pathname.split('/')[3]
 
     useEffect(() => {
         chooseThema({thema: themaUrl})
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [themaUrl])
 
     useEffect(() => {
@@ -29,9 +33,9 @@ export const UserCoursePage = () => {
                     <div className="col-md-8 col-xs-12">
                         <div className="container">
                             <Thema id={thema} nextThema={chooseThema}/>
-                            <div className="justify-content-between">
-                                {thema && <Link to={' asd'} className="btn btn-primary">Назад</Link>}
-                                {thema && <Link to={''} className="btn btn-primary">След</Link>}
+                            <div className="d-flex flex-nowrap m-3">
+                                {thema && <Link to={' asd'} className="btn btn-primary btn-block m-1    ">Назад</Link>}
+                                {thema && <Link to={''} className="btn btn-primary btn-block m-1">След</Link>}
                             </div>
                         </div>
                     </div>
