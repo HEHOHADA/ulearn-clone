@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UlearnData.Models.Tasks.TestTask;
@@ -13,10 +14,12 @@ namespace UlearnAPI.Controllers
     public class TestTaskController : ControllerBase
     {
         private readonly TestTasksService _testTasksService;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public TestTaskController(TestTasksService testTasksService)
+        public TestTaskController(TestTasksService testTasksService, UserManager<IdentityUser> userManager)
         {
             _testTasksService = testTasksService;
+            _userManager = userManager;
         }
 
         // GET: api/TestTask
@@ -93,6 +96,14 @@ namespace UlearnAPI.Controllers
             await _testTasksService.Remove(testTask);
             
             return testTask;
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<TestQuestionAnswerResult>>> GetResults(int id, int groupId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            return await _testTasksService.GetResults(id, groupId, user.Id);
         }
     }
 }

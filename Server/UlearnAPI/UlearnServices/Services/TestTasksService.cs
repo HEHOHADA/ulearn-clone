@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UlearnData;
+using UlearnData.Models;
 using UlearnData.Models.Tasks.TestTask;
 
 namespace UlearnServices.Services
@@ -54,6 +57,15 @@ namespace UlearnServices.Services
         {
             _context.TestTasks.Remove(testTask);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<TestQuestionAnswerResult>> GetResults(int taskId, int groupId, string userId)
+        {
+            return await _context.QuestionAnswerResults
+                .Include(result => result.Sender)
+                .Include(result => result.Group)
+                .Where(result => result.Group.Id == groupId && result.Sender.Id == userId)
+                .ToListAsync();
         }
     }
 }

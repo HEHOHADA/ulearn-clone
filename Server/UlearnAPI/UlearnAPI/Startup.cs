@@ -80,6 +80,8 @@ namespace UlearnAPI
             services.AddTransient<TestTasksService>();
             services.AddTransient<CoursesService>();
             services.AddTransient<GroupsService>();
+            services.AddTransient<CodeTasksService>();
+            services.AddTransient<VideoTasksService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
