@@ -11,7 +11,7 @@ interface Props {
 
 export const defaultSubscriptionFormValues = {
     price: 0,
-    benefits: '',
+    level: 0,
     name: ''
 }
 

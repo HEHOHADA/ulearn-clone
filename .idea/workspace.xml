@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="331656f1-42a6-47e1-8480-80db31d78777" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+        <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="develop" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1ZgAKtkhPr7IkgXkAHK0HtFjIV5" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="add_unversioned_files" value="true&#10;C:/Users/bulat/WebstormProjects/ulearn-clone/Client/node_modules/ace-builds/ace-modules.d.ts" />
+    <property name="ignore_missing_gitignore" value="true" />
+    <property name="javascript.nodejs.core.library.configured.version" value="13.1.0" />
+    <property name="last_opened_file_path" value="$USER_HOME$/AppData/Roaming/npm/node" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.standard" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.standard" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.standard" value="" />
+    <property name="nodejs_interpreter_path" value="node" />
+    <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="prettierjs.PrettierConfiguration.Package" value="C:\Users\bulat\AppData\Roaming\npm\node_modules\prettier" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="ts.external.directory.path" value="C:\Users\bulat\WebstormProjects\ulearn-clone\Client\node_modules\typescript\lib" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\bulat\WebstormProjects\ulearn-clone\src\modules\pages\Admin\Course\Theme" />
+      <recent name="C:\Users\bulat\WebstormProjects\ulearn-clone\src\modules\components\Admin\course" />
+      <recent name="C:\Users\bulat\WebstormProjects\ulearn-clone\public" />
+      <recent name="C:\Users\bulat\WebstormProjects\ulearn-clone\src\modules\pages\Admin\Course" />
+      <recent name="C:\Users\bulat\WebstormProjects\ulearn-clone\node_modules\bootstrap\dist\css" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\bulat\WebstormProjects\ulearn-clone\Client\src\modules\components" />
+      <recent name="C:\Users\bulat\WebstormProjects\ulearn-clone\Client\src\modules\components\User" />
+      <recent name="C:\Users\bulat\WebstormProjects\ulearn-clone\Client\src\modules" />
+      <recent name="C:\Users\bulat\WebstormProjects\ulearn-clone\Client" />
+      <recent name="C:\Users\bulat\WebstormProjects\ulearn-clone\src\modules\components\teacher" />
+    </key>
+  </component>
+  <component name="RunManager" selected="npm.npm start">
+    <configuration name="Debug Application" type="JavascriptDebugType" uri="http://localhost:3000">
+      <method v="2" />
+    </configuration>
+    <configuration name="npm start" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="331656f1-42a6-47e1-8480-80db31d78777" name="Default Changelist" comment="" />
+      <created>1585250302197</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1585250302197</updated>
+      <workItem from="1585250304330" duration="690000" />
+      <workItem from="1585289217530" duration="21000" />
+      <workItem from="1585379480991" duration="5283000" />
+      <workItem from="1585386278617" duration="383000" />
+      <workItem from="1585386690153" duration="5934000" />
+      <workItem from="1585465775822" duration="6024000" />
+      <workItem from="1585492636167" duration="1195000" />
+      <workItem from="1585568625290" duration="2000" />
+      <workItem from="1585593460395" duration="3000" />
+      <workItem from="1585732208667" duration="1445000" />
+      <workItem from="1585894101107" duration="6741000" />
+      <workItem from="1585915580468" duration="1049000" />
+      <workItem from="1585916644565" duration="4866000" />
+      <workItem from="1586082916226" duration="599000" />
+      <workItem from="1586260170772" duration="7652000" />
+      <workItem from="1586333411763" duration="5351000" />
+      <workItem from="1586434854821" duration="1347000" />
+      <workItem from="1586509445934" duration="756000" />
+      <workItem from="1586517855487" duration="129000" />
+      <workItem from="1586518153021" duration="574000" />
+      <workItem from="1586532105968" duration="599000" />
+      <workItem from="1586694100381" duration="674000" />
+      <workItem from="1587061449158" duration="184000" />
+      <workItem from="1587123328682" duration="1286000" />
+      <workItem from="1587214610730" duration="604000" />
+      <workItem from="1587215574562" duration="2382000" />
+      <workItem from="1587322939989" duration="12000" />
+      <workItem from="1587388407905" duration="886000" />
+      <workItem from="1587391871196" duration="9816000" />
+      <workItem from="1587410110335" duration="529000" />
+      <workItem from="1587454445453" duration="5647000" />
+      <workItem from="1587477988705" duration="2249000" />
+      <workItem from="1587502412480" duration="644000" />
+      <workItem from="1587537726249" duration="3994000" />
+      <workItem from="1587565080434" duration="610000" />
+      <workItem from="1587644814257" duration="8000" />
+      <workItem from="1587644833759" duration="6958000" />
+      <workItem from="1587665408705" duration="293000" />
+      <workItem from="1587713692764" duration="66000" />
+      <workItem from="1587720761543" duration="654000" />
+      <workItem from="1587732107663" duration="6979000" />
+      <workItem from="1587822573364" duration="1977000" />
+      <workItem from="1587834470012" duration="2678000" />
+      <workItem from="1587845726645" duration="600000" />
+      <workItem from="1587891058872" duration="10066000" />
+      <workItem from="1587924743823" duration="2000" />
+      <workItem from="1587975442892" duration="4461000" />
+      <workItem from="1588059114539" duration="1200000" />
+      <workItem from="1588087510147" duration="863000" />
+      <workItem from="1588150727214" duration="1335000" />
+      <workItem from="1588257380291" duration="392000" />
+      <workItem from="1588320315768" duration="612000" />
+      <workItem from="1588498158600" duration="19784000" />
+      <workItem from="1588572530562" duration="14368000" />
+      <workItem from="1588626765693" duration="1043000" />
+      <workItem from="1588664305035" duration="4000" />
+      <workItem from="1588675347494" duration="6871000" />
+      <workItem from="1588705090801" duration="1200000" />
+      <workItem from="1588755728469" duration="1209000" />
+      <workItem from="1588766346526" duration="1047000" />
+      <workItem from="1588851876048" duration="728000" />
+      <workItem from="1588923306196" duration="721000" />
+      <workItem from="1588936957701" duration="12589000" />
+      <workItem from="1588964704572" duration="2173000" />
+      <workItem from="1588967004163" duration="5157000" />
+      <workItem from="1589006072158" duration="5684000" />
+      <workItem from="1589019910854" duration="21214000" />
+      <workItem from="1589095037071" duration="2819000" />
+      <workItem from="1589184190816" duration="4591000" />
+      <workItem from="1589222251286" duration="11855000" />
+      <workItem from="1589263713678" duration="635000" />
+      <workItem from="1589278258237" duration="904000" />
+      <workItem from="1589282423476" duration="15412000" />
+      <workItem from="1589354495859" duration="21634000" />
+      <workItem from="1589438716155" duration="23747000" />
+      <workItem from="1589488661439" duration="27000" />
+      <workItem from="1589524550406" duration="6361000" />
+      <workItem from="1589612788547" duration="619000" />
+      <workItem from="1589715238196" duration="5002000" />
+      <workItem from="1589808740703" duration="685000" />
+      <workItem from="1589877598060" duration="10185000" />
+      <workItem from="1589983391677" duration="2910000" />
+      <workItem from="1590004451641" duration="922000" />
+      <workItem from="1590059544393" duration="2619000" />
+      <workItem from="1590072502734" duration="1439000" />
+      <workItem from="1590139485588" duration="836000" />
+      <workItem from="1590232370291" duration="11049000" />
+      <workItem from="1590266447812" duration="2368000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.cs" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="552" y="178" key="#ESLint" timestamp="1585381155417">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="178" key="#ESLint/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1585381155417" />
+    <state x="845" y="383" key="#Notifications" timestamp="1586694191342">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="845" y="383" key="#Notifications/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1586694191342" />
+    <state x="552" y="161" key="#Plugins" timestamp="1587215865415">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="161" key="#Plugins/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1587215865415" />
+    <state x="859" y="385" width="729" height="269" key="#Vim_Emulation" timestamp="1587471156140">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="859" y="385" width="729" height="269" key="#Vim_Emulation/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1587471156140" />
+    <state x="676" y="373" key="#com.intellij.codeInsight.template.impl.EditVariableDialog" timestamp="1585389834022">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="676" y="373" key="#com.intellij.codeInsight.template.impl.EditVariableDialog/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1585389834022" />
+    <state x="640" y="256" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1586517975628">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="640" y="256" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1586517975628" />
+    <state x="466" y="114" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1589018135758">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="466" y="114" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1589018135758" />
+    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1588951417938">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1588951417938" />
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1587503029316">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1587503029316" />
+    <state width="1877" height="280" key="GridCell.Tab.0.bottom" timestamp="1588951417865">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="280" key="GridCell.Tab.0.bottom/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1588951417865" />
+    <state width="1877" height="280" key="GridCell.Tab.0.center" timestamp="1588951417865">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="280" key="GridCell.Tab.0.center/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1588951417865" />
+    <state width="1877" height="280" key="GridCell.Tab.0.left" timestamp="1588951417865">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="280" key="GridCell.Tab.0.left/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1588951417865" />
+    <state width="1877" height="280" key="GridCell.Tab.0.right" timestamp="1588951417865">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="280" key="GridCell.Tab.0.right/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1588951417865" />
+    <state x="540" y="255" key="IDE.errors.dialog" timestamp="1590269013204">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="540" y="255" key="IDE.errors.dialog/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1590269013204" />
+    <state x="184" y="86" key="MergeDialog" timestamp="1590269183422">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="184" y="86" key="MergeDialog/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1590269183422" />
+    <state x="670" y="51" key="SettingsEditor" timestamp="1588967231782">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="670" y="51" key="SettingsEditor/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1588967231782" />
+    <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1588951135237">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1588951135237" />
+    <state x="737" y="233" key="git4idea.branch.GitSmartOperationDialog" timestamp="1590269272867">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="737" y="233" key="git4idea.branch.GitSmartOperationDialog/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1590269272867" />
+    <state x="616" y="240" key="run.anything.popup" timestamp="1589895877672">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="616" y="240" key="run.anything.popup/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1589895877672" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1590242132092">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/1816.-1080.1920.1040@0.0.1920.1040" timestamp="1590242132092" />
+  </component>
+</project>

@@ -10,7 +10,7 @@ interface Props {
         max: number
     }
     title?: string
-    onChooseModule: (data: { thema?: any, module?: any, course?: any }) => void
+    onChooseModule: (data: { theme?: any, module?: any, course?: any }) => void
 }
 
 export const Course = (props: Props) => {

@@ -12,14 +12,14 @@ export const SubscriptionView = (props: Props) => {
     const {onClick, text} = props
 
     const subscriptionHandler = () => {
-        const subs: ISubscription[] = [{price: 12, name: "321321", benefits: "321321"}]
+        const subs: ISubscription[] = [{price: 12, name: "321321", level: 321321}]
 
         return subs.map(sub => (
             <div className="clean-pricing-item" key={`${sub.name}-${sub.price}`}>
                 <div className="heading">
                     <h3>{sub.name}</h3>
                 </div>
-                <p>{sub.benefits}</p>
+                <p>{sub.level}</p>
                 <div className="features">
                     <h4><span className="feature">Duration:&nbsp;</span><span>121</span></h4>
                 </div>
