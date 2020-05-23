@@ -16,7 +16,9 @@ using UlearnData.Models;
 
 namespace UlearnAPI.Controllers
 {
-    public class AccountController : Controller
+    [Route("api/{controller}")]
+    [ApiController]
+    public class AccountController : ControllerBase
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
@@ -30,8 +32,8 @@ namespace UlearnAPI.Controllers
             _configuration = configuration;
         }
 
-        [HttpPost]
-        public async Task<object> Login([FromBody] LoginDto model)
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
             if (model.Login.IndexOf('@') > -1)
             {
@@ -64,13 +66,13 @@ namespace UlearnAPI.Controllers
             if (result.Succeeded)
             {
                 var user = _userManager.Users.SingleOrDefault(r => r.UserName == model.Login);
-                return Json(new {Token = await GenerateJwtToken(user)});
+                return Ok(new {Token = await GenerateJwtToken(user)});
             }
 
             return BadRequest(new {Message = new[] {"Invalid UserName or password"}});
         }
 
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto model)
         {
             var user = new User
@@ -84,7 +86,7 @@ namespace UlearnAPI.Controllers
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, false);
-                return Json(new {Token = await GenerateJwtToken(user)});
+                return Ok(new {Token = await GenerateJwtToken(user)});
             }
 
             return BadRequest(new
@@ -95,7 +97,7 @@ namespace UlearnAPI.Controllers
             });
         }
 
-        private async Task<object> GenerateJwtToken(User user)
+        private async Task<string> GenerateJwtToken(User user)
         {
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(
                 new List<Claim>

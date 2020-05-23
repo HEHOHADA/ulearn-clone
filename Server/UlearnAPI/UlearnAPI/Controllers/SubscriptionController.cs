@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -46,6 +47,7 @@ namespace UlearnAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutSubscription(int id, Subscription subscription)
         {
             if (id != subscription.Id)
@@ -75,6 +77,7 @@ namespace UlearnAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Subscription>> PostSubscription(Subscription subscription)
         {
             return CreatedAtAction("GetSubscription", new {id = subscription.Id},
@@ -84,6 +87,7 @@ namespace UlearnAPI.Controllers
 
         // DELETE: api/Subscription/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Subscription>> DeleteSubscription(int id)
         {
             var subscription = await _subscriptionsService.FindAsync(id);
