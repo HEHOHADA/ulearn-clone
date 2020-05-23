@@ -32,6 +32,11 @@ export const ThemeForm = () => {
         console.log(code)
         console.log('here', test, videoHref)
     }
+
+    const props = {
+        onChange: (code: any) => setCode(code)
+    }
+
     return (
         <div className="m-3">
             <h2 className="header-standard p-4">Создать модуль</h2>
@@ -51,7 +56,7 @@ export const ThemeForm = () => {
                         onSubmit={submit}>
                         {
                             selectedItem === Options.Code ?
-                                <CodeEditor code={code} onChangeHandler={setCode}/>
+                                <CodeEditor code={code} {...props}/>
                                 : selectedItem === Options.Video ?
                                 <VideoElement value={videoHref} onChange={setVideoHref}/> :
                                 <TestForm setTest={setTest} test={test}/>

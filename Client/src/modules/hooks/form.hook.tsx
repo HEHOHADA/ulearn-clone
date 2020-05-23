@@ -19,7 +19,6 @@ export interface Any<T> {
 }
 
 export const useForm = <T extends {}>(initialValues: T) => {
-    // const {initialValues, array} = data
 
     const [form, setForm] = useState<T>(initialValues)
 

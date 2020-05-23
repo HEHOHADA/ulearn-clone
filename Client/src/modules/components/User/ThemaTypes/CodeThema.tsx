@@ -10,6 +10,9 @@ interface Props {
 export const CodeThema = (props: Props) => {
     const {name, text, initialCode = ''} = props
     const [code, setCode] = useState(initialCode)
+    const propsCode = {
+        onChange: (code: any) => setCode(code)
+    }
 
     return (
         <div>
@@ -17,7 +20,7 @@ export const CodeThema = (props: Props) => {
             <p>{text}</p>
             <form onSubmit={() => {
             }}>
-                <CodeEditor code={code} onChangeHandler={setCode}/>
+                <CodeEditor code={code} {...propsCode}/>
                 <button className="btn btn-primary btn-block" type="submit"
                 > Отправить
                 </button>

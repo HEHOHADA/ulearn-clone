@@ -12,9 +12,6 @@ interface settings {
     value: Array<string>
 }
 
-// interface Props {
-//     role: string
-// }
 
 export const IdentityPage = () => {
     const auth = useContext(AuthContext)

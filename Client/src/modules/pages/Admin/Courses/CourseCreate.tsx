@@ -6,6 +6,5 @@ export const CourseCreate = () => {
     return (
         <CourseForm/>
     )
-
 }
 

@@ -3,7 +3,7 @@ import {ISubscription} from "../../shared/interface";
 
 
 interface Props {
-    onClick: (id:string) => void,
+    onClick: (id: string) => void,
     text: string
 }
 
@@ -26,7 +26,7 @@ export const SubscriptionView = (props: Props) => {
                 <div className="price">
                     <h4>{sub.price}</h4>
                 </div>
-                <button onClick={()=>onClick(sub.name)} className="btn btn-outline-primary btn-block"
+                <button onClick={() => onClick(sub.name)} className="btn btn-outline-primary btn-block"
                         type="button">{text}</button>
             </div>
         ))

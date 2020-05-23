@@ -1,5 +1,4 @@
 import React, {ReactComponentElement} from 'react'
-import {CourseViewModel, ViewModelField} from "../../view-models/CourseViewModel";
 
 interface Props {
     onChange: (event: any) => void

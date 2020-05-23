@@ -15,6 +15,7 @@ import {useTeacherRoute} from "./routes/TeacherRoute";
 import {LogoutPage} from "./modules/pages/LogoutPage";
 import {UserContext} from './modules/context/UserContext'
 import {useUser} from "./modules/hooks/user.hook";
+import {PaymentPage} from "./modules/pages/PaymentPage";
 
 
 const App: FC = () => {
@@ -37,6 +38,7 @@ const App: FC = () => {
                 <BrowserRouter>
                     <Switch>
                         <AppRoute exact path={"/"} component={HomePage} layout={MainLayout}/>
+                        <AppRoute exact path={"/pay"} component={PaymentPage} layout={MainLayout}/>
                         <AppRoute path={"/course/:id"} component={UserCoursePage} layout={MainLayout}/>
                         <AppRoute exact path={"/account"} component={IdentityPage} layout={MainLayout}/>
                         {!isAuth && <AppRoute exact path={"/login"} component={LoginPage} layout={AuthLayout}/>}

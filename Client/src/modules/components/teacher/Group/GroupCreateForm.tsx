@@ -7,6 +7,7 @@ import {SelectInput} from "../../../shared/utils/SelectInput";
 
 interface Props {
     initialValues?: IGroup
+    onSubmit: (event: any, form: any) => void
 }
 
 export const defaultGroupFormValues = {
@@ -17,14 +18,14 @@ export const defaultGroupFormValues = {
 
 
 export const GroupCreateForm = (props: Props) => {
+    //
+    // const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    //     event.preventDefault()
+    //     console.log(form)
+    //
+    // }
 
-    const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
-        console.log(form)
-
-    }
-
-    const {initialValues = defaultGroupFormValues} = props
+    const {initialValues = defaultGroupFormValues, onSubmit} = props
 
     const {form, changeHandler, setForm} = useForm<IGroup>(initialValues)
 
@@ -39,10 +40,11 @@ export const GroupCreateForm = (props: Props) => {
             onKeyPress={(e) => {
                 e.key === 'Enter' && e.preventDefault()
             }}
-            onSubmit={onSubmit}
+            onSubmit={(event) => onSubmit(event, form)}
             className="form-group">
             <FormInput onChange={changeHandler} name={'name'} formValue={form.name}/>
-            <SelectInput name={'courseName'} onSelect={(selectedItem: string) => setForm({...form,courseName: selectedItem})}
+            <SelectInput name={'courseName'}
+                         onSelect={(selectedItem: string) => setForm({...form, courseName: selectedItem})}
                          value={form.courseName}
                          data={["course1", 'course2']}
                          label={'chose course'}/>

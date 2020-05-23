@@ -21,8 +21,8 @@ export const FormInput = (props: Props) => {
                 onChange={onChange}
                 value={formValue}
                 name={name}
-                placeholder={name}
-                className="form-control item"
+                placeholder={label}
+                className="form-control"
                 type={type}/>
         </div>
     )

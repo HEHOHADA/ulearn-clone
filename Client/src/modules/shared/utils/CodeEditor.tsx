@@ -6,12 +6,11 @@ import "ace-builds/src-noconflict/theme-monokai"
 
 interface Props {
     code: string
-    onChangeHandler: (value: string) => void
 }
 
 export const CodeEditor = (props: Props) => {
 
-    const {code, onChangeHandler} = props
+    const {code, ...rest} = props
 
     return (
         <div className="border border-primary rounded mb-3">
@@ -20,10 +19,11 @@ export const CodeEditor = (props: Props) => {
                 placeholder="Placeholder Text"
                 mode="javascript"
                 theme="monokai"
-                name="UNIQUE_ID_OF_DIV"
-                onChange={code => onChangeHandler(code)}
+                name={`${new Date()}`}
                 fontSize={14}
                 value={code}
+                setOptions={{ useWorker: false }}
+                {...rest}
             />
         </div>
     )

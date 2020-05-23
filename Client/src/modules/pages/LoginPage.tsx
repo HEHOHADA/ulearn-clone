@@ -7,6 +7,7 @@ import {useHistory} from "react-router-dom"
 import {useForm} from "../hooks/form.hook";
 import {loginRequest} from "../shared/request";
 import {validationAuthForm} from "../shared/validation/validationAuthForm";
+import {Loader} from "../shared/utils/Loader";
 
 
 export const LoginPage: FC = () => {
@@ -49,7 +50,6 @@ export const LoginPage: FC = () => {
             console.log(e)
         }
     }
-
     return (
         <>
             <div className="block-heading">
@@ -57,7 +57,7 @@ export const LoginPage: FC = () => {
                 <p>Пожауйста войдите в систему</p>
             </div>
             {error &&
-            < div className="alert alert-danger" role="alert">
+            <div className="alert alert-danger" role="alert">
                 <strong>{error || 'Введите правильное значение'}</strong>
             </div>
             }
