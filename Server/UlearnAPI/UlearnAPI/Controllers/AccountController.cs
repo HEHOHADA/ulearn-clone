@@ -16,7 +16,7 @@ using UlearnData.Models;
 
 namespace UlearnAPI.Controllers
 {
-    [Route("api/{controller}/{action}/{id?}")]
+    [Route("api/{controller}")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -32,7 +32,7 @@ namespace UlearnAPI.Controllers
             _configuration = configuration;
         }
 
-        [HttpPost]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
             if (model.Login.IndexOf('@') > -1)
@@ -72,7 +72,7 @@ namespace UlearnAPI.Controllers
             return BadRequest(new {Message = new[] {"Invalid UserName or password"}});
         }
 
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto model)
         {
             var user = new User

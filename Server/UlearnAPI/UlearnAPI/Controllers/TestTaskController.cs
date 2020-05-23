@@ -98,7 +98,7 @@ namespace UlearnAPI.Controllers
             return testTask;
         }
 
-        [HttpGet]
+        [HttpGet("results")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<TestQuestionAnswerResult>>> GetResults(int id, int groupId)
         {
