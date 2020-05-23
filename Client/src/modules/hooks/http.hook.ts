@@ -7,12 +7,12 @@ export const useHttp = () => {
 
     const request = useCallback(async (url, method = 'GET', body = null, headers = {}) => {
         setLoading(true)
-
         try {
 
             if (body) {
                 body = JSON.stringify(body)
                 headers['Content-Type'] = 'application/json'
+                headers["Access-Control-Allow-Origin"] = URL
             }
 
             const response = await fetch(url, {
@@ -20,6 +20,10 @@ export const useHttp = () => {
             })
 
             const data = await response.json()
+            console.log(data)
+            if (data.message) {
+                throw new Error(data.message || 'Что-то пошло не так')
+            }
 
             if (!response.ok) {
                 throw new Error(data.message || 'Что-то пошло не так')

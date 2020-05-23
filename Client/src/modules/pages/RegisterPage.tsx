@@ -1,29 +1,42 @@
 import React, {FC, useContext} from 'react'
-import {RegisterModel, Token} from "../shared/interface";
-import {useHttp} from "../hooks/http.hook";
+import {IData, RegisterModel, Token} from "../shared/interface"
+import {useHttp} from "../hooks/http.hook"
 import {useHistory} from 'react-router-dom'
-import {useForm} from "../hooks/form.hook";
+import {useForm} from "../hooks/form.hook"
 import jwt from 'jsonwebtoken'
-import {AuthContext} from "../context/AuthContext";
+import {AuthContext} from "../context/AuthContext"
+import {registerRequest} from "../shared/request"
+import {validationAuthForm} from "../shared/validation/validationAuthForm"
 
 export const RegisterPage: FC = () => {
 
     const history = useHistory()
+
     const initialValues = {
         email: '',
         username: '',
         password: ''
     }
-    const {loading, request} = useHttp()
+
+    const {loading, request, error, clearError} = useHttp()
     const auth = useContext(AuthContext)
-    const {form, generateInputs} = useForm<RegisterModel>(initialValues)
+    const {form, generateInputs, validation, errors} = useForm<RegisterModel>(initialValues)
 
 
     const registerHandler = async (event: any) => {
         event.preventDefault()
+        clearError()
+        const isValid = validation(validationAuthForm)
+        if (errors && !isValid) {
+            return
+        }
         try {
-            const data: { token: string } = await request('https://localhost:5001/api/account/register', "POST", {...form})
-            const decoded = jwt.decode(data.token)
+            const data: IData = await request(registerRequest, "POST", {...form})
+            if (!data) {
+                return
+            }
+
+            const decoded = jwt.decode(data.token!)
             if (!decoded) {
                 return
             }
@@ -45,6 +58,11 @@ export const RegisterPage: FC = () => {
                 <h2 className="text-info">Регистрация</h2>
                 <p>Пожалуйста зарегистрируйтесь</p>
             </div>
+            {error &&
+            < div className="alert alert-danger" role="alert">
+                <strong>{error || 'Введите правильное значение'}</strong>
+            </div>
+            }
             <form
                 onSubmit={registerHandler}
             >
