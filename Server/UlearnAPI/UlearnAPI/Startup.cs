@@ -18,6 +18,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using UlearnData;
+using UlearnData.Models;
+using UlearnServices.Services;
 
 namespace UlearnAPI
 {
@@ -35,9 +37,10 @@ namespace UlearnAPI
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("DefaultConnection"), 
+                    b => b.MigrationsAssembly("UlearnAPI")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddIdentity<User, IdentityRole>(options =>
                 {
                     options.User.RequireUniqueEmail = true;
                 })
@@ -68,8 +71,17 @@ namespace UlearnAPI
                 });
 
             services.AddAuthorization();
-
             services.AddControllers();
+            services.AddSwaggerDocument();
+
+
+            services.AddTransient<SubscriptionsService>();
+            services.AddTransient<ModulesService>();
+            services.AddTransient<TestTasksService>();
+            services.AddTransient<CoursesService>();
+            services.AddTransient<GroupsService>();
+            services.AddTransient<CodeTasksService>();
+            services.AddTransient<VideoTasksService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -94,6 +106,9 @@ namespace UlearnAPI
             {
                 endpoints.MapControllerRoute("DefaultRoute", "api/{controller}/{action}/{id?}");
             });
+            
+            app.UseOpenApi();  
+            app.UseSwaggerUi3(); 
 
             using var scope = app.ApplicationServices.CreateScope();
             CreateRoles(scope.ServiceProvider.GetService<IServiceProvider>()).Wait();
@@ -101,7 +116,7 @@ namespace UlearnAPI
 
         private async Task CreateRoles(IServiceProvider serviceProvider)
         {
-            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             string[] roleNames = {"Admin"};
 
@@ -113,11 +128,11 @@ namespace UlearnAPI
                 }
             }
 
-            IdentityUser user = await userManager.FindByEmailAsync("admin@mail.ru");
+            User user = await userManager.FindByEmailAsync("admin@mail.ru");
 
             if (user == null)
             {
-                var admin = new IdentityUser()
+                var admin = new User()
                 {
                     UserName = "Admin",
                     Email = "admin@mail.ru",
