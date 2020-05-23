@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using UlearnAPI.Chat;
 using UlearnData;
 using UlearnData.Models;
 using UlearnServices.Services;
@@ -35,6 +36,8 @@ namespace UlearnAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
+            
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection"), 
@@ -105,6 +108,7 @@ namespace UlearnAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute("DefaultRoute", "api/{controller}/{action}/{id?}");
+                endpoints.MapHub<ChatHub>("/api/chat");
             });
             
             app.UseOpenApi();  
