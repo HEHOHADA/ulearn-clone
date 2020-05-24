@@ -37,16 +37,13 @@ namespace UlearnAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSignalR();
-            
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection"), 
+                    Configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly("UlearnAPI")));
 
-            services.AddIdentity<User, IdentityRole>(options =>
-                {
-                    options.User.RequireUniqueEmail = true;
-                })
+            services.AddIdentity<User, IdentityRole>(options => { options.User.RequireUniqueEmail = true; })
                 .AddRoles<IdentityRole>()
                 .AddRoleManager<RoleManager<IdentityRole>>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -78,13 +75,14 @@ namespace UlearnAPI
             services.AddSwaggerDocument();
 
 
-            services.AddTransient<SubscriptionsService>();
-            services.AddTransient<ModulesService>();
-            services.AddTransient<TestTasksService>();
-            services.AddTransient<CoursesService>();
-            services.AddTransient<GroupsService>();
-            services.AddTransient<CodeTasksService>();
-            services.AddTransient<VideoTasksService>();
+            services.AddScoped<SubscriptionsService>();
+            services.AddScoped<ModulesService>();
+            services.AddScoped<TestTasksService>();
+            services.AddScoped<CoursesService>();
+            services.AddScoped<GroupsService>();
+            services.AddScoped<CodeTasksService>();
+            services.AddScoped<VideoTasksService>();
+            services.AddScoped<AccountService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -110,9 +108,9 @@ namespace UlearnAPI
                 endpoints.MapControllerRoute("DefaultRoute", "api/{controller}/{action}/{id?}");
                 endpoints.MapHub<ChatHub>("/api/chat");
             });
-            
-            app.UseOpenApi();  
-            app.UseSwaggerUi3(); 
+
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
 
             using var scope = app.ApplicationServices.CreateScope();
             CreateRoles(scope.ServiceProvider.GetService<IServiceProvider>()).Wait();
