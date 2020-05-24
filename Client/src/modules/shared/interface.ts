@@ -44,7 +44,7 @@ export interface Course {
 }
 
 export interface ISubscription {
-    id?: string
+    id?:number
     name: string
     price: number
     level?: number
@@ -85,8 +85,8 @@ export interface IAnswer {
 
 export interface IGroup {
     name: string
-    course: any
-    participants?: Array<string>
+    courseId: any
+    userGroups?: Array<string>
 }
 
 

@@ -3,29 +3,27 @@ import {FormInput} from "../shared/utils/FormInput";
 import {getKeyValue} from "../shared/utils/getKeyValue";
 import {ObjectKeys} from "../shared/interface";
 
-interface Some<T> {
-    array: Array<{
-        keys?: keyof T | any
-        component: JSX.Element | any
-        type?: string
-        changeInput?: (e: any) => void
-    }>
-    initialValues: T
-}
-
-export interface Any<T> {
-    key: keyof T
-    component?: any
-}
+// interface Some<T> {
+//     array: Array<{
+//         keys?: keyof T | any
+//         component: JSX.Element | any
+//         type?: string
+//         changeInput?: (e: any) => void
+//     }>
+//     initialValues: T
+// }
+//
+// export interface Any<T> {
+//     key: keyof T
+//     component?: any
+// }
 
 export const useForm = <T extends {}>(initialValues: T) => {
 
     const [form, setForm] = useState<T>(initialValues)
-
     const objectKeys = Object.keys(initialValues)
 
     const keys = objectKeys as Array<keyof T>
-
     const [errors, setErrors] = useState(keys.reduce(function (result: ObjectKeys, item: string) {
         result[item] = ''
         return result
