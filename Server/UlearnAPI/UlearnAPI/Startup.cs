@@ -12,8 +12,10 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -73,7 +75,9 @@ namespace UlearnAPI
             services.AddAuthorization();
             services.AddControllers();
             services.AddSwaggerDocument();
-
+            
+            services.AddMemoryCache();
+            services.AddResponseCompression();
 
             services.AddScoped<SubscriptionsService>();
             services.AddScoped<ModulesService>();
@@ -97,6 +101,8 @@ namespace UlearnAPI
             }
 
             app.UseRouting();
+            
+            app.UseResponseCompression();
 
             app.UseAuthentication();
             app.UseAuthorization();
