@@ -94,7 +94,7 @@ namespace UlearnAPI
 
             if (env.IsDevelopment())
             {
-                app.UseCors(builder => builder.WithOrigins("http:/localhost:3000").AllowAnyMethod().AllowAnyHeader());
+                app.UseCors(builder => builder.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader());
                 app.UseDeveloperExceptionPage();
             }
 
