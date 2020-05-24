@@ -34,12 +34,9 @@ export const SubscriptionView = (props: Props) => {
                     <div className="heading">
                         <h3>{sub.name}</h3>
                     </div>
-                    <p>{sub.level}</p>
-                    <div className="features">
-                        <h4><span className="feature">Duration:&nbsp;</span><span>121</span></h4>
-                    </div>
+                    <p><span>Уровень </span>{sub.level}</p>
                     <div className="price">
-                        <h4>{sub.price}</h4>
+                        <h4><small>Цена </small>{sub.price}</h4>
                     </div>
                     <button onClick={() => onClick(sub.id!)}
                             className="btn btn-outline-primary btn-block"

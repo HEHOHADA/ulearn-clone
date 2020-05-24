@@ -1,10 +1,12 @@
-import React, {useContext} from 'react'
+import React, {useCallback, useContext, useEffect, useState} from 'react'
 import {IdentityForm} from "../components/identity/IdentityForm";
 import {IGroup} from "../shared/interface";
 import {Link} from "react-router-dom";
 import {IdentityPicture} from "../components/identity/IdentityPicture";
 import {AuthContext} from "../context/AuthContext";
 import {useHttp} from "../hooks/http.hook";
+import {groupRequest, teacherConfirm} from "../shared/request";
+import {useFetch} from "../hooks/fetch.hook";
 
 
 interface settings {
@@ -20,14 +22,26 @@ export const IdentityPage = () => {
         {name: "Profile settings", value: ["username", "email", "lastname", "firstname"]},
         {name: "Password settings", value: ["current", "password", "repeat Password"]}
     ]
-    const groups: Array<IGroup> = [
-        {name: 'group anme', course: "course 1"},
-        {name: 'group 2', course: "course 2"}
-    ]
-
+    // const groups: Array<IGroup> = [
+    //     {name: 'group anme', course: "course 1"},
+    //     {name: 'group 2', course: "course 2"}
+    // ]
+    // const [groups, setGroups] = useState<Array<IGroup>>()
+const{fetched}=useFetch(groupRequest)
+    // const fetchGroups = useCallback(async () => {
+    //     try {
+    //         setGroups(await request(groupRequest))
+    //     } catch (e) {
+    //         console.log(e)
+    //     }
+    // }, [])
+    //
+    // useEffect(() => {
+    //     if (auth.role === 'Teacher' || auth.role === 'Admin') fetchGroups()
+    // }, [])
 
     const teachersGroup = () => {
-        return groups && groups.map(g => (
+        return fetched && fetched.map(g => (
             <Link to={`/${g.course}`} key={`${g.name}-${g.course}`} className="module p-3 border">
                 <p className="text-primary m-0 font-weight-bold text-lg-left ">{g.name}</p>
                 <span className="text-primary">{g.course}</span>
@@ -37,12 +51,16 @@ export const IdentityPage = () => {
 
     const submitData = async (event: any, form: any) => {
         event.preventDefault()
+        if (form.password) {
+            if (form.password === form.repeatPassword) {
 
+            }
+        }
         // const response = await request('/teacher/confirm', "POST", form)
     }
 
     const confirmTeacherAccount = async () => {
-        // const response = await request('/teacher/confirm', "POST")
+        const response = await request(teacherConfirm, "POST")
     }
 
     const settingsCreate = () => {

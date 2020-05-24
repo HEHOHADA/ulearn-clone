@@ -23,10 +23,7 @@ export const Module = (props: Props) => {
     }
 
     const onChooseThemaHandler = (id: any) => {
-        console.log('course', course)
-        console.log(theme, 'theme')
         const current = theme.filter((t: any) => t.id === id)[0]
-        console.log(current)
         onChooseTheme({course: course, theme: current})
     }
 

@@ -10,10 +10,12 @@ export const useHttp = () => {
         setLoading(true)
         try {
 
+            if (!headers['Authorization'])
+                headers['Authorization'] = `Bearer ${auth.token}`
+
             if (body && !headers['Content-Type']) {
                 body = JSON.stringify(body)
                 headers['Content-Type'] = 'application/json'
-                headers['Authorization'] = `Bearer ${auth.token}`
             }
 
             const response = await fetch(url, {

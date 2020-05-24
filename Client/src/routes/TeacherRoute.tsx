@@ -11,7 +11,7 @@ import {Redirect, Switch} from 'react-router-dom';
 export const useTeacherRoute = () => {
     return (
         <Switch>
-            <AppRoute exact path={"/teacher"} component={ReviewPage} layout={MainLayout}/>
+            <AppRoute exact path={"/code/:id"} component={ReviewPage} layout={MainLayout}/>
             <AppRoute exact path={"/group"} component={GroupCreatePage} layout={MainLayout}/>
             <AppRoute exact path={"/group/:id"} component={GroupReviewPage} layout={MainLayout}/>
             <Redirect to="/"/>
