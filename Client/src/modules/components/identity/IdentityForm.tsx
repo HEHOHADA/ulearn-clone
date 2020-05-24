@@ -6,12 +6,14 @@ import {getKeyValue} from "../../shared/utils/getKeyValue";
 
 interface Props {
     formNames: Array<string>
+    submit: (event: any, form: any) => void
+    loading: boolean
 }
 
 
 export const IdentityForm = (props: Props) => {
 
-    const {formNames} = props
+    const {formNames, submit, loading} = props
 
     const initialValues = formNames.reduce(function (result: ObjectKeys, item: string) {
         result[item] = ''
@@ -24,9 +26,7 @@ export const IdentityForm = (props: Props) => {
 
     return (
         <div className="card-body">
-            <form onSubmit={() => {
-
-            }}>
+            <form onSubmit={(event) => submit(event, form)}>
                 {formNames.map((formValue, index) => (
                     <div className="col" key={`${formValue}-${index}`}>
                         <FormInput onChange={changeHandler} name={formValue}
@@ -35,7 +35,7 @@ export const IdentityForm = (props: Props) => {
                 ))}
 
                 <div className="form-group">
-                    <button className="btn btn-primary btn-sm" type="submit">Save
+                    <button className="btn btn-primary btn-sm" disabled={loading} type="submit">Save
                         Settings
                     </button>
                 </div>

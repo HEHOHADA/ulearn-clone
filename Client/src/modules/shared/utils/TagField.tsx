@@ -8,7 +8,7 @@ interface Props {
 
 
 export const TagField = (props: Props) => {
-    const [tags, setTags] = React.useState(props.tags);
+    const [tags, setTags] = React.useState(props.tags)
     const removeTags = (indexToRemove: any) => {
         setTags([...tags.filter((_: any, index: any) => index !== indexToRemove)]);
     }

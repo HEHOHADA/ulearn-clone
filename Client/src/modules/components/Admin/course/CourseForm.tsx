@@ -1,7 +1,5 @@
-import React from 'react'
-import {FormInput} from "../../../shared/utils/FormInput"
+import React, {FC} from 'react'
 import {ICourse} from "../../../shared/interface"
-import {SelectInput} from "../../../shared/utils/SelectInput"
 import {useForm} from "../../../hooks/form.hook";
 
 export const defaultCourseValue = {
@@ -10,20 +8,16 @@ export const defaultCourseValue = {
     description: ""
 }
 
-interface Props {
+interface IProps {
     initialValues?: ICourse
 }
 
-export const CourseForm = (props: Props) => {
+export const CourseForm: FC<IProps> = (props: IProps) => {
 
     const {initialValues = defaultCourseValue} = props
 
 
-    const {form, changeHandler} = useForm<ICourse>(initialValues)
-
-    // const onSelectHandler = ({description}: any) => {
-    //     setForm({...form, description})
-    // }
+    const {form,generateInputs} = useForm<ICourse>(initialValues)
 
     const submit = (event: any) => {
         event.preventDefault()
@@ -32,13 +26,13 @@ export const CourseForm = (props: Props) => {
     }
 
     return (
+
         <form onSubmit={submit}>
-            <FormInput onChange={changeHandler} name={"name"} formValue={form.name}/>
-            <SelectInput label={"Subscription type"} onSelect={changeHandler}
-                         options={["1"]}
-                         name={"subscriptionType"} value={form.subscriptionType}/>
             {/*<Textarea value={form.description} onChange={onSelectHandler}/>*/}
 
+            {
+                generateInputs()
+            }
             <button
                 className="btn btn-primary btn-block" type="submit">Create
             </button>

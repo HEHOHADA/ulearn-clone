@@ -1,16 +1,17 @@
 import React, {useCallback, useContext, useEffect} from 'react'
 import {HomeCourses} from "../components/home/HomeCourse/HomeCourses"
 import {Course} from "../shared/interface"
-import {RouteComponentProps} from "react-router-dom";
-import {useHttp} from "../hooks/http.hook";
-import {useAuth} from "../hooks/auth.hook";
-import {AuthContext} from "../context/AuthContext";
+import {RouteComponentProps} from "react-router-dom"
+import {useHttp} from "../hooks/http.hook"
+import {AuthContext} from "../context/AuthContext"
+import {UserContext} from "../context/UserContext";
 
 export const HomePage = (props: RouteComponentProps) => {
 
     const {history} = props
     const {loading, request} = useHttp()
     const auth = useContext(AuthContext)
+    const {chooseThema} = useContext(UserContext)
     console.log(auth)
     const onClickHandler = (link: string) => {
         if (!auth.userId) {
@@ -26,7 +27,7 @@ export const HomePage = (props: RouteComponentProps) => {
 
         //if have subscription redirect to course page
         if (data) {
-
+            chooseThema({course: courseId})
             history.push(link)
 
         } else {

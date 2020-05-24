@@ -5,7 +5,7 @@ export interface Token {
     jti: string
     name: string
     sub: string
-    role?:string
+    role?: string
 }
 
 export interface ILink {
@@ -20,7 +20,7 @@ export interface Footer {
 }
 
 export interface LoginModel {
-    email: string
+    login: string
     password: string
 }
 
@@ -29,6 +29,11 @@ export interface RegisterModel {
     username: string
     email: string
     password: string
+}
+
+export interface IData {
+    token?: string
+    message?: Array<string>
 }
 
 export interface Course {
@@ -45,30 +50,35 @@ export interface ISubscription {
 }
 
 export interface ICourse {
-    name: string
+    name: string | null
     subscriptionType: string
     description: string
+    id?: string
     // themas: Array<ITheme>
-}
-
-export interface ITheme {
-    name: string
-    maxPoints: string
-    modules: Array<IModule>
 }
 
 export interface IModule {
     name: string
-    video?: any
-    code?: any
-    test?: Array<ITest>
+    maxPoints: string
+    modules: Array<ITheme>
 }
 
-export interface ITest {
+export interface ITheme {
+    name: string
+    video?: any
+    code?: any
+    test?: Array<IQuestion>
+}
+
+export interface IQuestion {
     question: string
-    rightAnswer: Array<number> | number
-    answer: Array<string>
+    answers: Array<IAnswer>
     points: number
+}
+
+export interface IAnswer {
+    answerText: string
+    isCorrect: boolean
 }
 
 export interface IGroup {

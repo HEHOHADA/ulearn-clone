@@ -1,8 +1,10 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {IdentityForm} from "../components/identity/IdentityForm";
 import {IGroup} from "../shared/interface";
 import {Link} from "react-router-dom";
 import {IdentityPicture} from "../components/identity/IdentityPicture";
+import {AuthContext} from "../context/AuthContext";
+import {useHttp} from "../hooks/http.hook";
 
 
 interface settings {
@@ -10,11 +12,10 @@ interface settings {
     value: Array<string>
 }
 
-interface Props {
-    role: string
-}
 
-export const IdentityPage = (props: Props) => {
+export const IdentityPage = () => {
+    const auth = useContext(AuthContext)
+    const {request, loading} = useHttp()
     const settings: Array<settings> = [
         {name: "Profile settings", value: ["username", "email", "lastname", "firstname"]},
         {name: "Password settings", value: ["password", "repeat Password"]}
@@ -26,12 +27,21 @@ export const IdentityPage = (props: Props) => {
 
 
     const teachersGroup = () => {
-        return groups.map(g => (
+        return groups && groups.map(g => (
             <Link to={`/${g.courseName}`} key={`${g.name}-${g.courseName}`} className="module p-3 border">
                 <p className="text-primary m-0 font-weight-bold text-lg-left ">{g.name}</p>
                 <span className="text-primary">{g.courseName}</span>
             </Link>
         ))
+    }
+
+    const submitData = async (event: any, form: any) => {
+        event.preventDefault()
+        // const response = await request('/teacher/confirm', "POST", form)
+    }
+
+    const confirmTeacherAccount = async () => {
+        // const response = await request('/teacher/confirm', "POST")
     }
 
     const settingsCreate = () => {
@@ -45,7 +55,7 @@ export const IdentityPage = (props: Props) => {
                     <div className="card-header py-3">
                         <p className="text-primary m-0 font-weight-bold">{name}</p>
                     </div>
-                    <IdentityForm formNames={value}/>
+                    <IdentityForm loading={loading} submit={submitData} formNames={value}/>
                 </div>
             )
         })
@@ -60,13 +70,16 @@ export const IdentityPage = (props: Props) => {
                         <div className="card mb-3">
                             <IdentityPicture/>
                         </div>
-                        {props.role === 'teacher' && <div>
+                        <div>
                             <div className="card mb-3">
                                 <div className="card-body text-center shadow justify-content-between">
-                                    {teachersGroup()}
+                                    {auth.role === 'teacher' ? teachersGroup() :
+                                        <button disabled={loading} className="btn btn-info"
+                                                onClick={confirmTeacherAccount}>Confirm
+                                            teacher account</button>}
                                 </div>
                             </div>
-                        </div>}
+                        </div>
                     </div>
                     <div className="col-lg-8">
                         <div className="row">

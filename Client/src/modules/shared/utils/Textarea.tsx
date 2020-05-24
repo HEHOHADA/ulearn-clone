@@ -1,7 +1,12 @@
 import React from 'react'
 
+interface IProps {
+    name: string
+    formValue: string
+    onChange: (event: any) => void
+}
 
-export const Textarea = (props: any) => {
+export const Textarea = (props: IProps) => {
     const {name, formValue, onChange} = props
     return (
         <div className="form-group">

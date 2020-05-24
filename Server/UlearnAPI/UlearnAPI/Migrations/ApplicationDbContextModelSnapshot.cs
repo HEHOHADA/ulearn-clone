@@ -150,6 +150,12 @@ namespace UlearnAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("SubscriptionId")
                         .HasColumnType("INTEGER");
 
