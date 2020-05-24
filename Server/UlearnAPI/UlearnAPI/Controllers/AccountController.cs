@@ -2,17 +2,23 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using UlearnData.Models;
+using UlearnServices.Models.Account;
+using UlearnServices.Services;
 
 namespace UlearnAPI.Controllers
 {
@@ -23,13 +29,17 @@ namespace UlearnAPI.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly AccountService _accountService;
+        private readonly IWebHostEnvironment _appEnvironment;
 
         public AccountController(UserManager<User> userManager, SignInManager<User> signInManager,
-            IConfiguration configuration)
+            IConfiguration configuration, AccountService accountService, IWebHostEnvironment appEnvironment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _accountService = accountService;
+            _appEnvironment = appEnvironment;
         }
 
         [HttpPost("login")]
@@ -97,6 +107,56 @@ namespace UlearnAPI.Controllers
             });
         }
 
+        [HttpPut("updateData")]
+        [Authorize]
+        public async Task<IActionResult> UpdateData([FromBody] UserInfoDto model)
+        {
+            var userId = User.FindFirstValue("sub");
+            var user = await _userManager.FindByIdAsync(userId);
+            await _userManager.SetUserNameAsync(user, model.Username);
+            await _userManager.SetEmailAsync(user, model.Email);
+            await _accountService.Update(userId, new UserInfo
+            {
+                Firstname = model.Firstname, Lastname = model.Lastname
+            });
+            return Ok();
+        }
+
+        [HttpPost("changePassword")]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword(PasswordDto model)
+        {
+            var userId = User.FindFirstValue("sub");
+            var user = await _userManager.FindByIdAsync(userId);
+            await _userManager.ChangePasswordAsync(user, model.Current, model.Password);
+            return Ok();
+        }
+
+        [HttpPost("setImage")]
+        [Authorize]
+        public async Task<IActionResult> SetImage(IFormFile file)
+        {
+            string fileName = new Guid() + new FileInfo(file.FileName).Extension;
+            using (var fileStream = new FileStream(_appEnvironment.WebRootPath + "/Files/" + fileName, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+            
+            var userId = User.FindFirstValue("sub");
+            await _accountService.SetImage(userId, fileName);
+            return Ok();
+        }
+
+        [HttpPost("confirmTeacher")]
+        [Authorize]
+        public async Task<IActionResult> ConfirmTeacher()
+        {
+            var userId = User.FindFirstValue("sub");
+            await _accountService.ConfirmTeacher(userId);
+            return Ok();
+        }
+        
+
         private async Task<string> GenerateJwtToken(User user)
         {
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(
@@ -125,23 +185,37 @@ namespace UlearnAPI.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+    }
 
-        public class LoginDto
-        {
-            [Required] public string Login { get; set; }
+    public class LoginDto
+    {
+        [Required] public string Login { get; set; }
 
-            [Required] public string Password { get; set; }
-        }
+        [Required] public string Password { get; set; }
+    }
 
-        public class RegisterDto
-        {
-            [Required] public string UserName { get; set; }
+    public class RegisterDto
+    {
+        [Required] public string UserName { get; set; }
 
-            [Required] [EmailAddress] public string Email { get; set; }
+        [Required] [EmailAddress] public string Email { get; set; }
 
-            [Required]
-            [StringLength(100, ErrorMessage = "PASSWORD_MIN_LENGTH", MinimumLength = 6)]
-            public string Password { get; set; }
-        }
+        [Required]
+        [StringLength(100, ErrorMessage = "PASSWORD_MIN_LENGTH", MinimumLength = 6)]
+        public string Password { get; set; }
+    }
+
+    public class UserInfoDto
+    {
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
+    }
+
+    public class PasswordDto
+    {
+        public string Current { get; set; }
+        public string Password { get; set; }
     }
 }
