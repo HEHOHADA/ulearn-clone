@@ -37,6 +37,7 @@ export const IdentityPage = () => {
 
     const submitData = async (event: any, form: any) => {
         event.preventDefault()
+
         // const response = await request('/teacher/confirm', "POST", form)
     }
 

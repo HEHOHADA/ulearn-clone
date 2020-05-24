@@ -37,21 +37,22 @@ export interface IData {
 }
 
 export interface Course {
+
     name: string
     id: string
     description: string
-    time: Date
 }
 
 export interface ISubscription {
+    id?: string
     name: string
     price: number
-    benefits: string
+    level?: number
 }
 
 export interface ICourse {
     name: string | null
-    subscriptionType: string
+    subscription: {}
     description: string
     id?: string
     // themas: Array<ITheme>

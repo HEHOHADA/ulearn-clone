@@ -7,7 +7,7 @@ import {useParams, useHistory, Link} from 'react-router-dom';
 
 export const UserCoursePage = () => {
 
-    const {module, chooseThema, thema, course} = useContext(UserContext)
+    const {module, chooseTheme, theme, course} = useContext(UserContext)
 
     const {id} = useParams()
 
@@ -16,7 +16,7 @@ export const UserCoursePage = () => {
     const themaUrl = history.location.pathname.split('/')[3]
 
     useEffect(() => {
-        chooseThema({thema: themaUrl})
+        chooseTheme({theme: themaUrl})
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [themaUrl])
 
@@ -28,14 +28,14 @@ export const UserCoursePage = () => {
         <main className="page">
             <div className="container">
                 <div className="row">
-                    {module ? <Module id={module} course={course ? course : id} onChooseThema={chooseThema}/> :
-                        <Course onChooseModule={chooseThema}/>}
+                    {module ? <Module id={module} course={course ? course : id} onChooseThema={chooseTheme}/> :
+                        <Course onChooseModule={chooseTheme}/>}
                     <div className="col-md-8 col-xs-12">
                         <div className="container">
-                            <Thema id={thema} nextThema={chooseThema}/>
+                            <Thema id={theme} nextThema={chooseTheme}/>
                             <div className="d-flex flex-nowrap m-3">
-                                {thema && <Link to={' asd'} className="btn btn-primary btn-block m-1    ">Назад</Link>}
-                                {thema && <Link to={''} className="btn btn-primary btn-block m-1">След</Link>}
+                                {theme && <Link to={' asd'} className="btn btn-primary btn-block m-1    ">Назад</Link>}
+                                {theme && <Link to={''} className="btn btn-primary btn-block m-1">След</Link>}
                             </div>
                         </div>
                     </div>

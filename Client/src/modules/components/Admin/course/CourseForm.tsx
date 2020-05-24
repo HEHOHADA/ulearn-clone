@@ -4,7 +4,7 @@ import {useForm} from "../../../hooks/form.hook";
 
 export const defaultCourseValue = {
     name: "",
-    subscriptionType: "",
+    subscription:{},
     description: ""
 }
 
