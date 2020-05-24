@@ -32,8 +32,9 @@ export const SubscriptionPage = () => {
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor
                             in, mattis vitae leo.</p>
                     </div>
-                    <div className="row justify-content-center">
-                        <SubscriptionView subscription={subscription} onClick={onClickSubscription} text={"Buy now"}/>
+                    <div className="row">
+                        <SubscriptionView loading={true} subscription={subscription} onClick={onClickSubscription}
+                                          text={"Buy now"}/>
                     </div>
                 </div>
             </section>

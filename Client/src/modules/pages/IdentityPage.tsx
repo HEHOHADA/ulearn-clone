@@ -18,7 +18,7 @@ export const IdentityPage = () => {
     const {request, loading} = useHttp()
     const settings: Array<settings> = [
         {name: "Profile settings", value: ["username", "email", "lastname", "firstname"]},
-        {name: "Password settings", value: ["password", "repeat Password"]}
+        {name: "Password settings", value: ["current", "password", "repeat Password"]}
     ]
     const groups: Array<IGroup> = [
         {name: 'group anme', course: "course 1"},

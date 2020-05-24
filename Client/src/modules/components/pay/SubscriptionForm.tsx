@@ -5,8 +5,9 @@ import {useForm} from "../../hooks/form.hook";
 
 interface Props {
     initialValues?: ISubscription
-    onSubmit: (event: any, form: any) => void
+    onSubmit: (event: any, form: ISubscription) => void
     loading: boolean
+    title?: string
 }
 
 export const defaultSubscriptionFormValues = {
@@ -16,21 +17,20 @@ export const defaultSubscriptionFormValues = {
 }
 
 export const SubscriptionForm = (props: Props) => {
-    const {initialValues = defaultSubscriptionFormValues, onSubmit, loading} = props
-
+    const {initialValues = defaultSubscriptionFormValues, onSubmit, loading, title} = props
     const {form, generateInputs} = useForm<ISubscription>(initialValues)
-
     return (
         <form
             onSubmit={(event) => onSubmit(event, form)}
         >
             {generateInputs((key: string) => {
-                if (key === "price") return 'number'
+                if (key === 'price' || key === 'level') return 'number'
                 return 'text'
             })}
+
             <button
                 disabled={loading}
-                className="btn btn-primary btn-block" type="submit">Edit
+                className="btn btn-primary btn-block" type="submit">{title}
             </button>
         </form>
     )

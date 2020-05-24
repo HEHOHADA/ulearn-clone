@@ -12,7 +12,6 @@ import {UserCoursePage} from "./modules/pages/User/course/UserCoursePage"
 import {AuthContext} from "./modules/context/AuthContext"
 import {useAuth} from "./modules/hooks/auth.hook"
 import {useTeacherRoute} from "./routes/TeacherRoute"
-import {LogoutPage} from "./modules/pages/LogoutPage"
 import {UserContext} from './modules/context/UserContext'
 import {useUser} from "./modules/hooks/user.hook"
 import {PaymentPage} from "./modules/pages/PaymentPage"
@@ -43,7 +42,6 @@ const App: FC = () => {
                         <AppRoute exact path={'/account'} component={IdentityPage} layout={MainLayout}/>
                         {!isAuth && <AppRoute exact path={'/login'} component={LoginPage} layout={AuthLayout}/>}
                         {!isAuth && <AppRoute exact path={'/register'} component={RegisterPage} layout={AuthLayout}/>}
-                        {isAuth && <Route exact path={'/logout'} component={LogoutPage}/>}
                         {isAdmin && <Route path={'/admin'} component={useAdminRoute}/>}
                         {(isTeacher || isAdmin) && teacherRoutes}
                         <Route path='*' render={() => <Redirect to='/'/>}/>
