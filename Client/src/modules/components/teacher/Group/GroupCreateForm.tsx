@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const defaultGroupFormValues = {
-    courseName: '',
+    course: '',
     name: '',
     participants: []
 }
@@ -23,31 +23,24 @@ export const GroupCreateForm = (props: Props) => {
 
     const {request, loading} = useHttp()
     let courseNameArray: Array<string> = []
-    let courseIdArray: Array<any> = []
+    let courses: any = []
 
     const fetchCourse = useCallback(async () => {
         try {
-            const courses = await request(courseRequest, 'GET')
+            courses = await request(courseRequest, 'GET')
             if (courses) {
                 courses.forEach((c: any) => {
                     courseNameArray.push(c.name)
-                    courseIdArray.push(c.id)
                 })
             }
         } catch (e) {
-            //catching errors
+            console.log(e)
         }
     }, [])
 
     useEffect(() => {
         fetchCourse()
     }, [])
-    //
-    // const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    //     event.preventDefault()
-    //     console.log(form)
-    //
-    // }
 
     const {initialValues = defaultGroupFormValues, onSubmit} = props
 
@@ -69,9 +62,9 @@ export const GroupCreateForm = (props: Props) => {
             <SelectInput
                 optionName={courseNameArray}
                 name={'courseName'}
-                onSelect={(selectedItem: string) => setForm({...form, courseName: selectedItem})}
-                value={form.courseName}
-                data={courseIdArray}
+                onSelect={(selectedItem: any) => setForm({...form, course: selectedItem})}
+                value={form.course}
+                data={courses}
                 label={'chose course'}/>
             <TagField selectedTags={selectedTags} tags={form.participants ? form.participants : []}/>
             <button

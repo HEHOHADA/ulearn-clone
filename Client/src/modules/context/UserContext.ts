@@ -4,7 +4,7 @@ function noop() {
 }
 
 interface IUserContext {
-    theme: string | null
+    theme: any | string | null
     module: string | null
     course: string | null
     chooseTheme: (data: { theme?: any, module?: any, course?: any }) => void

@@ -37,7 +37,7 @@ namespace UlearnAPI
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection"), 
+                    Configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly("UlearnAPI")));
 
             services.AddIdentity<User, IdentityRole>(options =>
@@ -91,7 +91,7 @@ namespace UlearnAPI
 
             if (env.IsDevelopment())
             {
-                app.UseCors(builder => builder.WithOrigins("http:/localhost:3000").AllowAnyMethod().AllowAnyHeader());
+                app.UseCors(builder => builder.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader());
                 app.UseDeveloperExceptionPage();
             }
 
@@ -106,9 +106,9 @@ namespace UlearnAPI
             {
                 endpoints.MapControllerRoute("DefaultRoute", "api/{controller}/{action}/{id?}");
             });
-            
-            app.UseOpenApi();  
-            app.UseSwaggerUi3(); 
+
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
 
             using var scope = app.ApplicationServices.CreateScope();
             CreateRoles(scope.ServiceProvider.GetService<IServiceProvider>()).Wait();

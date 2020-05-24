@@ -11,7 +11,7 @@ export const NavbarAdmin = () => {
     }
 
     const navbarHandler = () => {
-        const links: ILink[] = [{name: "Dashboard", link: "/admin/"}, {
+        const links: ILink[] = [{name: "Dashboard", link: "/"}, {
             name: "Subscription",
             link: "/admin/subscription"
         }, {name: "Course", link: "/admin/course"}]

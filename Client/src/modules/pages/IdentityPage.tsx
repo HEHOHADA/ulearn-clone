@@ -21,16 +21,16 @@ export const IdentityPage = () => {
         {name: "Password settings", value: ["password", "repeat Password"]}
     ]
     const groups: Array<IGroup> = [
-        {name: 'group anme', courseName: "course 1"},
-        {name: 'group 2', courseName: "course 2"}
+        {name: 'group anme', course: "course 1"},
+        {name: 'group 2', course: "course 2"}
     ]
 
 
     const teachersGroup = () => {
         return groups && groups.map(g => (
-            <Link to={`/${g.courseName}`} key={`${g.name}-${g.courseName}`} className="module p-3 border">
+            <Link to={`/${g.course}`} key={`${g.name}-${g.course}`} className="module p-3 border">
                 <p className="text-primary m-0 font-weight-bold text-lg-left ">{g.name}</p>
-                <span className="text-primary">{g.courseName}</span>
+                <span className="text-primary">{g.course}</span>
             </Link>
         ))
     }

@@ -1,20 +1,21 @@
 import React from 'react'
-import {ISubscription} from "../../shared/interface";
+import {ISubscription} from "../../shared/interface"
 
 
 interface Props {
     onClick: (id: string) => void,
     text: string
+    subscription?: ISubscription[]
 }
 
 
 export const SubscriptionView = (props: Props) => {
-    const {onClick, text} = props
+    const {onClick, text, subscription = [{price: 12, name: "321321", level: 321321, id: ''}]} = props
+
 
     const subscriptionHandler = () => {
-        const subs: ISubscription[] = [{price: 12, name: "321321", level: 321321}]
 
-        return subs.map(sub => (
+        return subscription.map(sub => (
             <div className="clean-pricing-item" key={`${sub.name}-${sub.price}`}>
                 <div className="heading">
                     <h3>{sub.name}</h3>
@@ -26,7 +27,7 @@ export const SubscriptionView = (props: Props) => {
                 <div className="price">
                     <h4>{sub.price}</h4>
                 </div>
-                <button onClick={() => onClick(sub.name)} className="btn btn-outline-primary btn-block"
+                <button onClick={() => onClick(sub.id!)} className="btn btn-outline-primary btn-block"
                         type="button">{text}</button>
             </div>
         ))

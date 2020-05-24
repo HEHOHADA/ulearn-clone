@@ -22,14 +22,17 @@ export const LoginPage: FC = () => {
     const {form, generateInputs, validation, errors} = useForm<LoginModel>(initialValues)
 
     const loginHandler = async (event: any) => {
+
         event.preventDefault()
         clearError()
         const isValid = validation(validationAuthForm)
+        console.log('here', isValid)
         if (errors && !isValid) {
             return
         }
         try {
             const data: IData = await request(loginRequest, 'POST', {...form})
+
             if (!data) {
                 return
             }

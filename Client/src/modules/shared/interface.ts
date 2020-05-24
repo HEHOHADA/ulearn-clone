@@ -65,6 +65,7 @@ export interface IModule {
 }
 
 export interface ITheme {
+
     name: string
     video?: any
     code?: any
@@ -84,7 +85,7 @@ export interface IAnswer {
 
 export interface IGroup {
     name: string
-    courseName: string
+    course: any
     participants?: Array<string>
 }
 

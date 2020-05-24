@@ -31,23 +31,6 @@ export const useForm = <T extends {}>(initialValues: T) => {
         return result
     }, {}))
 
-    // const newArray: Array<Some<T>> = [{
-    //     values: '', component: "", defaultValues: () => {
-    //     }
-    // }]
-
-    // const generate = () => {
-    //     return array.map(({keys, component: Component, type, changeInput = changeHandler}, index) => {
-    //         return (<Component key={`${keys}-${index}`} onChange={changeInput}
-    //                            name={keys}
-    //                            type={type} formValue={getKeyValue<T, any>(keys)(form)}
-    //             />
-    //
-    //         )
-    //     })
-    // }
-
-
     const generateInputs = (condition?: (key: string) => string, array: Array<keyof T> = keys) =>
 
         array.map((key, index) => {

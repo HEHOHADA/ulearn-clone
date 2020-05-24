@@ -24,18 +24,21 @@ export const Navbar = (props: any) => {
         } else {
             links = [{name: "home", link: "/"}, {name: "account", link: "/account"}, {name: "LOGOUT", link: "/logout"}]
         }
-        if (auth.role === 'admin') {
+        if (auth.role === 'Admin') {
             links.push({name: "admin", link: '/admin'})
         }
-        return (
-            <ul className="nav navbar-nav ml-auto">
-                {links.map(m => (
-                    <li className="nav-item" key={`${m.name}-NB-${m.link}`} role="presentation"><NavLink
-                        exact
-                        className="nav-link"
-                        to={m.link}>{m.name}</NavLink></li>
-                ))}
-            </ul>)
+        if (auth.role === 'Admin' || auth.role === 'Teacher'){
+            links.push({name:'groups',link:'/group'})
+        }
+            return (
+                <ul className="nav navbar-nav ml-auto">
+                    {links.map(m => (
+                        <li className="nav-item" key={`${m.name}-NB-${m.link}`} role="presentation"><NavLink
+                            exact
+                            className="nav-link"
+                            to={m.link}>{m.name}</NavLink></li>
+                    ))}
+                </ul>)
     }
 
     const showNavbar = () => {

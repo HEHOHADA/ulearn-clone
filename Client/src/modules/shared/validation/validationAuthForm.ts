@@ -3,9 +3,6 @@ export const validationAuthForm = (values: any) => {
     if (!values.login) {
         errors.login = 'Напишите логин или почту'
     }
-    if (!values.username) {
-        errors.username = 'Напишите имя пользователя'
-    }
     if (!values.password) {
         errors.password = 'Напишите пароль'
     } else if (values.password.length < 6) {

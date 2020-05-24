@@ -8,7 +8,7 @@ export const GroupCreatePage = () => {
     const onSubmit = async (event: any, form: any) => {
         event.preventDefault()
 
-        const response = await request(groupRequest, 'POST', form)
+        const response = await request(groupRequest, 'POST', {...form})
         console.log(response)
     }
 

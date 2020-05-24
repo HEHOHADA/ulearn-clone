@@ -5,7 +5,7 @@ interface Props {
     data: Array<any>
     label: string
     name: string
-    value: string
+    value: any
     optionName?: Array<string>
 }
 

@@ -2,6 +2,7 @@ import React, {useEffect} from 'react'
 import {GroupCreateForm} from "../../components/teacher/Group/GroupCreateForm";
 import {useHttp} from "../../hooks/http.hook";
 import {useParams} from 'react-router-dom';
+import {groupRequest} from "../../shared/request";
 
 
 export const GroupEditPage = () => {
@@ -9,13 +10,13 @@ export const GroupEditPage = () => {
     const {id} = useParams()
 
     useEffect(() => {
-        //const data = request(`api/groups/${id}`,'GET')
+        const data = request(groupRequest + '/' + id, 'GET')
     }, [id])
 
     const onSubmit = (event: any, form: any) => {
         event.preventDefault()
 
-        const response = request('api/groups/edit', 'POST', form)
+        const response = request(`${groupRequest}/edit/${id}`, 'POST', {...form})
     }
     return (
         <main className="page">
