@@ -44,7 +44,7 @@ export interface Course {
 }
 
 export interface ISubscription {
-    id?: string
+    id?: number
     name: string
     price: number
     level?: number
@@ -52,7 +52,7 @@ export interface ISubscription {
 
 export interface ICourse {
     name: string | null
-    subscription: {}
+    subscription?: ISubscription
     description: string
     id?: string
     // themas: Array<ITheme>

@@ -23,7 +23,7 @@ export const SubscriptionPage = () => {
         fetchSubscription()
     }, [])
 
-    const onEditHandler = (id: string) => {
+    const onEditHandler = (id: number) => {
         history.push(`/admin/subscription/edit/${id}`)
     }
 
@@ -31,7 +31,7 @@ export const SubscriptionPage = () => {
         history.push(`/admin/subscription/create`)
     }
 
-    const onDeleteHandler = async (id: string) => {
+    const onDeleteHandler = async (id: number) => {
         try {
             await request(`${subscriptionRequest}/${id}`, 'DELETE')
         } catch (e) {

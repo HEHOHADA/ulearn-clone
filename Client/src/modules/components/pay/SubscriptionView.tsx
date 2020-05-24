@@ -4,8 +4,8 @@ import {Loader} from "../../shared/utils/Loader"
 
 
 interface Props {
-    onClick: (id: string) => void
-    onDelete?: (id: string) => void
+    onClick: (id: number) => void
+    onDelete?: (id: number) => void
     text: string
     subscription?: ISubscription[]
     loading: boolean
@@ -18,7 +18,7 @@ export const SubscriptionView = (props: Props) => {
             price: 12,
             name: "321321",
             level: 321321,
-            id: ''
+            id: 0
         }], loading, onDelete
     } = props
 

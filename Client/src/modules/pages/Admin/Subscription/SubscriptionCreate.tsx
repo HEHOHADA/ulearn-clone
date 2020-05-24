@@ -9,7 +9,7 @@ export const SubscriptionCreate = () => {
     const submit = async (event: any, form: ISubscription) => {
 
         event.preventDefault()
-       await request(subscriptionRequest, 'POST', {...form})
+        await request(subscriptionRequest, 'POST', {...form})
     }
 
     return (

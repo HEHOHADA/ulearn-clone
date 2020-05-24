@@ -19,7 +19,7 @@ export const SubscriptionPage = () => {
     useEffect(() => {
         fetchSubscription()
     }, [])
-    const onClickSubscription = (id: string) => {
+    const onClickSubscription = (id: number) => {
 
     }
 
