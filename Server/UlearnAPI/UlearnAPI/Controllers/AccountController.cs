@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -141,7 +142,7 @@ namespace UlearnAPI.Controllers
             {
                 await file.CopyToAsync(fileStream);
             }
-            
+
             var userId = User.FindFirstValue("sub");
             await _accountService.SetImage(userId, fileName);
             return Ok();
@@ -156,6 +157,74 @@ namespace UlearnAPI.Controllers
             return Ok();
         }
         
+        [HttpPost("auth/google")]
+        public async Task<IActionResult> GoogleLogin(GoogleLogin request)
+        {
+            try
+            {
+                var user = await GetOrCreateExternalLoginUser("google", request.Subject, request.Email,
+                    request.GivenName, request.FamilyName);
+
+                return Ok(new {Token = await GenerateJwtToken(user)});
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        /*[HttpPost("auth/google")]
+        public async Task<IActionResult> GoogleLogin(GoogleLogin request)
+        {
+            try
+            {
+                var payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken,
+                    new GoogleJsonWebSignature.ValidationSettings
+                    {
+                        Audience = new[] {_configuration["Authentication:Google:ClientId"]}
+                    });
+                var user = await GetOrCreateExternalLoginUser("google", payload.Subject, payload.Email,
+                    payload.GivenName, payload.FamilyName);
+
+                return Ok(new {Token = await GenerateJwtToken(user)});
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }*/
+
+        private async Task<User> GetOrCreateExternalLoginUser(string provider, string key, string email,
+            string firstName, string lastName)
+        {
+            // Login already linked to a user
+            var user = await _userManager.FindByLoginAsync(provider, key);
+            if (user != null)
+                return user;
+
+            user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                // No user exists with this email address, we create a new one
+                user = new User
+                {
+                    Email = email,
+                    UserName = email,
+                    Firstname = firstName,
+                    Lastname = lastName
+                };
+
+                await _userManager.CreateAsync(user);
+            }
+
+            // Link the user to this login
+            var info = new UserLoginInfo(provider, key, provider.ToUpperInvariant());
+            var result = await _userManager.AddLoginAsync(user, info);
+            if (result.Succeeded)
+                return user;
+            return null;
+        }
+
 
         private async Task<string> GenerateJwtToken(User user)
         {
@@ -186,6 +255,19 @@ namespace UlearnAPI.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
+
+    public class GoogleLogin
+    {
+        public string Email { get; set; }
+        public string GivenName { get; set; }
+        public string FamilyName { get; set; }
+        public string Subject { get; set; }
+    }
+
+    /*public class GoogleLogin
+    {
+        public string IdToken { get; set; }
+    }*/
 
     public class LoginDto
     {
