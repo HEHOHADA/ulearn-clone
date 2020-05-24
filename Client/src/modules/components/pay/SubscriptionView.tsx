@@ -18,7 +18,7 @@ export const SubscriptionView = (props: Props) => {
             price: 12,
             name: "321321",
             level: 321321,
-            id: ''
+            id: 0
         }], loading, onDelete
     } = props
 
@@ -28,18 +28,15 @@ export const SubscriptionView = (props: Props) => {
 
     const subscriptionHandler = () => {
 
-        return subscription.map(sub => (
+        return subscription.map((sub: any) => (
             <div className="col-md-5 col-lg-4" key={`${sub.name}-${sub.price}`}>
                 <div className="clean-pricing-item">
                     <div className="heading">
                         <h3>{sub.name}</h3>
                     </div>
-                    <p>{sub.level}</p>
-                    <div className="features">
-                        <h4><span className="feature">Duration:&nbsp;</span><span>121</span></h4>
-                    </div>
+                    <p><span>Уровень </span>{sub.level}</p>
                     <div className="price">
-                        <h4>{sub.price}</h4>
+                        <h4><small>Цена </small>{sub.price}</h4>
                     </div>
                     <button onClick={() => onClick(sub.id!)}
                             className="btn btn-outline-primary btn-block"

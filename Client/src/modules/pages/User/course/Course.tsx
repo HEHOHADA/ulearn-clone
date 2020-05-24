@@ -1,6 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import {IModule} from "../../../shared/interface";
+import {IModule} from "../../../shared/interface"
 
 interface Props {
     id?: string
