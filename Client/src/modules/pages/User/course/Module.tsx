@@ -2,7 +2,7 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 
 interface Props {
-    onChooseThema: (data: { thema?: any, module?: any, course?: any }) => void
+    onChooseTheme: (data: { theme?: any, module?: any, course?: any }) => void
     course: any
     id: any
 }
@@ -14,16 +14,16 @@ export const Module = (props: Props) => {
         {id: 2, name: "qq1", points: 5, maxPoints: 5},
     ]
 
-    const {onChooseThema, course} = props
+    const {onChooseTheme, course} = props
 
 
     const onClickBackHandler = () => {
-        onChooseThema({module: null})
+        onChooseTheme({module: null})
     }
 
     const onChooseThemaHandler = (id: any) => {
         console.log('course', course)
-        onChooseThema({course: course, thema: id})
+        onChooseTheme({course: course, theme: id})
     }
 
     const rendereModules = () => {

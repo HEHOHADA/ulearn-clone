@@ -28,7 +28,7 @@ export const UserCoursePage = () => {
         <main className="page">
             <div className="container">
                 <div className="row">
-                    {module ? <Module id={module} course={course ? course : id} onChooseThema={chooseTheme}/> :
+                    {module ? <Module id={module} course={course ? course : id} onChooseTheme={chooseTheme}/> :
                         <Course onChooseModule={chooseTheme}/>}
                     <div className="col-md-8 col-xs-12">
                         <div className="container">

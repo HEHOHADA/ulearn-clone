@@ -40,6 +40,13 @@ export const ChatRavil = () => {
         <main className="page">
             <div className="container">
                 <form onSubmit={submit}>
+                    <div className="card-body">
+                        {messages.map(m => {
+                            return (
+                                <span>{m}</span>
+                            )
+                        })}
+                    </div>
                     <FormInput onChange={(event) => setMessage(event.target.value)
                     } name={'message'} formValue={message}/>
                     <button>send</button>

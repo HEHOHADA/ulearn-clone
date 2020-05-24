@@ -21,7 +21,7 @@ import {PaymentPage} from "./modules/pages/PaymentPage";
 const App: FC = () => {
     const {token, login, logout, userId, role} = useAuth()
 
-    const {thema, module, course, chooseThema} = useUser()
+    const {theme, module, course, chooseTheme} = useUser()
 
     let isAdmin = true
     let isAuth = !!token
@@ -33,7 +33,7 @@ const App: FC = () => {
             token, login, logout, userId, isAuth, role
         }}>
             <UserContext.Provider value={{
-                thema, module, course, chooseThema
+                theme, module, course, chooseTheme
             }}>
                 <BrowserRouter>
                     <Switch>

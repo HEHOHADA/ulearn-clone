@@ -1,13 +1,15 @@
 import React from 'react'
 import {GroupCreateForm} from "../../components/teacher/Group/GroupCreateForm";
 import {useHttp} from "../../hooks/http.hook";
+import {groupRequest} from "../../shared/request";
 
 export const GroupCreatePage = () => {
     const {request} = useHttp()
-    const onSubmit = (event: any, form: any) => {
+    const onSubmit = async (event: any, form: any) => {
         event.preventDefault()
 
-        const response = request('api/groups/create', 'POST', form)
+        const response = await request(groupRequest, 'POST', form)
+        console.log(response)
     }
 
     return (
