@@ -13,9 +13,9 @@ interface Props {
 }
 
 export const defaultGroupFormValues = {
-    course: '',
+    courseId: 0,
     name: '',
-    participants: []
+    userGroups: []
 }
 
 
@@ -23,7 +23,7 @@ export const GroupCreateForm = (props: Props) => {
 
     const {request, loading} = useHttp()
     let courseNameArray: Array<string> = []
-    let courses: any = []
+    let courses: any = [{name: '', id: 1}]
 
     const fetchCourse = useCallback(async () => {
         try {
@@ -46,8 +46,8 @@ export const GroupCreateForm = (props: Props) => {
 
     const {form, changeHandler, setForm} = useForm<IGroup>(initialValues)
 
-    const selectedTags = (participants: Array<string>) => {
-        setForm({...form, participants})
+    const selectedTags = (userGroups: Array<string>) => {
+        setForm({...form, userGroups})
     }
 
     return (
@@ -62,11 +62,11 @@ export const GroupCreateForm = (props: Props) => {
             <SelectInput
                 optionName={courseNameArray}
                 name={'courseName'}
-                onSelect={(selectedItem: any) => setForm({...form, course: selectedItem})}
-                value={form.course}
-                data={courses}
+                onSelect={(selectedItem: any) => setForm({...form, courseId: selectedItem})}
+                value={form.courseId}
+                data={courses.map((m: any) => m.id)}
                 label={'chose course'}/>
-            <TagField selectedTags={selectedTags} tags={form.participants ? form.participants : []}/>
+            <TagField selectedTags={selectedTags} tags={form.userGroups ? form.userGroups : []}/>
             <button
                 disabled={loading}
                 className="btn btn-primary btn-block mt-3" type="submit">Send

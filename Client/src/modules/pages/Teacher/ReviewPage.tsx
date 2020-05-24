@@ -3,22 +3,23 @@ import {ReviewCode} from "./Review/ReviewCode";
 import {CodeEditor} from "../../shared/utils/CodeEditor"
 import {useParams} from 'react-router-dom'
 import {useHttp} from "../../hooks/http.hook"
+import {useFetch} from "../../hooks/fetch.hook";
 
 
 export const ReviewPage = () => {
     const {id} = useParams()
     const {request} = useHttp()
-    const [code, setCode] = useState()
-    const fetchReviewCode = useCallback(async () => {
-        try {
-            setCode(await request(`code/${id}`))
-        } catch (e) {
-            console.log(e)
-        }
-    }, [])
-    useEffect(() => {
-        fetchReviewCode()
-    }, [])
+    const{fetched} = useFetch(`code/${id}`)
+    // const fetchReviewCode = useCallback(async () => {
+    //     try {
+    //         setCode(await request(`code/${id}`))
+    //     } catch (e) {
+    //         console.log(e)
+    //     }
+    // }, [])
+    // useEffect(() => {
+    //     fetchReviewCode()
+    // }, [])
     const propsCode = {
         readOnly: true
     }

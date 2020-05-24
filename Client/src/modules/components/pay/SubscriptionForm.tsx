@@ -1,6 +1,7 @@
 import React from 'react'
 import {ISubscription} from "../../shared/interface";
 import {useForm} from "../../hooks/form.hook";
+import {Loader} from "../../shared/utils/Loader";
 
 
 interface Props {
@@ -18,7 +19,15 @@ export const defaultSubscriptionFormValues = {
 
 export const SubscriptionForm = (props: Props) => {
     const {initialValues = defaultSubscriptionFormValues, onSubmit, loading, title} = props
+    // @ts-ignore
+    if (initialValues.id) {
+        // @ts-ignore
+        delete initialValues.id
+    }
     const {form, generateInputs} = useForm<ISubscription>(initialValues)
+    if (loading) {
+        return <Loader/>
+    }
     return (
         <form
             onSubmit={(event) => onSubmit(event, form)}

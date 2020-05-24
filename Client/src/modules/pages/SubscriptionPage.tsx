@@ -1,4 +1,4 @@
-import React  from 'react'
+import React from 'react'
 import {SubscriptionView} from "../components/pay/SubscriptionView"
 import {useHttp} from "../hooks/http.hook";
 import {subscriptionRequest} from "../shared/request";
@@ -6,7 +6,7 @@ import {useFetch} from "../hooks/fetch.hook";
 
 export const SubscriptionPage = () => {
     const {request} = useHttp()
-    const {fetched}= useFetch(subscriptionRequest)
+    const {fetched} = useFetch(subscriptionRequest)
     // let subscription: ISubscription | any = []
     // const fetchSubscription = useCallback(async () => {
     //     try {
