@@ -76,8 +76,8 @@ namespace UlearnAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Group>> PostGroup(Group group)
         {
-            return CreatedAtAction("GetGroup", new { id = @group.Id }, 
-                await _groupsService.CreateAsync(group));
+            var newGroup = await _groupsService.CreateAsync(group);
+            return CreatedAtAction("GetGroup", new { id = newGroup.Id }, newGroup);
         }
 
         // DELETE: api/Group/5

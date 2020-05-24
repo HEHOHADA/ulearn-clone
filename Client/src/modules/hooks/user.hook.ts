@@ -2,19 +2,17 @@ import {useCallback, useState} from "react";
 
 
 export const useUser = () => {
-    const [thema, setThema] = useState(null)
+    const [theme, setTheme] = useState(null)
     const [module, setModule] = useState(null)
     const [course, setCourse] = useState(null)
-    console.log({course, thema, module})
-    const chooseThema = useCallback((data: { thema?: any, module?: any, course?: any }) => {
-            const {thema, module, course} = data
-            console.log(thema, module, course)
-            course !== undefined && setCourse(course)
-            module !== undefined && setModule(module)
-            thema !== undefined && setThema(thema)
-        }, [],
-    )
+    console.log({course, theme: theme, module})
+    const chooseTheme = useCallback((data: { theme?: any, module?: any, course?: any }) => {
+        const {theme, module, course} = data
+        course !== undefined && setCourse(course)
+        module !== undefined && setModule(module)
+        theme !== undefined && setTheme(theme)
+    }, [])
 
-    return {thema, module, course, chooseThema}
+    return {theme, module, course, chooseTheme}
 
 }

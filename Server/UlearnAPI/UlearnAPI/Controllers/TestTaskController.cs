@@ -77,10 +77,10 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<TestTask>> PostTestTask(TestTask testTask)
+        public async Task<ActionResult<TestTask>> PostTestTask(int moduleId, TestTask testTask)
         {
-            return CreatedAtAction("GetTestTask", new { id = testTask.Id },
-                await _testTasksService.CreateAsync(testTask));
+            var newTestTask = await _testTasksService.CreateAsync(moduleId, testTask);
+            return CreatedAtAction("GetTestTask", new { id = newTestTask.Id }, newTestTask);
         }
 
         // DELETE: api/TestTask/5

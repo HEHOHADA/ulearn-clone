@@ -32,8 +32,10 @@ namespace UlearnServices.Services
             return await _context.CodeTasks.FindAsync(id);
         }
 
-        public async Task<CodeTask> CreateAsync(CodeTask codeTask)
+        public async Task<CodeTask> CreateAsync(int moduleId, CodeTask codeTask)
         {
+            var module = await _context.Modules.FindAsync(moduleId);
+            codeTask.Module = module;
             _context.CodeTasks.Add(codeTask);
             await _context.SaveChangesAsync();
             return codeTask;

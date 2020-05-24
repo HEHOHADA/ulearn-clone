@@ -1,7 +1,7 @@
 import React from 'react'
-import {defaultSubscriptionFormValues, SubscriptionForm} from "../../../components/pay/SubscriptionForm";
-import {useParams} from 'react-router-dom';
-import {useHttp} from "../../../hooks/http.hook";
+import {defaultSubscriptionFormValues, SubscriptionForm} from "../../../components/pay/SubscriptionForm"
+import {useParams} from 'react-router-dom'
+import {useHttp} from "../../../hooks/http.hook"
 
 export const SubscriptionEdit = () => {
 
@@ -14,6 +14,10 @@ export const SubscriptionEdit = () => {
     }
 
     return (//params find by id
-        <SubscriptionForm loading={loading} onSubmit={submit} initialValues={defaultSubscriptionFormValues}/>
+        <SubscriptionForm
+            loading={loading}
+            onSubmit={submit}
+            title={"Edit"}
+            initialValues={defaultSubscriptionFormValues}/>
     )
 }
