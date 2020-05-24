@@ -1,13 +1,12 @@
 import React, {FC, useContext} from 'react'
-import {IData, LoginModel, Token} from "../shared/interface";
-import {AuthContext} from "../context/AuthContext";
-import {useHttp} from "../hooks/http.hook";
+import {IData, LoginModel, Token} from "../shared/interface"
+import {AuthContext} from "../context/AuthContext"
+import {useHttp} from "../hooks/http.hook"
 import jwt from 'jsonwebtoken'
 import {useHistory} from "react-router-dom"
-import {useForm} from "../hooks/form.hook";
-import {loginRequest} from "../shared/request";
-import {validationAuthForm} from "../shared/validation/validationAuthForm";
-import {Loader} from "../shared/utils/Loader";
+import {useForm} from "../hooks/form.hook"
+import {loginRequest} from "../shared/request"
+import {validationAuthForm} from "../shared/validation/validationAuthForm"
 
 
 export const LoginPage: FC = () => {
@@ -23,14 +22,17 @@ export const LoginPage: FC = () => {
     const {form, generateInputs, validation, errors} = useForm<LoginModel>(initialValues)
 
     const loginHandler = async (event: any) => {
+
         event.preventDefault()
         clearError()
         const isValid = validation(validationAuthForm)
+        console.log('here', isValid)
         if (errors && !isValid) {
             return
         }
         try {
             const data: IData = await request(loginRequest, 'POST', {...form})
+
             if (!data) {
                 return
             }

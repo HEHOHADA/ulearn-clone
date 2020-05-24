@@ -11,21 +11,20 @@ import {IdentityPage} from "./modules/pages/IdentityPage"
 import {UserCoursePage} from "./modules/pages/User/course/UserCoursePage"
 import {AuthContext} from "./modules/context/AuthContext"
 import {useAuth} from "./modules/hooks/auth.hook"
-import {useTeacherRoute} from "./routes/TeacherRoute";
-import {LogoutPage} from "./modules/pages/LogoutPage";
+import {useTeacherRoute} from "./routes/TeacherRoute"
 import {UserContext} from './modules/context/UserContext'
-import {useUser} from "./modules/hooks/user.hook";
-import {PaymentPage} from "./modules/pages/PaymentPage";
+import {useUser} from "./modules/hooks/user.hook"
+import {PaymentPage} from "./modules/pages/PaymentPage"
 
 
 const App: FC = () => {
     const {token, login, logout, userId, role} = useAuth()
 
-    const {thema, module, course, chooseThema} = useUser()
+    const {theme, module, course, chooseTheme} = useUser()
 
-    let isAdmin = true
+    let isAdmin = role === 'Admin'
     let isAuth = !!token
-    let isTeacher = role === "teacher"
+    let isTeacher = role === 'teacher'
     const teacherRoutes = useTeacherRoute()
 
     return (
@@ -33,20 +32,19 @@ const App: FC = () => {
             token, login, logout, userId, isAuth, role
         }}>
             <UserContext.Provider value={{
-                thema, module, course, chooseThema
+                theme, module, course, chooseTheme
             }}>
                 <BrowserRouter>
                     <Switch>
-                        <AppRoute exact path={"/"} component={HomePage} layout={MainLayout}/>
-                        <AppRoute exact path={"/pay"} component={PaymentPage} layout={MainLayout}/>
-                        <AppRoute path={"/course/:id"} component={UserCoursePage} layout={MainLayout}/>
-                        <AppRoute exact path={"/account"} component={IdentityPage} layout={MainLayout}/>
-                        {!isAuth && <AppRoute exact path={"/login"} component={LoginPage} layout={AuthLayout}/>}
-                        {!isAuth && <AppRoute exact path={"/register"} component={RegisterPage} layout={AuthLayout}/>}
-                        {isAuth && <Route exact path={"/logout"} component={LogoutPage}/>}
-                        {isAdmin && <Route path="/admin" component={useAdminRoute}/>}
+                        <AppRoute exact path={'/'} component={HomePage} layout={MainLayout}/>
+                        <AppRoute exact path={'/pay'} component={PaymentPage} layout={MainLayout}/>
+                        <AppRoute path={'/course/:id'} component={UserCoursePage} layout={MainLayout}/>
+                        <AppRoute exact path={'/account'} component={IdentityPage} layout={MainLayout}/>
+                        {!isAuth && <AppRoute exact path={'/login'} component={LoginPage} layout={AuthLayout}/>}
+                        {!isAuth && <AppRoute exact path={'/register'} component={RegisterPage} layout={AuthLayout}/>}
+                        {isAdmin && <Route path={'/admin'} component={useAdminRoute}/>}
                         {(isTeacher || isAdmin) && teacherRoutes}
-                        <Route path="*" render={() => <Redirect to='/'/>}/>
+                        <Route path='*' render={() => <Redirect to='/'/>}/>
                     </Switch>
                 </BrowserRouter>
             </UserContext.Provider>

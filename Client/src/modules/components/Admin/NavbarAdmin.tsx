@@ -1,17 +1,18 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {ILink} from "../../shared/interface";
 import {Link, useHistory} from "react-router-dom";
+import {AuthContext} from "../../context/AuthContext";
 
 export const NavbarAdmin = () => {
-
+    const auth = useContext(AuthContext)
     const history = useHistory()
-
     const logoutHandler = () => {
+        auth.logout()
         history.push('/')
     }
 
     const navbarHandler = () => {
-        const links: ILink[] = [{name: "Dashboard", link: "/admin/"}, {
+        const links: ILink[] = [{name: "Dashboard", link: "/"}, {
             name: "Subscription",
             link: "/admin/subscription"
         }, {name: "Course", link: "/admin/course"}]
@@ -40,7 +41,6 @@ export const NavbarAdmin = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbar">
                     {navbarHandler()}
-
                 </div>
             </nav>
         </div>

@@ -3,7 +3,7 @@ import {CourseForm} from "../../../components/Admin/course/CourseForm";
 
 const initialValuesMock = {
     name: "mock",
-    subscriptionType: "mock",
+    subscription: {},
     description: "mock"
 }
 export const CourseEdit = () => {

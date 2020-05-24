@@ -1,5 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
+import {IModule} from "../../../shared/interface";
 
 interface Props {
     id?: string
@@ -10,7 +11,9 @@ interface Props {
         max: number
     }
     title?: string
-    onChooseModule: (data: { thema?: any, module?: any, course?: any }) => void
+    header:string
+    module?:Array<IModule>
+    onChooseModule: (data: { theme?: any, module?: any, course?: any }) => void
 }
 
 export const Course = (props: Props) => {

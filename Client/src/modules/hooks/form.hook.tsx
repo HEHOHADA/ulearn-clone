@@ -31,23 +31,6 @@ export const useForm = <T extends {}>(initialValues: T) => {
         return result
     }, {}))
 
-    // const newArray: Array<Some<T>> = [{
-    //     values: '', component: "", defaultValues: () => {
-    //     }
-    // }]
-
-    // const generate = () => {
-    //     return array.map(({keys, component: Component, type, changeInput = changeHandler}, index) => {
-    //         return (<Component key={`${keys}-${index}`} onChange={changeInput}
-    //                            name={keys}
-    //                            type={type} formValue={getKeyValue<T, any>(keys)(form)}
-    //             />
-    //
-    //         )
-    //     })
-    // }
-
-
     const generateInputs = (condition?: (key: string) => string, array: Array<keyof T> = keys) =>
 
         array.map((key, index) => {
@@ -58,7 +41,7 @@ export const useForm = <T extends {}>(initialValues: T) => {
                 <div key={`${key}-${index}`}>
                     {errors[key] &&
                     <div className="alert alert-danger" role="alert">
-                        <strong>    {errors[key] || 'Введите правильное значение'}</strong>
+                        <strong>{errors[key] || 'Введите правильное значение'}</strong>
                     </div>
                     }
                     <FormInput onChange={changeHandler} name={key} type={type}
@@ -74,7 +57,14 @@ export const useForm = <T extends {}>(initialValues: T) => {
     }
 
     const changeHandler = (event: any) => {
-        setForm({...form, [event.target.name]: event.target.value})
+        const {name, value, type} = event.target
+        let changed
+        if (type === 'number') {
+            changed = parseInt(value)
+        } else {
+            changed = value
+        }
+        setForm({...form, [name]: changed})
     }
 
     const clearForm = (defaultValues: T) => {

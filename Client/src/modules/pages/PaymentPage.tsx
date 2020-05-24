@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
-import {useForm} from "../hooks/form.hook";
 import {useParams} from 'react-router-dom';
 import {CreditCard} from "../components/pay/CreditCard";
+import {ISubscription} from "../shared/interface";
 
 
 export const PaymentPage = () => {
@@ -11,7 +11,7 @@ export const PaymentPage = () => {
         //request to api
     }, [id])
     const [isSubmitting, setIsSubmitting] = useState(false)
-
+    let subscription: ISubscription | any = []
     const changeFormHandler = (form: any) => {
         form.product = ''
         console.log(form)
@@ -33,11 +33,11 @@ export const PaymentPage = () => {
                     }>
                         <div className="products">
                             <h3 className="title">Checkout</h3>
-                            <div className="item"><span className="price">$200</span>
-                                <p className="item-name">Product 1</p>
-                                <p className="item-description">Lorem ipsum dolor sit amet</p>
+                            <div className="item"><span className="price">{subscription.price}</span>
+                                <p className="item-name">{subscription.name}</p>
+                                <p className="item-description">{subscription.level}</p>
                             </div>
-                            <div className="total"><span>Total</span><span className="price">$320</span></div>
+                            <div className="total"><span>Total</span><span className="price">{subscription.price}</span></div>
                         </div>
                         <CreditCard isSubmitting={isSubmitting} changeFormHandler={changeFormHandler}/>
 
