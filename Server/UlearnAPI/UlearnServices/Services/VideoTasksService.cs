@@ -31,8 +31,10 @@ namespace UlearnServices.Services
             return await _context.VideoTasks.FindAsync(id);
         }
 
-        public async Task<VideoTask> CreateAsync(VideoTask videoTask)
+        public async Task<VideoTask> CreateAsync(int moduleId, VideoTask videoTask)
         {
+            var module = await _context.Modules.FindAsync(moduleId);
+            videoTask.Module = module;
             _context.VideoTasks.Add(videoTask);
             await _context.SaveChangesAsync();
             return videoTask;

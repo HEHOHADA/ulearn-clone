@@ -39,8 +39,10 @@ namespace UlearnServices.Services
                 .FirstOrDefaultAsync(module => module.Id == id);
         }
 
-        public async Task<Module> CreateAsync(Module module)
+        public async Task<Module> CreateAsync(int courseId, Module module)
         {
+            var course = await _context.Courses.FindAsync(courseId);
+            module.Course = course;
             _context.Modules.Add(module);
             await _context.SaveChangesAsync();
             return module;

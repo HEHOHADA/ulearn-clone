@@ -81,11 +81,10 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<CodeTask>> PostCodeTask(CodeTask codeTask)
+        public async Task<ActionResult<CodeTask>> PostCodeTask(int moduleId, CodeTask codeTask)
         {
-            await _codeTasksService.CreateAsync(codeTask);
-
-            return CreatedAtAction("GetCodeTask", new { id = codeTask.Id }, codeTask);
+            var newCodeTask = await _codeTasksService.CreateAsync(moduleId, codeTask);
+            return CreatedAtAction("GetCodeTask", new {id = newCodeTask.Id}, newCodeTask);
         }
 
         // DELETE: api/CodeTask/5
@@ -98,12 +97,12 @@ namespace UlearnAPI.Controllers
             {
                 return NotFound();
             }
-            
+
             await _codeTasksService.Remove(codeTask);
 
             return codeTask;
         }
-        
+
         [HttpGet("results")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<CodeTaskResult>>> GetResults(int id, int groupId)

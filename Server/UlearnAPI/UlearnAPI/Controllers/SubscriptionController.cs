@@ -80,8 +80,8 @@ namespace UlearnAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Subscription>> PostSubscription(Subscription subscription)
         {
-            return CreatedAtAction("GetSubscription", new {id = subscription.Id},
-                await _subscriptionsService.CreateAsync(subscription));
+            var newSubscription = await _subscriptionsService.CreateAsync(subscription);
+            return CreatedAtAction("GetSubscription", new {id = newSubscription.Id}, newSubscription);
         }
 
 

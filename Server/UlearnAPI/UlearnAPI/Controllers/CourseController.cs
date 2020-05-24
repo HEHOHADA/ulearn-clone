@@ -62,7 +62,7 @@ namespace UlearnAPI.Controllers
                 {
                     return NotFound();
                 }
-                
+
                 throw;
             }
 
@@ -76,8 +76,8 @@ namespace UlearnAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Course>> PostCourse(Course course)
         {
-            return CreatedAtAction("GetCourse", new { id = course.Id },
-                await _coursesService.CreateAsync(course));
+            var newCourse = await _coursesService.CreateAsync(course);
+            return CreatedAtAction("GetCourse", new {id = newCourse.Id}, newCourse);
         }
 
         // DELETE: api/Course/5
@@ -90,7 +90,7 @@ namespace UlearnAPI.Controllers
             {
                 return NotFound();
             }
-            
+
             await _coursesService.Remove(course);
 
             return course;
