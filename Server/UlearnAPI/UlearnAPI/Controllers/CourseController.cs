@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UlearnData.Models;
+using UlearnServices.Models.Course;
 using UlearnServices.Services;
 
 namespace UlearnAPI.Controllers
@@ -74,7 +75,7 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Course>> PostCourse(Course course)
+        public async Task<ActionResult<Course>> PostCourse(CourseCreateDto course)
         {
             var newCourse = await _coursesService.CreateAsync(course);
             return CreatedAtAction("GetCourse", new {id = newCourse.Id}, newCourse);

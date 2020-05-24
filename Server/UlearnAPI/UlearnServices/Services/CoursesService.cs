@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using UlearnData;
 using UlearnData.Models;
+using UlearnServices.Models.Course;
 
 namespace UlearnServices.Services
 {
@@ -35,8 +36,14 @@ namespace UlearnServices.Services
                 .FirstOrDefaultAsync(course => course.Id == id);
         }
 
-        public async Task<Course> CreateAsync(Course course)
+        public async Task<Course> CreateAsync(CourseCreateDto model)
         {
+            var course = new Course()
+            {
+                Name = model.Name,
+                Description = model.Description,
+                Subscription = await _context.Subscriptions.FindAsync(model.SubscriptionId)
+            };
             _context.Courses.Add(course);
             await _context.SaveChangesAsync();
             return course;
