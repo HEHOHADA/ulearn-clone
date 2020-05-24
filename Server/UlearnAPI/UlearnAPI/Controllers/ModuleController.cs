@@ -51,7 +51,7 @@ namespace UlearnAPI.Controllers
             {
                 return BadRequest();
             }
-            
+
             try
             {
                 await _modulesService.PutAsync(module);
@@ -74,10 +74,10 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Module>> PostModule(Module module)
+        public async Task<ActionResult<Module>> PostModule(int courseId, Module module)
         {
-            return CreatedAtAction("GetModule", new { id = @module.Id },
-                await _modulesService.CreateAsync(module));
+            var newModule = await _modulesService.CreateAsync(courseId, module);
+            return CreatedAtAction("GetModule", new {id = newModule.Id}, newModule);
         }
 
         // DELETE: api/Module/5
@@ -90,7 +90,7 @@ namespace UlearnAPI.Controllers
             {
                 return NotFound();
             }
-            
+
             await _modulesService.Remove(module);
 
             return module;

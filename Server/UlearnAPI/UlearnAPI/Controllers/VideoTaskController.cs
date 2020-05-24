@@ -66,7 +66,7 @@ namespace UlearnAPI.Controllers
                 {
                     return NotFound();
                 }
-                
+
                 throw;
             }
 
@@ -78,10 +78,10 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<VideoTask>> PostVideoTask(VideoTask videoTask)
+        public async Task<ActionResult<VideoTask>> PostVideoTask(int moduleId, VideoTask videoTask)
         {
-            return CreatedAtAction("GetVideoTask", new { id = videoTask.Id },
-                await _videoTasksService.CreateAsync(videoTask));
+            var newVideoTask = await _videoTasksService.CreateAsync(moduleId, videoTask);
+            return CreatedAtAction("GetVideoTask", new {id = newVideoTask.Id}, newVideoTask);
         }
 
         // DELETE: api/VideoTask/5
@@ -94,7 +94,7 @@ namespace UlearnAPI.Controllers
             {
                 return NotFound();
             }
-            
+
             await _videoTasksService.Remove(videoTask);
 
             return videoTask;

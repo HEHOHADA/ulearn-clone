@@ -115,7 +115,7 @@ namespace UlearnAPI.Controllers
             var user = await _userManager.FindByIdAsync(userId);
             await _userManager.SetUserNameAsync(user, model.Username);
             await _userManager.SetEmailAsync(user, model.Email);
-            await _accountService.Update(userId, new UserInfo
+            await _accountService.Update(userId, new UlearnServices.Models.Account.UserInfoDto
             {
                 Firstname = model.Firstname, Lastname = model.Lastname
             });
