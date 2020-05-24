@@ -2,10 +2,11 @@ import React, {useState} from 'react'
 
 interface Props {
     onSelect: (event: any) => void
-    data: Array<string>
+    data: Array<any>
     label: string
-    name: string,
-    value: string
+    name: string
+    value: any
+    optionName?: Array<string>
 }
 
 export const SelectInput = (props: Props) => {
@@ -15,7 +16,7 @@ export const SelectInput = (props: Props) => {
         func(chosenOpt)
         setSelected(chosenOpt)
     }
-    const {onSelect, data, name, value} = props
+    const {onSelect, data, name, value, optionName} = props
     const [selected, setSelected] = useState(value)
     const htmlFor = `${props.label}-${Math.random()}`
     return (
@@ -32,7 +33,7 @@ export const SelectInput = (props: Props) => {
                     return <option
                         key={option + index}
                         value={option}>
-                        {option}
+                        {(optionName && optionName[index]) ? optionName[index] : option}
                     </option>
                 })}
             </select>

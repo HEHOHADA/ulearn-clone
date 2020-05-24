@@ -11,7 +11,7 @@ export const Dropzone = (props: any) => {
     })
 
     return (
-        <div {...getRootProps()}>
+        <div{...getRootProps()}>
             <input {...getInputProps()} className="form-control-file"/>
             {
                 isDragActive ?

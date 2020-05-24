@@ -4,16 +4,16 @@ function noop() {
 }
 
 interface IUserContext {
-    thema: string | null
+    theme: any | string | null
     module: string | null
     course: string | null
-    chooseThema: (data:{thema?: any, module?: any, course?: any}) => void
+    chooseTheme: (data: { theme?: any, module?: any, course?: any }) => void
 }
 
 
 export const UserContext = createContext<IUserContext>({
-    thema: null,
+    theme: null,
     module: null,
     course: null,
-    chooseThema: noop
+    chooseTheme: noop
 })

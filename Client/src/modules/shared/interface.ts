@@ -37,21 +37,22 @@ export interface IData {
 }
 
 export interface Course {
+
     name: string
     id: string
     description: string
-    time: Date
 }
 
 export interface ISubscription {
+    id?: string
     name: string
     price: number
-    benefits: string
+    level?: number
 }
 
 export interface ICourse {
     name: string | null
-    subscriptionType: string
+    subscription: {}
     description: string
     id?: string
     // themas: Array<ITheme>
@@ -64,6 +65,7 @@ export interface IModule {
 }
 
 export interface ITheme {
+
     name: string
     video?: any
     code?: any
@@ -83,7 +85,7 @@ export interface IAnswer {
 
 export interface IGroup {
     name: string
-    courseName: string
+    course: any
     participants?: Array<string>
 }
 

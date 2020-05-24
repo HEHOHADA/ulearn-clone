@@ -1,23 +1,22 @@
 import React, {useCallback, useContext, useEffect} from 'react'
 import {HomeCourses} from "../components/home/HomeCourse/HomeCourses"
-import {Course} from "../shared/interface"
+import {ICourse} from "../shared/interface"
 import {RouteComponentProps} from "react-router-dom"
 import {useHttp} from "../hooks/http.hook"
 import {AuthContext} from "../context/AuthContext"
-import {UserContext} from "../context/UserContext";
+import {UserContext} from "../context/UserContext"
 
 export const HomePage = (props: RouteComponentProps) => {
 
     const {history} = props
     const {loading, request} = useHttp()
     const auth = useContext(AuthContext)
-    const {chooseThema} = useContext(UserContext)
-    console.log(auth)
-    const onClickHandler = (link: string) => {
+    const {chooseTheme} = useContext(UserContext)
+    const onClickHandler = (course: ICourse) => {
         if (!auth.userId) {
             history.push('/login')
         }
-
+        const link = `course/${course.id}`
         const courseId = link.split("/")[1]
         //substype
         const data = request(`${process.env.API}/api/user/subscription/`,
@@ -27,19 +26,19 @@ export const HomePage = (props: RouteComponentProps) => {
 
         //if have subscription redirect to course page
         if (data) {
-            chooseThema({course: courseId})
+            chooseTheme({course: courseId})
             history.push(link)
-
         } else {
             // redirect to payment page
+
         }
 
     }
 
 // will be replace for api connect
-    const courses: Course[] = [
-        {description: "321321321 312 321 312 3123 213 123", id: "1", name: "3", time: new Date()},
-        {description: "321321321 312 321 312 3123 213 123", id: "2", name: "3", time: new Date()},
+    const courses: ICourse[] = [
+        {description: "321321321 312 321 312 3123 213 123", id: "1", name: "3", subscription: {}},
+        {description: "321321321 312 321 312 3123 213 123", id: "2", name: "3", subscription: {}},
     ]
 
     const fetchCourse = useCallback(async () => {
