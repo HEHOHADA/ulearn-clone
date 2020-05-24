@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UlearnData;
+using UlearnData.Models;
 using UlearnData.Models.Tasks.CodeTask;
 using UlearnServices.Services;
 
@@ -18,10 +19,12 @@ namespace UlearnAPI.Controllers
     public class CodeTaskController : ControllerBase
     {
         private readonly CodeTasksService _codeTasksService;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly AccountService _accountService;
+        private readonly UserManager<User> _userManager;
 
-        public CodeTaskController(CodeTasksService codeTasksService, UserManager<IdentityUser> userManager)
+        public CodeTaskController(CodeTasksService codeTasksService, AccountService accountService, UserManager<User> userManager)
         {
+            _accountService = accountService;
             _codeTasksService = codeTasksService;
             _userManager = userManager;
         }
@@ -106,10 +109,22 @@ namespace UlearnAPI.Controllers
         
         [HttpGet("results")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<CodeTaskResult>>> GetResults(int id, int groupId)
+        public async Task<ActionResult<IEnumerable<CodeTaskResult>>> GetResults(int id,[FromQuery] int groupId)
         {
             var user = await _userManager.GetUserAsync(User);
             return await _codeTasksService.GetResults(id, groupId, user.Id);
+        }
+
+        [HttpGet("groupResults")]
+        [Authorize(Roles = "Teacher, Admin")]
+        public async Task<ActionResult<IEnumerable<CodeTaskResult>>> GetGroupResults([FromQuery] int groupId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (!await _userManager.IsInRoleAsync(user, "Admin") && !await _accountService.IsInGroup(user, groupId))
+            {
+                return Unauthorized();
+            }
+            return await _codeTasksService.GetGroupResults(groupId);
         }
     }
 }

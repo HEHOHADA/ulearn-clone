@@ -185,6 +185,17 @@ namespace UlearnAPI.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+        
+        [HttpGet("checkSubscription")]
+        [Authorize]
+        public async Task<ActionResult<bool>> CheckSubscription([FromQuery] int groupId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var result = await _accountService.IsCourseAvailable(user, groupId);
+            if (result.HasValue)
+                return result.Value;
+            return NotFound();
+        }
     }
 
     public class LoginDto
