@@ -44,6 +44,7 @@ const App: FC = () => {
                         {!isAuth && <AppRoute exact path={'/register'} component={RegisterPage} layout={AuthLayout}/>}
                         {isAdmin && <Route path={'/admin'} component={useAdminRoute}/>}
                         {(isTeacher || isAdmin) && teacherRoutes}
+                        {/*<Route path='*' render={() => <Redirect to='/'/>}/>*/}
                     </Switch>
                 </BrowserRouter>
             </UserContext.Provider>

@@ -10,7 +10,7 @@ export const GroupEditPage = () => {
     const {id} = useParams()
 
     useEffect(() => {
-        const data = request(groupRequest + '/' + id, 'GET')
+        const data = request(`${groupRequest}/${id}`, 'GET')
     }, [id])
 
     const onSubmit = (event: any, form: any) => {

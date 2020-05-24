@@ -1,25 +1,26 @@
-import React, {useCallback, useEffect} from 'react'
+import React  from 'react'
 import {SubscriptionView} from "../components/pay/SubscriptionView"
 import {useHttp} from "../hooks/http.hook";
 import {subscriptionRequest} from "../shared/request";
-import {ISubscription} from "../shared/interface";
+import {useFetch} from "../hooks/fetch.hook";
 
 export const SubscriptionPage = () => {
     const {request} = useHttp()
-    let subscription: ISubscription | any = []
-    const fetchSubscription = useCallback(async () => {
-        try {
-            const response = await request(subscriptionRequest)
-
-        } catch (e) {
-            console.log(e)
-        }
-    }, [])
-
-    useEffect(() => {
-        fetchSubscription()
-    }, [])
-    const onClickSubscription = (id: number) => {
+    const {fetched}= useFetch(subscriptionRequest)
+    // let subscription: ISubscription | any = []
+    // const fetchSubscription = useCallback(async () => {
+    //     try {
+    //         const response = await request(subscriptionRequest)
+    //
+    //     } catch (e) {
+    //         console.log(e)
+    //     }
+    // }, [])
+    //
+    // useEffect(() => {
+    //     fetchSubscription()
+    // }, [])
+    const onClickSubscription = (id: string) => {
 
     }
 
@@ -33,7 +34,7 @@ export const SubscriptionPage = () => {
                             in, mattis vitae leo.</p>
                     </div>
                     <div className="row">
-                        <SubscriptionView loading={true} subscription={subscription} onClick={onClickSubscription}
+                        <SubscriptionView loading={true} subscription={fetched} onClick={onClickSubscription}
                                           text={"Buy now"}/>
                     </div>
                 </div>
