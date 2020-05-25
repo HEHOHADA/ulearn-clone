@@ -18,6 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using UlearnAPI.Chat;
 using UlearnAPI.Middleware;
@@ -80,6 +81,13 @@ namespace UlearnAPI
                         ClockSkew = TimeSpan.Zero
                     };
                 });
+            
+            // requires using Microsoft.Extensions.Options
+            services.Configure<UlearnDatabaseSettings>(
+                Configuration.GetSection(nameof(UlearnDatabaseSettings)));
+
+            services.AddSingleton<IUlearnDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<UlearnDatabaseSettings>>().Value);
 
             services.AddAuthorization();
             services.AddControllers();
@@ -96,12 +104,13 @@ namespace UlearnAPI
             services.AddScoped<CodeTasksService>();
             services.AddScoped<VideoTasksService>();
             services.AddScoped<AccountService>();
+            services.AddScoped<LoggingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseMiddleware<MongoLogMiddleware>("logs.txt");
+            app.UseMiddleware<MongoLogMiddleware>();
             
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
