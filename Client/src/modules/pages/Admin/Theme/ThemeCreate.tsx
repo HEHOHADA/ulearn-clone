@@ -9,7 +9,13 @@ export const ThemeCreate = () => {
     const {request} = useHttp()
 
     const {moduleId} = useParams()
-    const submit = async (event: any, name: string, videoHref: string, enteredQuestions: Array<Question>, enteredCode: string, description: string, selectedItem?: string) => {
+    const submit = async (event: any,
+                          name: string,
+                          videoHref: string,
+                          enteredQuestions: Array<Question>,
+                          enteredCode: string,
+                          description: string,
+                          selectedItem?: string) => {
         event.preventDefault()
         let body: any = {name, moduleId: parseInt(moduleId!), description}
         if (selectedItem) {

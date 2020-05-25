@@ -11,7 +11,7 @@ interface Props {
     submit: (event: any, form: any) => void
     loading: boolean
     initialValues?: any
-    errors?: any
+    error?: any
 }
 
 
@@ -32,20 +32,23 @@ export const IdentityForm = (props: Props) => {
         <div className="card-body">
             <form onSubmit={(event) => {
                 event.preventDefault()
-                const isValid = validation(validationForm)
-                if (errors && !isValid) {
-                    return
+                if (form.password) {
+                    const isValid = validation(validationForm)
+                    if (errors && !isValid) {
+                        return
+                    }
                 }
                 submit(event, form)
-            }
-            }>
+            }}>
+
                 {props.formNames.map((formValue, index) => {
                     let type = 'text'
-                    if (formValue.includes('assword')) {
+                    if (formValue.toLowerCase().includes('password') || formValue === 'current') {
                         type = 'password'
                     }
                     return (
                         <div className="col" key={`${formValue}-${index}`}>
+                            {errors && <span className="alert-warning">{errors[formValue]}</span>}
                             <FormInput type={type} onChange={changeHandler} name={formValue}
                                        formValue={getKeyValue<ObjectKeys, string>(formValue)(form)}/>
                         </div>

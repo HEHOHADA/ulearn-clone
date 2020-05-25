@@ -17,12 +17,12 @@ interface settings {
 
 export const IdentityPage = () => {
     const auth = useContext(AuthContext)
-    const {request, loading} = useHttp()
-    const [errors, setErrors] = useState()
+    const {request, loading, error} = useHttp()
+    // const [errors, setErrors] = useState()
 
     const settings: Array<settings> = [
         {name: "Profile settings", value: ["username", "email", "lastname", "firstname"]},
-        {name: "Password settings", value: ["current Password", "password", "repeat Password"]}
+        {name: "Password settings", value: ["current", "password", "repeat Password"]}
     ]
 
     const {fetched: fetchedIdentity, isBusy} = useFetch<any>(accountRequest)
@@ -39,13 +39,14 @@ export const IdentityPage = () => {
     }
 
     const submitData = async (event: any, form: any) => {
+        console.log(form)
+
         event.preventDefault()
         if (form.password) {
-            if (form.password === form.repeatPassword) {
-                delete form.repeatPassword
-                await request(`${accountRequest}/changePassword`, 'PUT', {...form})
-            } else {
-            }
+            await request(`${accountRequest}/changePassword`, 'POST', {
+                password: form.password,
+                current: form.current
+            })
         } else {
             await request(`${accountRequest}/updateData`, 'PUT', {...form})
         }
@@ -74,7 +75,7 @@ export const IdentityPage = () => {
                     <div className="card-header py-3">
                         <p className="text-primary m-0 font-weight-bold">{name}</p>
                     </div>
-                    <IdentityForm {...props} loading={loading} errors={errors} submit={submitData} formNames={value}/>
+                    <IdentityForm {...props} loading={loading} error={error} submit={submitData} formNames={value}/>
                 </div>
             )
         })
@@ -104,6 +105,7 @@ export const IdentityPage = () => {
                     <div className="col-lg-8">
                         <div className="row">
                             <div className="col">
+                                {error && <span className="alert-warning">{error}</span>}
                                 {!isBusy && settingsCreate()}
                             </div>
                         </div>

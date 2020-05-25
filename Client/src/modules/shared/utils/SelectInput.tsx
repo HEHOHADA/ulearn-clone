@@ -11,7 +11,6 @@ interface Props {
 
 export const SelectInput = (props: Props) => {
     const onChange = (func: (label: string) => void, event: any) => {
-        console.log(event.target.selectedOptions)
         const chosenOpt = event.target.selectedOptions[0].value
         func(chosenOpt)
         setSelected(chosenOpt)
@@ -19,7 +18,6 @@ export const SelectInput = (props: Props) => {
     const {onSelect, data, name, value, optionName} = props
     const [selected, setSelected] = useState(value)
     const htmlFor = `${props.label}-${Math.random()}`
-    console.log('select', data)
     return (
         <div>
             <label htmlFor={htmlFor}>{props.label}</label>
