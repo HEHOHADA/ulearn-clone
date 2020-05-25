@@ -64,29 +64,30 @@ export interface ICourse {
 
 export interface IModule {
     id?: number
-    maxPoints?:number
+    maxPoints?: number
     name: string
     codeTasks: Array<CodeTask>
     testTasks: Array<TestTask>
     videoTasks: Array<VideoTask>
 }
 
-interface CommonTheme {
+export interface CommonTask {
     name: string
     description: string
     id?: string
 }
 
-interface TestTask extends CommonTheme {
+export interface TestTask extends CommonTask {
+    points?: number
     questions: Array<Question>
 }
 
-interface CodeTask extends CommonTheme {
+export interface CodeTask extends CommonTask {
     initialCode: string
     points: number
 }
 
-interface VideoTask extends CommonTheme {
+export interface VideoTask extends CommonTask {
     video: string
 }
 
@@ -96,9 +97,6 @@ export interface ITheme {
     test?: Array<IQuestion>
 }
 
-export interface IVideoTask {
-
-}
 
 export interface IQuestion {
     text: string
@@ -115,6 +113,7 @@ export interface IGroup {
     name: string
     courseId?: any
     emails?: Array<string>
+    id?:number
 }
 
 

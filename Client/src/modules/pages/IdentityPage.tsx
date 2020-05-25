@@ -31,7 +31,7 @@ export const IdentityPage = () => {
 
     const teachersGroup = () => {
         return fetched && fetched.map((g: any) => (
-            <Link to={`/${g.course}`} key={`${g.name}-${g.course}`} className="module p-3 border">
+            <Link to={`/group/${g.id}`} key={`${g.name}-${g.course}`} className="module p-3 border">
                 <p className="text-primary m-0 font-weight-bold text-lg-left ">{g.name}</p>
                 <span className="text-primary">{g.course}</span>
             </Link>
@@ -39,8 +39,6 @@ export const IdentityPage = () => {
     }
 
     const submitData = async (event: any, form: any) => {
-        console.log(form)
-
         event.preventDefault()
         if (form.password) {
             await request(`${accountRequest}/changePassword`, 'POST', {
@@ -69,7 +67,6 @@ export const IdentityPage = () => {
                     initialValues: {...fetchedIdentity}
                 }
             }
-
             return (
                 <div className={`card shadow ${flag}`} key={`${name}-${index}`}>
                     <div className="card-header py-3">

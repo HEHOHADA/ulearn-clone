@@ -19,7 +19,7 @@ export const GroupReviewPage = () => {
 
     const reviewHandler = () => {
         return (
-            fetched.map((code: any) => (
+            fetched && fetched.map((code: any) => (
                 <li className="list-group-item module" key={code.id}>
                     <Link to={'/'}>
                         <div>{code.task}</div>

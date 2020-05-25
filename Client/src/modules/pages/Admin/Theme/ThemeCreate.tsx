@@ -1,14 +1,14 @@
 import React from 'react'
 import {Options, ThemeForm} from "../../../components/Admin/theme/ThemeForm"
 import {useHttp} from "../../../hooks/http.hook";
-import {useParams} from "react-router-dom";
+import {useParams, useHistory} from "react-router-dom";
 import {Question} from "../../../components/Admin/theme/TestForm";
 import {api, moduleRequest, testTackRequest} from "../../../shared/request";
 
 export const ThemeCreate = () => {
     const {request} = useHttp()
-
-    const {moduleId} = useParams()
+    const history = useHistory()
+    const {moduleId, courseId} = useParams()
     const submit = async (event: any,
                           name: string,
                           videoHref: string,
@@ -29,6 +29,7 @@ export const ThemeCreate = () => {
                 : body.questions = enteredQuestions
         }
         await request(`${api}/${selectedItem}Task`, 'POST', body)
+        history.push(`/admin/course/${courseId}/module/${moduleId}/theme`)
     }
     return (
         <ThemeForm loading={false} onSubmit={submit} title={"Theme Create"}/>

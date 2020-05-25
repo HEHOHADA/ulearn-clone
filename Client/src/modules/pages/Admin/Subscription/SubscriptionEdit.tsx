@@ -5,7 +5,7 @@ import {useFetch} from "../../../hooks/fetch.hook"
 import {subscriptionRequest} from "../../../shared/request"
 import {Loader} from "../../../shared/utils/Loader"
 import {useHttp} from "../../../hooks/http.hook"
-import {ISubscription} from "../../../shared/interface";
+import {ISubscription} from "../../../shared/interface"
 
 export const SubscriptionEdit = () => {
 
