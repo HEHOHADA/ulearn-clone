@@ -25,7 +25,9 @@ namespace UlearnServices.Services
         public async Task<List<Course>> GetAsync()
         {
             return await _context.Courses
-                .Include(course => course.Modules)
+                .Include(course => course.Modules).ThenInclude(module => module.TestTasks)
+                .Include(course => course.Modules).ThenInclude(module => module.CodeTasks)
+                .Include(course => course.Modules).ThenInclude(module => module.VideoTasks)
                 .Include(course => course.Subscription)
                 .ToListAsync();
         }
@@ -33,7 +35,9 @@ namespace UlearnServices.Services
         public async Task<Course> FindAsync(int id)
         {
             return await _context.Courses
-                .Include(course => course.Modules)
+                .Include(course => course.Modules).ThenInclude(module => module.TestTasks)
+                .Include(course => course.Modules).ThenInclude(module => module.CodeTasks)
+                .Include(course => course.Modules).ThenInclude(module => module.VideoTasks)
                 .Include(course => course.Subscription)
                 .FirstOrDefaultAsync(course => course.Id == id);
         }
@@ -54,11 +58,11 @@ namespace UlearnServices.Services
         public async Task PutAsync(int id, CourseDto model)
         {
             var course = await _context.Courses.FindAsync(id);
-            
+
             course.Description = model.Description;
             course.Name = model.Name;
             course.Subscription = await _context.Subscriptions.FindAsync(model.SubscriptionId);
-            
+
             _context.Entry(course).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }

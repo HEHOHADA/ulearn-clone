@@ -15,7 +15,7 @@ export const ModulePage = () => {
             console.log('fetched', fetched)
             fetched?.modules!.map(module => {
                 module.maxPoints = module.codeTasks.map(task => task.points).reduce((a, b) => a + b, 0)
-                    + module.testTasks.map(task => task.questions.map(question => question.points).reduce((a, b) => a + b, 0)).reduce((a, b) => a + b, 0)
+                    + module.testTasks.map(task => task.points!).reduce((a, b) => a + b, 0)
             })
             setModules(fetched?.modules!)
         }
