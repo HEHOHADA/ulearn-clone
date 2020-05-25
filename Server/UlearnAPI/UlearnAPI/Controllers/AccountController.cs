@@ -256,14 +256,14 @@ namespace UlearnAPI.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        [HttpGet("checkSubscription")]
+        [HttpGet("checkSubscription/{courseId}")]
         [Authorize]
-        public async Task<ActionResult<bool>> CheckSubscription([FromQuery] int groupId)
+        public async Task<ActionResult<bool>> CheckSubscription(int courseId)
         {
             var user = await _userManager.GetUserAsync(User);
-            var result = await _accountService.IsCourseAvailable(user, groupId);
+            var result = await _accountService.IsCourseAvailable(user, courseId);
             if (result.HasValue)
-                return result.Value;
+                return Ok(new {HasAccess = result.Value});
             return NotFound();
         }
     }
