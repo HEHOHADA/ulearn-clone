@@ -40,6 +40,7 @@ namespace UlearnServices.Services
                 Name = model.Name,
                 Description = model.Description,
                 InitialCode = model.InitialCode,
+                Points = model.Points,
                 Module = await _context.Modules.FindAsync(model.ModuleId)
             };
             _context.CodeTasks.Add(codeTask);
@@ -53,6 +54,7 @@ namespace UlearnServices.Services
             codeTask.Name = model.Name;
             codeTask.Description = model.Description;
             codeTask.InitialCode = model.InitialCode;
+            codeTask.Points = model.Points;
             codeTask.Module = await _context.Modules.FindAsync(model.ModuleId);
 
             _context.Entry(codeTask).State = EntityState.Modified;
