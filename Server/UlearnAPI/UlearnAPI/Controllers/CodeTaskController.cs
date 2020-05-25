@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using UlearnAPI.AOP;
 using UlearnData;
 using UlearnData.Models;
 using UlearnData.Models.Tasks.CodeTask;
@@ -55,6 +56,7 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<IActionResult> PutCodeTask(int id, CodeTask codeTask)
         {
             if (id != codeTask.Id)
@@ -84,6 +86,7 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<ActionResult<CodeTask>> PostCodeTask(int moduleId, CodeTask codeTask)
         {
             var newCodeTask = await _codeTasksService.CreateAsync(moduleId, codeTask);
@@ -93,6 +96,7 @@ namespace UlearnAPI.Controllers
         // DELETE: api/CodeTask/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<ActionResult<CodeTask>> DeleteCodeTask(int id)
         {
             var codeTask = await _codeTasksService.FindAsync(id);
@@ -116,6 +120,7 @@ namespace UlearnAPI.Controllers
 
         [HttpGet("groupResults")]
         [Authorize(Roles = "Teacher, Admin")]
+        [LogAuthorizeRoles("Teacher,Admin")]
         public async Task<ActionResult<IEnumerable<CodeTaskResult>>> GetGroupResults([FromQuery] int groupId)
         {
             var user = await _userManager.GetUserAsync(User);

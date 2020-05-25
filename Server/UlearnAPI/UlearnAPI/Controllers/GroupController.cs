@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using UlearnAPI.AOP;
 using UlearnData.Models;
 using UlearnServices.Models.Group;
 using UlearnServices.Services;
@@ -46,6 +47,7 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<IActionResult> PutGroup(int id, GroupDto group)
         {
             try
@@ -70,6 +72,7 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<ActionResult<Group>> PostGroup(GroupDto group)
         {
             var newGroup = await _groupsService.CreateAsync(group);
@@ -79,6 +82,7 @@ namespace UlearnAPI.Controllers
         // DELETE: api/Group/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<ActionResult<Group>> DeleteGroup(int id)
         {
             var group = await _groupsService.FindAsync(id);

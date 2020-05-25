@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using UlearnAPI.AOP;
 using UlearnData.Models;
 using UlearnData.Models.Tasks.TestTask;
 using UlearnServices.Services;
@@ -49,6 +50,7 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<IActionResult> PutTestTask(int id, TestTask testTask)
         {
             if (id != testTask.Id)
@@ -77,6 +79,7 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<ActionResult<TestTask>> PostTestTask(int moduleId, TestTask testTask)
         {
             var newTestTask = await _testTasksService.CreateAsync(moduleId, testTask);
@@ -86,6 +89,7 @@ namespace UlearnAPI.Controllers
         // DELETE: api/TestTask/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<ActionResult<TestTask>> DeleteTestTask(int id)
         {
             var testTask = await _testTasksService.FindAsync(id);
