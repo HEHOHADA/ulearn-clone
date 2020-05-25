@@ -5,12 +5,13 @@ import {useFetch} from "../../../hooks/fetch.hook"
 import {subscriptionRequest} from "../../../shared/request"
 import {Loader} from "../../../shared/utils/Loader"
 import {useHttp} from "../../../hooks/http.hook"
+import {ISubscription} from "../../../shared/interface";
 
 export const SubscriptionEdit = () => {
 
     const {id} = useParams()
     const history = useHistory()
-    const {fetched, loading: loading1, isBusy} = useFetch(`${subscriptionRequest}/${id}`)
+    const {fetched, loading: loading1, isBusy} = useFetch<ISubscription>(`${subscriptionRequest}/${id}`)
 
     const {request, loading} = useHttp()
 

@@ -7,6 +7,7 @@ import {UserContext} from "../../../context/UserContext"
 import {useHttp} from "../../../hooks/http.hook"
 import {useFetch} from "../../../hooks/fetch.hook"
 import {courseRequest, moduleRequest} from "../../../shared/request"
+import {ICourse, IModule} from "../../../shared/interface";
 
 export const UserCoursePage = () => {
 
@@ -16,8 +17,8 @@ export const UserCoursePage = () => {
     // const {request} = useHttp()
 
     // const history = useHistory()
-    const {fetched: courseItem} = useFetch(`${courseRequest}/${id}`)
-    const {fetched: moduleItem} = useFetch(`${moduleRequest}/${module}`)
+    const {fetched: courseItem} = useFetch<ICourse>(`${courseRequest}/${id}`)
+    const {fetched: moduleItem} = useFetch<IModule>(`${moduleRequest}/${module}`)
     // let moduleItems: any = []
     // let headerCourse: any = ''
     // let themas: any = ''

@@ -19,6 +19,7 @@ export const SelectInput = (props: Props) => {
     const {onSelect, data, name, value, optionName} = props
     const [selected, setSelected] = useState(value)
     const htmlFor = `${props.label}-${Math.random()}`
+    console.log('select', data)
     return (
         <div>
             <label htmlFor={htmlFor}>{props.label}</label>

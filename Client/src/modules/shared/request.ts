@@ -1,6 +1,7 @@
 export const URL = "https://localhost:5001/"
 
 export const registerRequest = URL + "api/account/register"
+export const accountRequest = URL + "api/account"
 export const loginRequest = URL + "api/account/login"
 export const groupRequest = URL + "api/Group"
 export const courseRequest = URL + "api/Course"

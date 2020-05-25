@@ -10,6 +10,7 @@ export const GroupCreatePage = () => {
         event.preventDefault()
         form.courseId = parseInt(form.courseId)
         const response = await request(groupRequest, 'POST', {...form})
+
         console.log(response)
     }
 
