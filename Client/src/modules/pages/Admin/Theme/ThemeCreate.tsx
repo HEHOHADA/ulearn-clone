@@ -13,15 +13,18 @@ export const ThemeCreate = () => {
                           name: string,
                           videoHref: string,
                           enteredQuestions: Array<Question>,
-                          enteredCode: string,
+                          initialCode: string,
+                          codePoints: number,
                           description: string,
                           selectedItem?: string) => {
         event.preventDefault()
         let body: any = {name, moduleId: parseInt(moduleId!), description}
         if (selectedItem) {
-            selectedItem === Options.Code
-                ? body.codeTask = enteredCode
-                : selectedItem === Options.Video
+            if (selectedItem === Options.Code) {
+                body.initialCode = initialCode
+                body.points = codePoints
+            }
+            selectedItem === Options.Video
                 ? body.video = videoHref
                 : body.questions = enteredQuestions
         }

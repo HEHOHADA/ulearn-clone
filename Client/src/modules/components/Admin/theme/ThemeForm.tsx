@@ -16,7 +16,7 @@ export enum Options {
 
 interface IProps {
     initialValues?: any,
-    onSubmit: (event: any, name: string, videoHref: string, test: Array<Question>, code: string, description: string, selectedItem?: string) => void
+    onSubmit: (event: any, name: string, videoHref: string, test: Array<Question>, code: string, codePoints: number, description: string, selectedItem?: string) => void
     title?: string
     loading: boolean
 }
@@ -36,6 +36,7 @@ export const ThemeForm: FC<IProps> = (props: IProps) => {
 
     const [questions, setQuestions] = useState<Array<Question>>([])
     const [code, setCode] = useState('')
+    const [codePoints, setCodePoints] = useState(0);
 
 
     const props1 = {
@@ -58,7 +59,7 @@ export const ThemeForm: FC<IProps> = (props: IProps) => {
                             selectedItem === Options.Code &&
                             e.key === 'Enter' && e.preventDefault()
                         }}
-                        onSubmit={(event: any) => onSubmit(event, name, videoHref, questions, code, description, selectedItem)}>
+                        onSubmit={(event: any) => onSubmit(event, name, videoHref, questions, code, codePoints, description, selectedItem)}>
                         <label htmlFor={"name"}>Название таска:</label>
                         <input id={"name"} className="form-control item" value={name}
                                onChange={(event: any) => setName(event.target.value)}/>
@@ -68,7 +69,13 @@ export const ThemeForm: FC<IProps> = (props: IProps) => {
                         <br/>
                         {
                             selectedItem === Options.Code ?
-                                <CodeEditor code={code} {...props1}/>
+                                <div>
+                                    <label htmlFor={"codePoints"}>Описание таска:</label>
+                                    <input id={"codePoints"} className="form-control item" value={codePoints}
+                                           onChange={(event: any) => setCodePoints(parseInt(event.target.value))}/>
+                                    <CodeEditor code={code} {...props1}/>
+                                </div>
+
                                 : selectedItem === Options.Video ?
                                 <VideoElement value={videoHref} onChange={setVideoHref}/> :
                                 <TestForm setTest={setQuestions} questions={questions}/>

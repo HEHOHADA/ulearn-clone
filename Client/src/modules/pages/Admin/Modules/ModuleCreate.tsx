@@ -11,9 +11,11 @@ export const ModuleCreate = () => {
     const {courseId} = useParams()
     const submit = async (event: any, form: IVisibleModule) => {
         event.preventDefault()
+        await request(moduleRequest, "POST", {...form, courseId: parseInt(courseId!)})
         history.push(`/admin/course/${courseId}/module`)
     }
     return (
         <ModuleForm loading={false} onSubmit={submit} title={"Module Create"}/>
     )
 }
+
