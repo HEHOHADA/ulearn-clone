@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -28,6 +29,11 @@ namespace UlearnServices.Services
 
         public async Task<List<FullGroupDto>> GetAsync()
         {
+            var a = (await _context.Groups
+                .Include(x => x.Course)
+                .Include(x => x.UserGroups)
+                .ThenInclude(x => x.User)
+                .ToListAsync());
             return (await _context.Groups
                     .Include(x => x.Course)
                     .Include(x => x.UserGroups)
@@ -39,7 +45,7 @@ namespace UlearnServices.Services
                     Name = x.Name,
                     CourseId = x.Course.Id,
                     Users = x.UserGroups
-                        .Select(x => x.User.Email)
+                        .Select(y => y.User.Email)
                         .ToList()
                 })
                 .ToList();
@@ -71,6 +77,11 @@ namespace UlearnServices.Services
                 Course = await _context.Courses.FindAsync(model.CourseId),
             };
 
+            if (group.Course == null)
+            {
+                throw new ArgumentException();
+            }
+
             group.UserGroups = (await Task.WhenAll(model.Emails
                     .Select(x => _userManager.FindByEmailAsync(x))))
                     .Where(x => x != null)
@@ -100,6 +111,11 @@ namespace UlearnServices.Services
             var group = await _context.Groups.FindAsync(id);
 
             group.Course = await _context.Courses.FindAsync(model.CourseId);
+            if (group.Course == null)
+            {
+                throw new ArgumentException();
+            }
+            
             group.UserGroups = (await Task.WhenAll(model.Emails
                     .Select(x => _userManager.FindByEmailAsync(x))))
                 .Select(x => new UserGroup

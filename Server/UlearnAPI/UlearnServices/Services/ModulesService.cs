@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using UlearnData;
 using UlearnData.Models;
+using UlearnData.Models.Tasks.CodeTask;
+using UlearnData.Models.Tasks.TestTask;
+using UlearnData.Models.Tasks.VideoTask;
 using UlearnServices.Models.Module;
 
 namespace UlearnServices.Services
@@ -45,8 +49,15 @@ namespace UlearnServices.Services
             var module = new Module
             {
                 Name = model.Name,
-                Course = await _context.Courses.FindAsync(model.CourseId)
+                Course = await _context.Courses.FindAsync(model.CourseId),
+                CodeTasks = new List<CodeTask>(),
+                TestTasks = new List<TestTask>(),
+                VideoTasks = new List<VideoTask>()
             };
+            if (module.Course == null)
+            {
+                throw new ArgumentException("No courseId passed");
+            }
             _context.Modules.Add(module);
             await _context.SaveChangesAsync();
             return module;
