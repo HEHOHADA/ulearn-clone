@@ -14,7 +14,7 @@ export const HomePage = (props: RouteComponentProps) => {
     const {loading, request} = useHttp()
     const auth = useContext(AuthContext)
     const {chooseTheme} = useContext(UserContext)
-    const {fetched, isBusy} = useFetch(courseRequest)
+    const {fetched, isBusy} = useFetch<Array<ICourse>>(courseRequest)
     const onClickHandler = async (course: ICourse) => {
         if (!auth.isAuth) {
             history.push('/login')

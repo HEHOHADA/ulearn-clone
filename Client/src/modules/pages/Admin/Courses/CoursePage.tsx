@@ -12,7 +12,7 @@ export const CoursePage = () => {
     const history = useHistory()
     const {request, loading} = useHttp()
     const [courses, setCourses] = useState<Array<ICourse>>()
-    const {fetched, isBusy} = useFetch(courseRequest)
+    const {fetched, isBusy} = useFetch<Array<ICourse>>(courseRequest)
 
     // const courses: ICourse[] = [
     //     {description: "321321321 312 321 312 3123 213 123", id: "1", name: "3"},

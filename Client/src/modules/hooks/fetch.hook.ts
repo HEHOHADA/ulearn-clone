@@ -1,8 +1,8 @@
 import {useCallback, useEffect, useState} from "react"
 import {useHttp} from "./http.hook"
 
-export const useFetch = (url: string) => {
-    const [fetched, setFetched] = useState<any | Array<any>>()
+export const useFetch = <T>(url: string) => {
+    const [fetched, setFetched] = useState<T>()
 
     const [isBusy, setIsBusy] = useState(true)
 
@@ -11,7 +11,6 @@ export const useFetch = (url: string) => {
     const fetch = useCallback(async () => {
         setIsBusy(true)
         try {
-            console.log("here")
             setFetched(await request(url))
 
         } catch (e) {

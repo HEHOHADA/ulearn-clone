@@ -12,7 +12,7 @@ export const GroupReviewPage = () => {
     useEffect(() => {
         // request(`api/groups/${id}`, "GET")
     }, [id])
-    const {fetched} = useFetch(`${groupReviewRequest}/${id}`)
+    const {fetched} = useFetch<any>(`${groupReviewRequest}/${id}`)
     const onEditHandler = () => {
 
     }

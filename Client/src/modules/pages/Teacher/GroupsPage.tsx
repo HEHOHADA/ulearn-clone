@@ -3,10 +3,11 @@ import {Link} from 'react-router-dom'
 import {groupRequest} from "../../shared/request"
 import {useFetch} from "../../hooks/fetch.hook"
 import {Loader} from "../../shared/utils/Loader"
+import {IGroup} from "../../shared/interface";
 
 export const GroupsPage = () => {
 
-    const {fetched, loading} = useFetch(groupRequest)
+    const {fetched, loading} = useFetch<Array<IGroup>>(groupRequest)
 
     if (loading) {
         return <Loader/>

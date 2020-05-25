@@ -11,11 +11,11 @@ export const SubscriptionPage = () => {
     const history = useHistory()
     const {request, loading} = useHttp()
     const [subscriptions, setSubscriptions] = useState<Array<ISubscription>>()
-    const {fetched, isBusy} = useFetch(subscriptionRequest)
+    const {fetched, isBusy} = useFetch<Array<ISubscription>>(subscriptionRequest)
 
     useEffect(() => {
         if (!isBusy) {
-            console.log('fetched',fetched)
+            console.log('fetched', fetched)
             setSubscriptions(fetched)
         }
     }, [isBusy])

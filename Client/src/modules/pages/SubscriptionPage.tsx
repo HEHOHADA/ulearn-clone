@@ -3,10 +3,11 @@ import {SubscriptionView} from "../components/pay/SubscriptionView"
 import {useHttp} from "../hooks/http.hook"
 import {subscriptionRequest} from "../shared/request"
 import {useFetch} from "../hooks/fetch.hook"
+import {ISubscription} from "../shared/interface";
 
 export const SubscriptionPage = () => {
     const {request} = useHttp()
-    const {fetched} = useFetch(subscriptionRequest)
+    const {fetched} = useFetch<Array<ISubscription>>(subscriptionRequest)
 
     const onClickSubscription = async (id: number) => {
         try {

@@ -12,7 +12,7 @@ export const IdentityPicture = () => {
 
         const response = await request(URL, 'POST', formData, {'Content-Type': 'multipart/form-data'})
         console.log(response)
-    }, [request])
+    }, [])
 
     return (
         <div className="card-body text-center shadow">
