@@ -11,7 +11,7 @@ import {Options} from "../../../components/Admin/theme/ThemeForm";
 
 export const ThemePage = () => {
     const {request} = useHttp()
-    const {moduleId,courseId} = useParams()
+    const {moduleId, courseId} = useParams()
     const {fetched, isBusy} = useFetch<IModule>(`${moduleRequest}/${moduleId}`)
     useEffect(() => {
         if (!isBusy) {
@@ -34,14 +34,14 @@ export const ThemePage = () => {
             newModule.testTasks = newModule.testTasks.filter(x => x.id !== id)
         }
         if (option === Options.Code) {
-            await request(`${testTackRequest}/${id}`, 'DELETE')
+            await request(`${codeTaskRequest}/${id}`, 'DELETE')
             newModule.codeTasks = newModule.codeTasks.filter(x => x.id !== id)
         }
 
-        setModule(module)
+        setModule(newModule)
 
     }
-    const onCreateModule = ()=>{
+    const onCreateModule = () => {
         history.push(`/admin/course/${courseId}/module/${moduleId}/theme/create`)
     }
     return (
@@ -53,6 +53,9 @@ export const ThemePage = () => {
                             <div className="clean-pricing-item">
                                 <div className="heading">
                                     <h3>{video.name}</h3>
+                                </div>
+                                <div className="heading">
+                                    <h3>{video.description}</h3>
                                 </div>
                                 <VideoElement value={video.videoHref}/>
                                 <button onClick={() => onDelete(video.id!, Options.Video)}
@@ -68,6 +71,12 @@ export const ThemePage = () => {
                     return (
                         <div className="col-md-5 col-lg-4" key={`${codeTask.name}-${codeTask.points}`}>
                             <div className="clean-pricing-item">
+                                <div className="heading">
+                                    <h3>{codeTask.name}</h3>
+                                </div>
+                                <div className="heading">
+                                    <h3>{codeTask.description}</h3>
+                                </div>
 
                                 <CodeEditor code={codeTask.initialCode}/>
                                 <div className="price">
@@ -79,7 +88,6 @@ export const ThemePage = () => {
                             </div>
                         </div>
                     )
-
                 })
             }
             {
@@ -87,8 +95,14 @@ export const ThemePage = () => {
                     return (
                         <div className="col-md-5 col-lg-4" key={`${testTask.name}-${testTask.points}`}>
                             <div className="clean-pricing-item">
-
-                                <TestForm questions={testTask.questions} setTest={null}/>
+                                <div className="heading">
+                                    <h3>{testTask.name}</h3>
+                                </div>
+                                <div className="heading">
+                                    <h3>{testTask.description}</h3>
+                                </div>
+                                <TestForm questions={testTask.questions} setTest={() => {
+                                }}/>
                                 <div className="price">
                                     <h4><small>Поинты </small>{testTask.points}</h4>
                                 </div>
@@ -102,7 +116,7 @@ export const ThemePage = () => {
                 })
             }
             <button className="btn btn-outline-primary btn-block" type={"button"}
-                    onClick={onCreateModule}>{"Создать модуль"}</button>
+                    onClick={onCreateModule}>{"Создать тему"}</button>
         </div>
 
     )

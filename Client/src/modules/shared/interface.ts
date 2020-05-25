@@ -106,7 +106,7 @@ export interface IQuestion {
 
 export interface IAnswer {
     text: string
-    isCorrect: boolean
+    isRight: boolean
 }
 
 export interface IGroup {

@@ -54,6 +54,7 @@ export const ModulePage = () => {
                                     <h3>{module.name}</h3>
                                 </div>
                                 <div className="price">
+                                    <h4><small>Поинты </small>{module.maxPoints}</h4>
                                 </div>
                                 <button onClick={() => onViewThemes(module.id!)}
                                         className="btn btn-outline-primary btn-block"

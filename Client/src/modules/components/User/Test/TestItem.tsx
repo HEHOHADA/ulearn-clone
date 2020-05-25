@@ -39,7 +39,7 @@ export const TestItem = (props: Props) => {
 
             const newResult = answer ? [...answer, ans!] : [ans!]
             setAnswers(newResult)
-            if (!ans!.isCorrect) {
+            if (!ans!.isRight) {
                 setPoint(0)
             }
         }
@@ -65,7 +65,7 @@ export const TestItem = (props: Props) => {
     const validate = () => {
         let classe: Map<string, string> = new Map()
         answer && answer.forEach((a) => {
-            const inputClass = a.isCorrect ? "alert-success" : 'alert-danger'
+            const inputClass = a.isRight ? "alert-success" : 'alert-danger'
             classe.set(a.text, inputClass)
         })
         setClasses(classe)

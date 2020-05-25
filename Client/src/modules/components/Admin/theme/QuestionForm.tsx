@@ -5,7 +5,7 @@ import {IAnswer} from "../../../shared/interface"
 
 class Answer implements IAnswer {
     text: string = ""
-    isCorrect: boolean = false
+    isRight: boolean = false
 }
 
 interface Props {
@@ -42,7 +42,7 @@ export const QuestionForm = (props: Props) => {
     }
 
     const setCorrect = (question: Question, answer: Answer, event?: any) => {
-        answer.isCorrect = !answer.isCorrect
+        answer.isRight = !answer.isRight
         setQuestion({...question})
     }
 
@@ -73,7 +73,7 @@ export const QuestionForm = (props: Props) => {
                                     <div className="input-group-text">
                                         <input type={"checkbox"}
 
-                                               checked={answer.isCorrect}
+                                               checked={answer.isRight}
                                                onChange={(event?: any) => setCorrect(question, answer, event)}/></div>
                                 </div>
                                 <input type="text" className="form-control"

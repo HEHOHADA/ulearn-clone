@@ -71,7 +71,7 @@ export const ThemeForm: FC<IProps> = (props: IProps) => {
                             selectedItem === Options.Code ?
                                 <div>
                                     <label htmlFor={"codePoints"}>Поинты</label>
-                                    <input id={"codePoints"} className="form-control item" value={codePoints}
+                                    <input id={"codePoints"} type={"number"} className="form-control item" value={codePoints}
                                            onChange={(event: any) => setCodePoints(parseInt(event.target.value))}/>
                                     <CodeEditor code={code} {...props1}/>
                                 </div>
