@@ -1,25 +1,13 @@
 import React from 'react'
-import {Link} from 'react-router-dom';
-import {groupRequest} from "../../shared/request";
-import {useFetch} from "../../hooks/fetch.hook";
-import {Loader} from "../../shared/utils/Loader";
+import {Link} from 'react-router-dom'
+import {groupRequest} from "../../shared/request"
+import {useFetch} from "../../hooks/fetch.hook"
+import {Loader} from "../../shared/utils/Loader"
 
 export const GroupsPage = () => {
 
     const {fetched, loading} = useFetch(groupRequest)
-    // let groups: any = []
-    // const fetchGroups = useCallback(async () => {
-    //     try {
-    //         const response = await request(groupRequest)
-    //
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    // }, [])
-    //
-    // useEffect(() => {
-    //     fetchGroups()
-    // }, [])
+
     if (loading) {
         return <Loader/>
     }

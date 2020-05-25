@@ -1,7 +1,7 @@
 import React, {useContext} from 'react'
-import {ILink} from "../../shared/interface";
-import {Link, useHistory} from "react-router-dom";
-import {AuthContext} from "../../context/AuthContext";
+import {ILink} from '../../shared/interface'
+import {Link, useHistory} from 'react-router-dom'
+import {AuthContext} from '../../context/AuthContext'
 
 export const NavbarAdmin = () => {
     const auth = useContext(AuthContext)

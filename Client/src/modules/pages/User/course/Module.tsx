@@ -3,8 +3,8 @@ import {Link} from 'react-router-dom'
 
 interface Props {
     onChooseTheme: (data: { theme?: any, module?: any, course?: any }) => void
-    course: any
-    id: any
+    course?: any
+    id?: any
     theme?: any
 }
 

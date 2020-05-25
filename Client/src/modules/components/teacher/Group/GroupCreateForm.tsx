@@ -1,11 +1,11 @@
 import React, {useCallback, useEffect} from 'react'
-import {IGroup} from "../../../shared/interface";
-import {useForm} from "../../../hooks/form.hook";
-import {TagField} from "../../../shared/utils/TagField";
-import {FormInput} from "../../../shared/utils/FormInput";
-import {SelectInput} from "../../../shared/utils/SelectInput";
-import {useHttp} from "../../../hooks/http.hook";
-import {courseRequest} from "../../../shared/request";
+import {IGroup} from "../../../shared/interface"
+import {useForm} from "../../../hooks/form.hook"
+import {TagField} from "../../../shared/utils/TagField"
+import {FormInput} from "../../../shared/utils/FormInput"
+import {SelectInput} from "../../../shared/utils/SelectInput"
+import {useHttp} from "../../../hooks/http.hook"
+import {courseRequest} from "../../../shared/request"
 
 interface Props {
     initialValues?: IGroup
@@ -36,11 +36,11 @@ export const GroupCreateForm = (props: Props) => {
         } catch (e) {
             console.log(e)
         }
-    }, [])
+    }, [courses])
 
     useEffect(() => {
         fetchCourse()
-    }, [])
+    }, [fetchCourse])
 
     const {initialValues = defaultGroupFormValues, onSubmit} = props
 

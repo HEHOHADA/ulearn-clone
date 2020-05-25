@@ -1,8 +1,8 @@
 import React from 'react'
-import {FormInput} from "../../shared/utils/FormInput";
-import {useForm} from "../../hooks/form.hook";
-import {ObjectKeys} from "../../shared/interface";
-import {getKeyValue} from "../../shared/utils/getKeyValue";
+import {FormInput} from "../../shared/utils/FormInput"
+import {useForm} from "../../hooks/form.hook"
+import {ObjectKeys} from "../../shared/interface"
+import {getKeyValue} from "../../shared/utils/getKeyValue"
 
 interface Props {
     formNames: Array<string>

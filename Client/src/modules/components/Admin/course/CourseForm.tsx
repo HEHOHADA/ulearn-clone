@@ -1,6 +1,6 @@
 import React, {FC} from 'react'
-import {ICourse} from "../../../shared/interface"
-import {useForm} from "../../../hooks/form.hook";
+import {ICourse} from '../../../shared/interface'
+import {useForm} from '../../../hooks/form.hook'
 
 export const defaultCourseValue = {
     name: "",

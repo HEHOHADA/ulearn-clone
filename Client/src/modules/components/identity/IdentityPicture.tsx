@@ -6,18 +6,13 @@ import {URL} from "../../shared/request"
 export const IdentityPicture = () => {
     const {request} = useHttp()
     const onDrop = useCallback(async ([acceptedFiles]) => {
-        const reader = new FileReader()
         const formData = new FormData()
-        // reader.onload = () => {
-        //     const binaryStr = reader.result
-        //     console.log(binaryStr)
-        formData.append('file', acceptedFiles)
-        // }
 
-        // reader.readAsArrayBuffer(acceptedFiles)
+        formData.append('file', acceptedFiles)
+
         const response = await request(URL, 'POST', formData, {'Content-Type': 'multipart/form-data'})
         console.log(response)
-    }, [])
+    }, [request])
 
     return (
         <div className="card-body text-center shadow">

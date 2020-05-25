@@ -1,5 +1,5 @@
 import React, {FC} from 'react'
-import {BrowserRouter, Switch, Route, Redirect,} from "react-router-dom"
+import {BrowserRouter, Switch, Route} from "react-router-dom"
 import {MainLayout} from "./modules/shared/layout/MainLayout"
 import {AppRoute} from "./routes/AppRoute"
 import {HomePage} from "./modules/pages/HomePage"
@@ -39,7 +39,7 @@ const App: FC = () => {
                         <AppRoute exact path={'/'} component={HomePage} layout={MainLayout}/>
                         <AppRoute exact path={'/pay'} component={PaymentPage} layout={MainLayout}/>
                         <AppRoute path={'/course/:id'} component={UserCoursePage} layout={MainLayout}/>
-                        <AppRoute exact path={'/account'} component={IdentityPage} layout={MainLayout}/>
+                        {isAdmin && <AppRoute exact path={'/account'} component={IdentityPage} layout={MainLayout}/>}
                         {!isAuth && <AppRoute exact path={'/login'} component={LoginPage} layout={AuthLayout}/>}
                         {!isAuth && <AppRoute exact path={'/register'} component={RegisterPage} layout={AuthLayout}/>}
                         {isAdmin && <Route path={'/admin'} component={useAdminRoute}/>}

@@ -14,11 +14,13 @@ export const useFetch = (url: string) => {
         } catch (e) {
             console.log(e)
         }
+        // eslint-disable-next-line
     }, [])
 
     useEffect(() => {
         fetch().finally(() => console.log(fetched))
-    }, [])
+        // eslint-disable-next-line
+    },[])
 
     return {fetched, loading, isBusy}
 }

@@ -1,5 +1,5 @@
 import {useCallback, useContext, useState} from 'react'
-import {AuthContext} from "../context/AuthContext";
+import {AuthContext} from "../context/AuthContext"
 
 export const useHttp = () => {
 
@@ -38,7 +38,7 @@ export const useHttp = () => {
             setError(e.message)
             throw e
         }
-    }, [])
+    }, [auth.token])
 
     const clearError = useCallback(() => setError(null), [])
 

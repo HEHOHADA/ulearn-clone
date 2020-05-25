@@ -1,10 +1,12 @@
-import React, {useCallback, useContext, useEffect} from 'react'
-import {HomeCourses} from "../components/home/HomeCourse/HomeCourses"
-import {ICourse} from "../shared/interface"
-import {RouteComponentProps} from "react-router-dom"
-import {useHttp} from "../hooks/http.hook"
-import {AuthContext} from "../context/AuthContext"
-import {UserContext} from "../context/UserContext"
+import React, {useContext} from 'react'
+import {HomeCourses} from '../components/home/HomeCourse/HomeCourses'
+import {ICourse} from '../shared/interface'
+import {RouteComponentProps} from "react-router"
+import {useHttp} from '../hooks/http.hook'
+import {AuthContext} from '../context/AuthContext'
+import {UserContext} from '../context/UserContext'
+import {useFetch} from '../hooks/fetch.hook'
+import {courseRequest} from '../shared/request'
 
 export const HomePage = (props: RouteComponentProps) => {
 
@@ -12,6 +14,7 @@ export const HomePage = (props: RouteComponentProps) => {
     const {loading, request} = useHttp()
     const auth = useContext(AuthContext)
     const {chooseTheme} = useContext(UserContext)
+    const {fetched} = useFetch(courseRequest)
     const onClickHandler = (course: ICourse) => {
         if (!auth.userId) {
             history.push('/login')
@@ -41,18 +44,6 @@ export const HomePage = (props: RouteComponentProps) => {
         {description: "321321321 312 321 312 3123 213 123", id: "2", name: "3", subscription: {}},
     ]
 
-    const fetchCourse = useCallback(async () => {
-        try {
-            // using api
-        } catch (e) {
-            //catching errors
-        }
-    }, [])
-
-    useEffect(() => {
-        fetchCourse()
-    }, [fetchCourse])
-
 
     return (
         <main className="page catalog-page">
@@ -68,7 +59,9 @@ export const HomePage = (props: RouteComponentProps) => {
                             <div className="col-md-9">
                                 <div className="products">
                                     <div className="row no-gutters">
-                                        <HomeCourses courses={courses} onClick={onClickHandler} loading={loading}/>
+                                        <HomeCourses courses={fetched&&fetched.length ? fetched : courses}
+                                                     onClick={onClickHandler}
+                                                     loading={loading}/>
                                     </div>
                                     <nav>
                                         <ul className="pagination"/>

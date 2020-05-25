@@ -1,11 +1,11 @@
 import React from 'react'
-import {AppRoute} from "./AppRoute"
+import {Redirect, Switch} from 'react-router-dom'
 
-import {ReviewPage} from "../modules/pages/Teacher/ReviewPage";
-import {MainLayout} from "../modules/shared/layout/MainLayout";
-import {GroupCreatePage} from "../modules/pages/Teacher/GroupCreatePage";
-import {GroupReviewPage} from "../modules/pages/Teacher/GroupReviewPage";
-import {Redirect, Switch} from 'react-router-dom';
+import {AppRoute} from "./AppRoute"
+import {ReviewPage} from "../modules/pages/Teacher/ReviewPage"
+import {MainLayout} from "../modules/shared/layout/MainLayout"
+import {GroupCreatePage} from "../modules/pages/Teacher/GroupCreatePage"
+import {GroupReviewPage} from "../modules/pages/Teacher/GroupReviewPage"
 
 
 export const useTeacherRoute = () => {

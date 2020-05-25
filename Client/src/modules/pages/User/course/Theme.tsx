@@ -1,17 +1,17 @@
 import React from 'react'
 
-import {CodeThema} from "../../../components/User/ThemaTypes/CodeThema"
-import {ITheme} from "../../../shared/interface"
-import {VideoThema} from '../../../components/User/ThemaTypes/VideoThema'
-import {TestThema} from "../../../components/User/ThemaTypes/TestThema"
+import {CodeThema} from '../../../components/User/ThemaTypes/CodeThema'
+import {ITheme} from '../../../shared/interface'
+import {VideoThema} from "../../../components/User/ThemaTypes/VideoThema"
+import {TestThema} from '../../../components/User/ThemaTypes/TestThema'
 
 interface Props {
-    id?: any
+    theme?: any
     nextThema: any
 }
 
 export const Theme = (props: Props) => {
-    const {id} = props
+    const {theme} = props
     // const {request, loading} = useHttp()
     //
     // let themaType = ''

@@ -1,7 +1,7 @@
 import React from 'react'
-import {HomeCourses} from "../../../components/home/HomeCourse/HomeCourses";
-import {ICourse} from "../../../shared/interface";
-import {useHistory} from 'react-router-dom';
+import {useHistory} from 'react-router-dom'
+import {HomeCourses} from "../../../components/home/HomeCourse/HomeCourses"
+import {ICourse} from "../../../shared/interface"
 
 export const CoursePage = () => {
 

@@ -1,6 +1,6 @@
 import React from 'react'
-import {ICourse} from "../../../shared/interface";
-import {Link} from "react-router-dom";
+import {Link} from "react-router-dom"
+import {ICourse} from "../../../shared/interface"
 
 
 interface Props {

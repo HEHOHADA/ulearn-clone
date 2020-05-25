@@ -1,7 +1,7 @@
 import React from 'react'
-import {ISubscription} from "../../shared/interface";
-import {useForm} from "../../hooks/form.hook";
-import {Loader} from "../../shared/utils/Loader";
+import {ISubscription} from "../../shared/interface"
+import {useForm} from "../../hooks/form.hook"
+import {Loader} from "../../shared/utils/Loader"
 
 
 interface Props {

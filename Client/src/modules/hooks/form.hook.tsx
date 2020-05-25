@@ -1,7 +1,7 @@
-import React, {useState} from "react";
-import {FormInput} from "../shared/utils/FormInput";
-import {getKeyValue} from "../shared/utils/getKeyValue";
-import {ObjectKeys} from "../shared/interface";
+import React, {useState} from "react"
+import {FormInput} from "../shared/utils/FormInput"
+import {getKeyValue} from "../shared/utils/getKeyValue"
+import {ObjectKeys} from "../shared/interface"
 
 // interface Some<T> {
 //     array: Array<{

@@ -1,14 +1,14 @@
 import React from 'react'
-import {AdminLayout} from "../modules/shared/layout/AdminLayout"
-import {AppRoute} from "./AppRoute"
-import {SubscriptionPage} from "../modules/pages/Admin/Subscription/SubscriptionPage"
-import {SubscriptionEdit} from "../modules/pages/Admin/Subscription/SubscriptionEdit"
-import {SubscriptionCreate} from "../modules/pages/Admin/Subscription/SubscriptionCreate"
-import {CoursePage} from "../modules/pages/Admin/Courses/CoursePage";
-import {CourseCreate} from "../modules/pages/Admin/Courses/CourseCreate";
-import {CourseEdit} from "../modules/pages/Admin/Courses/CourseEdit";
-import {ModuleCreate} from "../modules/pages/Admin/Modules/ModuleCreate";
 import {Switch, Redirect} from 'react-router-dom'
+import {AdminLayout} from '../modules/shared/layout/AdminLayout'
+import {AppRoute} from './AppRoute'
+import {SubscriptionPage} from '../modules/pages/Admin/Subscription/SubscriptionPage'
+import {SubscriptionEdit} from '../modules/pages/Admin/Subscription/SubscriptionEdit'
+import {SubscriptionCreate} from '../modules/pages/Admin/Subscription/SubscriptionCreate'
+import {CoursePage} from '../modules/pages/Admin/Courses/CoursePage'
+import {CourseCreate} from '../modules/pages/Admin/Courses/CourseCreate'
+import {CourseEdit} from '../modules/pages/Admin/Courses/CourseEdit'
+import {ModuleCreate} from '../modules/pages/Admin/Modules/ModuleCreate'
 
 
 export const useAdminRoute = () => {

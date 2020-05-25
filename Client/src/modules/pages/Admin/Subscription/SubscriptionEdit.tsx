@@ -1,48 +1,25 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React from 'react'
+import {useParams, useHistory} from 'react-router-dom'
 import {SubscriptionForm} from "../../../components/pay/SubscriptionForm"
-import {useParams} from 'react-router-dom'
-import {useFetch} from "../../../hooks/fetch.hook";
-import {subscriptionRequest} from "../../../shared/request";
-import {Loader} from "../../../shared/utils/Loader";
-import {useHttp} from "../../../hooks/http.hook";
+import {useFetch} from "../../../hooks/fetch.hook"
+import {subscriptionRequest} from "../../../shared/request"
+import {Loader} from "../../../shared/utils/Loader"
+import {useHttp} from "../../../hooks/http.hook"
 
 export const SubscriptionEdit = () => {
 
     const {id} = useParams()
-    // const [data, setData] = useState()
-    // const {request, loading} = useHttp()
+    const history = useHistory()
     const {fetched, loading: loading1, isBusy} = useFetch(`${subscriptionRequest}/${id}`)
-    // useEffect(() => {
-    //     setData(fetched)
-    // }, [loading, fetched])
-    // const [fetched, setFetched] = useState()
-    // const [isBusy, setIsBusy] = useState(false)
-    const {request, loading} = useHttp()
-    // const fetch = useCallback(async () => {
-    //     try {
-    //         setFetched(await request(`${subscriptionRequest}/${id}`))
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    // }, [])
 
-    // useEffect(() => {
-    //     setIsBusy(true)
-    //     const fetch = (async () => {
-    //         try {
-    //             setFetched(await request(`${subscriptionRequest}/${id}`))
-    //             setIsBusy(false)
-    //         } catch (e) {
-    //             console.log(e)
-    //         }
-    //     })
-    //     fetch()
-    //
-    // }, [])
+    const {request, loading} = useHttp()
 
     const submit = async (event: any, form: any) => {
         event.preventDefault()
-        console.log(form)
+        const response = await request(`${subscriptionRequest}/${id}`, 'PUT', {...form})
+        if (response) {
+            history.push('/admin/subscription')
+        }
     }
     if (loading) {
         return <Loader/>

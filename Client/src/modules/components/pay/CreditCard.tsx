@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
-import {FormInput} from "../../shared/utils/FormInput";
-import {useForm} from "../../hooks/form.hook";
+import {FormInput} from "../../shared/utils/FormInput"
+import {useForm} from "../../hooks/form.hook"
 
 interface Props {
     changeFormHandler: (form: any) => void

@@ -1,10 +1,11 @@
-import React, {useCallback, useContext, useEffect} from 'react'
+import React, {useContext} from 'react'
+import {useParams, useHistory, Link} from 'react-router-dom'
 import {Module} from "./Module"
 import {Theme} from './Theme'
 import {Course} from "./Course"
 import {UserContext} from "../../../context/UserContext"
-import {useParams, useHistory, Link} from 'react-router-dom'
 import {useHttp} from "../../../hooks/http.hook"
+import {useFetch} from "../../../hooks/fetch.hook"
 import {courseRequest, moduleRequest} from "../../../shared/request"
 
 export const UserCoursePage = () => {
@@ -15,6 +16,8 @@ export const UserCoursePage = () => {
     const {request} = useHttp()
 
     const history = useHistory()
+    const {fetched: courseItem} = useFetch(`${courseRequest}/${id}`)
+    const {fetched: moduleItem} = useFetch(`${moduleRequest}/${module}`)
     let moduleItems: any = []
     let headerCourse: any = ''
     let themas: any = ''
@@ -25,42 +28,42 @@ export const UserCoursePage = () => {
     //     // eslint-disable-next-line react-hooks/exhaustive-deps
     // }, [themeUrl])
 
-    const fetchModule = useCallback(async () => {
-        try {
-            const data = await request(`${moduleRequest}/${module}`)
-            themas = data
-        } catch (e) {
-            console.log(e)
-        }
-    }, [module])
-
-    const fetchCourse = useCallback(async () => {
-        try {
-            const data = await request(`${courseRequest}/${id}`)
-            moduleItems = data.modules
-            headerCourse = data.name
-
-        } catch (e) {
-            console.log(e)
-        }
-    }, [id])
-
-    useEffect(() => {
-        fetchCourse()
-        fetchModule()
-    }, [id, module])
+    // const fetchModule = useCallback(async () => {
+    //     try {
+    //         const data = await request(`${moduleRequest}/${module}`)
+    //         themas = data
+    //     } catch (e) {
+    //         console.log(e)
+    //     }
+    // }, [module])
+    //
+    // const fetchCourse = useCallback(async () => {
+    //     try {
+    //         const data = await request(`${courseRequest}/${id}`)
+    //         moduleItems = data.modules
+    //         headerCourse = data.name
+    //
+    //     } catch (e) {
+    //         console.log(e)
+    //     }
+    // }, [id])
+    //
+    // useEffect(() => {
+    //     fetchCourse()
+    //     fetchModule()
+    // }, [id, module])
 
     return (
         <main className="page">
             <div className="container">
                 <div className="row">
                     {module ?
-                        <Module id={module}  course={course ? course : id}
+                        <Module theme={moduleItem} id={module} course={course ? course : id}
                                 onChooseTheme={chooseTheme}/> :
-                        <Course header={headerCourse} module={moduleItems} onChooseModule={chooseTheme}/>}
+                        <Course course={courseItem} onChooseModule={chooseTheme}/>}
                     <div className="col-md-8 col-xs-12">
                         <div className="container">
-                            <Theme id={theme} nextThema={chooseTheme}/>
+                            <Theme theme={theme} nextThema={chooseTheme}/>
                             <div className="d-flex flex-nowrap m-3">
                                 {theme && <Link to={' asd'} className="btn btn-primary btn-block m-1">Назад</Link>}
                                 {theme && <Link to={''} className="btn btn-primary btn-block m-1">След</Link>}

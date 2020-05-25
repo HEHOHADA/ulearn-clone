@@ -1,11 +1,12 @@
 import React, {useContext} from 'react'
-import {IdentityForm} from "../components/identity/IdentityForm";
-import {Link} from "react-router-dom";
-import {IdentityPicture} from "../components/identity/IdentityPicture";
-import {AuthContext} from "../context/AuthContext";
-import {useHttp} from "../hooks/http.hook";
-import {groupRequest, teacherConfirm} from "../shared/request";
-import {useFetch} from "../hooks/fetch.hook";
+import {Link} from "react-router-dom"
+import {IdentityForm} from "../components/identity/IdentityForm"
+import {IdentityPicture} from "../components/identity/IdentityPicture"
+import {AuthContext} from "../context/AuthContext"
+import {useHttp} from "../hooks/http.hook"
+import {groupRequest, teacherConfirm} from "../shared/request"
+import {useFetch} from "../hooks/fetch.hook"
+import {GoogleMap} from "../shared/utils/GoogleMap"
 
 
 interface settings {
@@ -96,6 +97,7 @@ export const IdentityPage = () => {
                                         <button disabled={loading} className="btn btn-info"
                                                 onClick={confirmTeacherAccount}>Confirm
                                             teacher account</button>}
+                                    <GoogleMap/>
                                 </div>
                             </div>
                         </div>
