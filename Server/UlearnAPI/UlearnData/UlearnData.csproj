@@ -10,6 +10,7 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0-preview.3.20181.2" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.0-preview.3.20181.2" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0-preview.3.20181.2" />
+      <PackageReference Include="MongoDB.Bson" Version="2.10.4" />
     </ItemGroup>
 
 </Project>

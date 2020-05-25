@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UlearnAPI.AOP;
 using UlearnData.Models;
+using UlearnServices.Models.Subscription;
 using UlearnServices.Services;
 
 namespace UlearnAPI.Controllers
@@ -20,13 +21,6 @@ namespace UlearnAPI.Controllers
         public SubscriptionController(SubscriptionsService subscriptionsService)
         {
             _subscriptionsService = subscriptionsService;
-        }
-
-        // GET: api/Subscription
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Subscription>>> GetSubscriptions()
-        {
-            return await _subscriptionsService.GetAsync();
         }
 
         // GET: api/Subscription/5
@@ -97,6 +91,12 @@ namespace UlearnAPI.Controllers
             await _subscriptionsService.Remove(subscription);
 
             return subscription;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Subscription>>> GetSorted([FromQuery] SearchQuery query)
+        {
+            return await _subscriptionsService.GetSortedAsync(query);
         }
     }
 }

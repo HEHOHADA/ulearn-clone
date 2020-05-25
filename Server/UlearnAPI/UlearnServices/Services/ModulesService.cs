@@ -39,6 +39,8 @@ namespace UlearnServices.Services
         {
             return await _context.Modules
                 .Include(module => module.TestTasks)
+                .ThenInclude(x => x.Questions)
+                .ThenInclude(x => x.Answers)
                 .Include(module => module.CodeTasks)
                 .Include(module => module.VideoTasks)
                 .FirstOrDefaultAsync(module => module.Id == id);

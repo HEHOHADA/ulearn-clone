@@ -3,21 +3,21 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using UlearnData.Models.MongoModels;
+using UlearnServices.Services;
 
 namespace UlearnAPI.Middleware
 {
     public class MongoLogMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly string _path;
 
-        public MongoLogMiddleware(RequestDelegate next, string path)
+        public MongoLogMiddleware(RequestDelegate next)
         {
             _next = next;
-            _path = path;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, LoggingService loggingService)
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -26,11 +26,11 @@ namespace UlearnAPI.Middleware
 
             try
             {
-                using (StreamWriter sw = new StreamWriter(_path, true, System.Text.Encoding.Default))
+                loggingService.Create(new Log
                 {
-                    sw.WriteLine($"Request for {context.Request.Path} elapsed {stopwatch.ElapsedMilliseconds} ms");
-                    Console.WriteLine($"Request for {context.Request.Path} elapsed {stopwatch.ElapsedMilliseconds} ms");
-                }
+                    Elapsed = stopwatch.ElapsedMilliseconds,
+                    Path = context.Request.Path
+                });
             }
             catch (Exception e)
             {
