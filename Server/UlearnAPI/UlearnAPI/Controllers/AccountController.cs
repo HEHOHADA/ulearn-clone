@@ -44,6 +44,14 @@ namespace UlearnAPI.Controllers
             _appEnvironment = appEnvironment;
         }
 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Get()
+        {
+            var userId = User.FindFirstValue("sub");
+            return Ok(await _accountService.Get(userId));
+        }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
@@ -111,16 +119,10 @@ namespace UlearnAPI.Controllers
 
         [HttpPut("updateData")]
         [SensitiveAuthorize]
-        public async Task<IActionResult> UpdateData([FromBody] UserInfoDto model)
+        public async Task<IActionResult> UpdateData([FromBody] FullUserInfoDto model)
         {
             var userId = User.FindFirstValue("sub");
-            var user = await _userManager.FindByIdAsync(userId);
-            await _userManager.SetUserNameAsync(user, model.Username);
-            await _userManager.SetEmailAsync(user, model.Email);
-            await _accountService.Update(userId, new UlearnServices.Models.Account.UserInfoDto
-            {
-                Firstname = model.Firstname, Lastname = model.Lastname
-            });
+            await _accountService.Update(userId, model);
             return Ok();
         }
 
@@ -297,14 +299,6 @@ namespace UlearnAPI.Controllers
         [Required]
         [StringLength(100, ErrorMessage = "PASSWORD_MIN_LENGTH", MinimumLength = 6)]
         public string Password { get; set; }
-    }
-
-    public class UserInfoDto
-    {
-        [Required] public string Username { get; set; }
-        [Required] public string Email { get; set; }
-        public string Firstname { get; set; }
-        public string Lastname { get; set; }
     }
 
     public class PasswordDto
