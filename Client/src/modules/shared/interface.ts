@@ -98,7 +98,7 @@ export interface IQuestion {
 }
 
 export interface IAnswer {
-    answerText: string
+    text: string
     isCorrect: boolean
 }
 

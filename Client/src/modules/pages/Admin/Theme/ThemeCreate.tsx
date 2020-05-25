@@ -9,14 +9,17 @@ export const ThemeCreate = () => {
     const {request} = useHttp()
 
     const {moduleId} = useParams()
-    const submit = async (event: any, name: string, videoHref: string, test: Array<Question>, code: string, description: string, selectedItem?: string) => {
+    const submit = async (event: any, name: string, videoHref: string, enteredQuestions: Array<Question>, enteredCode: string, description: string, selectedItem?: string) => {
         event.preventDefault()
-        let task: any
+        let body: any = {name, moduleId: parseInt(moduleId!), description}
         if (selectedItem) {
-            selectedItem === Options.Code ? task = code : selectedItem === Options.Video ? task = videoHref : task = test
+            selectedItem === Options.Code
+                ? body.codeTask = enteredCode
+                : selectedItem === Options.Video
+                ? body.video = videoHref
+                : body.questions = enteredQuestions
         }
-        await request(`${api}/${selectedItem}Task?moduleId=${moduleId}`, 'POST', {name,description,task})
-        console.log(name, description, selectedItem, task,`${api}/${selectedItem}Task?moduleId=${moduleId}`)
+        await request(`${api}/${selectedItem}Task`, 'POST', body)
     }
     return (
         <ThemeForm loading={false} onSubmit={submit} title={"Theme Create"}/>

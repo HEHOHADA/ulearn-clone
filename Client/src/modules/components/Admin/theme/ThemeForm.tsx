@@ -34,7 +34,7 @@ export const ThemeForm: FC<IProps> = (props: IProps) => {
     const [description, setDescription] = useState("")
     const [videoHref, setVideoHref] = useState("")
 
-    const [test, setTest] = useState<Array<Question>>([])
+    const [questions, setQuestions] = useState<Array<Question>>([])
     const [code, setCode] = useState('')
 
 
@@ -44,7 +44,7 @@ export const ThemeForm: FC<IProps> = (props: IProps) => {
 
     return (
         <div className="m-3">
-            <h2 className="header-standard p-4">Создать модуль</h2>
+            <h2 className="header-standard p-4">Создать таск</h2>
             <div className="row">
                 <div className="col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">
                     <SelectInput onSelect={onSelect} data={options} label={"Тип темы"} name={"sad"}
@@ -58,17 +58,20 @@ export const ThemeForm: FC<IProps> = (props: IProps) => {
                             selectedItem === Options.Code &&
                             e.key === 'Enter' && e.preventDefault()
                         }}
-                        onSubmit={(event: any) => onSubmit(event, name, videoHref, test, code, description, selectedItem)}>
-                        <input className="form-control item" value={name}
+                        onSubmit={(event: any) => onSubmit(event, name, videoHref, questions, code, description, selectedItem)}>
+                        <label htmlFor={"name"}>Название таска:</label>
+                        <input id={"name"} className="form-control item" value={name}
                                onChange={(event: any) => setName(event.target.value)}/>
-                        <input className="form-control item" value={description}
+                        <label htmlFor={"desc"}>Описание таска:</label>
+                        <input id={"desc"} className="form-control item" value={description}
                                onChange={(event: any) => setDescription(event.target.value)}/>
+                        <br/>
                         {
                             selectedItem === Options.Code ?
                                 <CodeEditor code={code} {...props1}/>
                                 : selectedItem === Options.Video ?
                                 <VideoElement value={videoHref} onChange={setVideoHref}/> :
-                                <TestForm setTest={setTest} test={test}/>
+                                <TestForm setTest={setQuestions} questions={questions}/>
                         }
                         <button className={"btn btn-block btn-primary"} type={"submit"}>Создать модуль</button>
                     </form>
