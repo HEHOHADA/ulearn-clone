@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using UlearnAPI.AOP;
 using UlearnData.Models;
 using UlearnServices.Models.Account;
 using UlearnServices.Services;
@@ -109,7 +110,7 @@ namespace UlearnAPI.Controllers
         }
 
         [HttpPut("updateData")]
-        [Authorize]
+        [SensitiveAuthorize]
         public async Task<IActionResult> UpdateData([FromBody] UserInfoDto model)
         {
             var userId = User.FindFirstValue("sub");
@@ -124,7 +125,7 @@ namespace UlearnAPI.Controllers
         }
 
         [HttpPost("changePassword")]
-        [Authorize]
+        [SensitiveAuthorize]
         public async Task<IActionResult> ChangePassword(PasswordDto model)
         {
             var userId = User.FindFirstValue("sub");
@@ -149,14 +150,14 @@ namespace UlearnAPI.Controllers
         }
 
         [HttpPost("confirmTeacher")]
-        [Authorize]
+        [SensitiveAuthorize]
         public async Task<IActionResult> ConfirmTeacher()
         {
             var userId = User.FindFirstValue("sub");
             await _accountService.ConfirmTeacher(userId);
             return Ok();
         }
-        
+
         [HttpPost("auth/google")]
         public async Task<IActionResult> GoogleLogin(GoogleLogin request)
         {
@@ -254,7 +255,7 @@ namespace UlearnAPI.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        
+
         [HttpGet("checkSubscription")]
         [Authorize]
         public async Task<ActionResult<bool>> CheckSubscription([FromQuery] int groupId)
@@ -300,8 +301,8 @@ namespace UlearnAPI.Controllers
 
     public class UserInfoDto
     {
-        public string Username { get; set; }
-        public string Email { get; set; }
+        [Required] public string Username { get; set; }
+        [Required] public string Email { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
     }
