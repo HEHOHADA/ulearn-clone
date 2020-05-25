@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using UlearnData;
 using UlearnData.Models;
 using UlearnData.Models.Tasks.TestTask;
+using UlearnServices.Models.Tasks.TestTask;
+using UlearnServices.Models.Tasks.TestTask.TestQuestion;
 
 namespace UlearnServices.Services
 {
@@ -28,7 +30,7 @@ namespace UlearnServices.Services
         {
             return await _context.TestTasks
                 .Include(testTask => testTask.Questions)
-                    .ThenInclude(question => question.Answers)
+                .ThenInclude(question => question.Answers)
                 .ToListAsync();
         }
 
@@ -36,21 +38,61 @@ namespace UlearnServices.Services
         {
             return await _context.TestTasks
                 .Include(testTask => testTask.Questions)
-                    .ThenInclude(question => question.Answers)
+                .ThenInclude(question => question.Answers)
                 .FirstOrDefaultAsync(module => module.Id == id);
         }
 
-        public async Task<TestTask> CreateAsync(int moduleId, TestTask testTask)
+        public async Task<TestTask> CreateAsync(TestTaskDto model)
         {
-            var module = await _context.Modules.FindAsync(moduleId);
-            testTask.Module = module;
+            var testTask = new TestTask
+            {
+                Name = model.Name,
+                Description = model.Description,
+                Module = await _context.Modules.FindAsync(model.moduleId),
+                Questions = model.Questions
+                    .Select(x => new TestQuestion
+                    {
+                        Text = x.Text,
+                        Points = x.Points,
+                        Answers = x.Answers
+                            .Select(y => new TestQuestionAnswer
+                            {
+                                Text = y.Text,
+                                IsRight = y.IsRight
+                            })
+                            .ToList()
+                    })
+                    .ToList()
+            };
+            testTask.Points = testTask.Questions.Select(x => x.Points).Aggregate((x, y) => x + y);
+
             _context.TestTasks.Add(testTask);
             await _context.SaveChangesAsync();
             return testTask;
         }
 
-        public async Task PutAsync(TestTask testTask)
+        public async Task PutAsync(int id, TestTaskDto model)
         {
+            var testTask = await _context.TestTasks.FindAsync(id);
+            testTask.Name = model.Name;
+            testTask.Description = model.Description;
+            testTask.Module = await _context.Modules.FindAsync(model.moduleId);
+            testTask.Questions = model.Questions
+                .Select(x => new TestQuestion
+                {
+                    Text = x.Text,
+                    Points = x.Points,
+                    Answers = x.Answers
+                        .Select(y => new TestQuestionAnswer
+                        {
+                            Text = y.Text,
+                            IsRight = y.IsRight
+                        })
+                        .ToList()
+                })
+                .ToList();
+            testTask.Points = testTask.Questions.Select(x => x.Points).Aggregate((x, y) => x + y);
+
             _context.Entry(testTask).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
