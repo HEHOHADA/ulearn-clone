@@ -1,43 +1,98 @@
 import {useHttp} from "../../../hooks/http.hook";
 import {useHistory, useParams} from "react-router-dom";
 import {useFetch} from "../../../hooks/fetch.hook";
-import {ICourse, IModule} from "../../../shared/interface";
-import {courseRequest, moduleRequest} from "../../../shared/request";
+import {IModule} from "../../../shared/interface";
+import {codeTaskRequest, moduleRequest, testTackRequest, videoTaskRequest} from "../../../shared/request";
 import React, {useEffect, useState} from "react";
+import {VideoElement} from "../../../shared/utils/VideoElement";
+import {CodeEditor} from "../../../shared/utils/CodeEditor";
+import {TestForm} from "../../../components/Admin/theme/TestForm";
+import {Options} from "../../../components/Admin/theme/ThemeForm";
 
 export const ThemePage = () => {
-    /*const {request} = useHttp()
-    const {moduleId} = useParams()
+    const {request} = useHttp()
+    const {moduleId,courseId} = useParams()
     const {fetched, isBusy} = useFetch<IModule>(`${moduleRequest}/${moduleId}`)
     useEffect(() => {
         if (!isBusy) {
             console.log('fetched', fetched)
-            const tasks = fetched.
             setModule(fetched)
         }
     }, [isBusy])
     const [module, setModule] = useState<IModule>();
+
     const history = useHistory()
+    const onDelete = async (id: number, option: Options) => {
+
+        const newModule = {...module!}
+        if (option === Options.Video) {
+            await request(`${videoTaskRequest}/${id}`, 'DELETE')
+            newModule.videoTasks = newModule.videoTasks.filter(x => x.id !== id)
+        }
+        if (option === Options.Test) {
+            await request(`${testTackRequest}/${id}`, 'DELETE')
+            newModule.testTasks = newModule.testTasks.filter(x => x.id !== id)
+        }
+        if (option === Options.Code) {
+            await request(`${testTackRequest}/${id}`, 'DELETE')
+            newModule.codeTasks = newModule.codeTasks.filter(x => x.id !== id)
+        }
+
+        setModule(module)
+
+    }
+    const onCreateModule = ()=>{
+        history.push(`/admin/course/${courseId}/module/${moduleId}/theme/create`)
+    }
     return (
-        <div>
+        !isBusy && <div>
             {
-                modules.map((module, index) => {
+                module?.videoTasks.map((video, index) => {
                     return (
-                        <div className="col-md-5 col-lg-4" key={`${module.name}-${module.maxPoints}`}>
+                        <div className="col-md-5 col-lg-4" key={`${video.name}-${video.videoHref}`}>
                             <div className="clean-pricing-item">
                                 <div className="heading">
-                                    <h3>{module.name}</h3>
+                                    <h3>{video.name}</h3>
                                 </div>
+                                <VideoElement value={video.videoHref}/>
+                                <button onClick={() => onDelete(video.id!, Options.Video)}
+                                        className="btn btn-outline-primary btn-block"
+                                        type="button">{"Удалить"}</button>
+                            </div>
+                        </div>
+                    )
+                })
+            }
+            {
+                module?.codeTasks.map((codeTask, index) => {
+                    return (
+                        <div className="col-md-5 col-lg-4" key={`${codeTask.name}-${codeTask.points}`}>
+                            <div className="clean-pricing-item">
+
+                                <CodeEditor code={codeTask.initialCode}/>
                                 <div className="price">
-                                    <h4><small>Макс</small>{module.maxPoints}</h4>
+                                    <h4><small>Поинты </small>{codeTask.points}</h4>
                                 </div>
-                                <button onClick={() => onEdit(module.id!)}
+                                <button onClick={() => onDelete(codeTask.id!, Options.Code)}
                                         className="btn btn-outline-primary btn-block"
-                                        type="button">{"Изменить"}</button>
-                                <button onClick={() => onAddTheme(module.id!)}
-                                        className="btn btn-outline-primary btn-block"
-                                        type="button">{"Добавить тест"}</button>
-                                <button onClick={() => onDelete(module.id!)}
+                                        type="button">{"Удалить"}</button>
+                            </div>
+                        </div>
+                    )
+
+                })
+            }
+            {
+                module?.testTasks.map((testTask, index) => {
+                    return (
+                        <div className="col-md-5 col-lg-4" key={`${testTask.name}-${testTask.points}`}>
+                            <div className="clean-pricing-item">
+
+                                <TestForm questions={testTask.questions} setTest={null}/>
+                                <div className="price">
+                                    <h4><small>Поинты </small>{testTask.points}</h4>
+                                </div>
+                                <button onClick={() => onDelete(testTask.id!, Options.Test)}
                                         className="btn btn-outline-primary btn-block"
                                         type="button">{"Удалить"}</button>
                             </div>
@@ -50,5 +105,5 @@ export const ThemePage = () => {
                     onClick={onCreateModule}>{"Создать модуль"}</button>
         </div>
 
-    )*/
+    )
 }

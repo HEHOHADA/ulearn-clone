@@ -28,8 +28,8 @@ export const ModulePage = () => {
     const onCreateModule = () => {
         history.push(`/admin/course/${courseId}/module/create`)
     }
-    const onEdit = (moduleId: number) => {
-        history.push(`/admin/course/${courseId}/module/edit/${moduleId}`)
+    const onViewThemes = (moduleId: number) => {
+        history.push(`/admin/course/${courseId}/module/${moduleId}/theme`)
     }
     const onDelete = async (moduleId: number) => {
         try {
@@ -55,9 +55,9 @@ export const ModulePage = () => {
                                 </div>
                                 <div className="price">
                                 </div>
-                                <button onClick={() => onEdit(module.id!)}
+                                <button onClick={() => onViewThemes(module.id!)}
                                         className="btn btn-outline-primary btn-block"
-                                        type="button">{"Изменить"}</button>
+                                        type="button">{"Модули"}</button>
                                 <button onClick={() => onAddTheme(module.id!)}
                                         className="btn btn-outline-primary btn-block"
                                         type="button">{"Добавить тест"}</button>
