@@ -6,7 +6,7 @@ import {QuestionForm} from "./QuestionForm"
 export class Question implements IQuestion {
     answers: Array<Answer> = []
     points: number = 0
-    question: string = ""
+    text: string = ""
 }
 
 export class Answer implements IAnswer {
@@ -33,16 +33,16 @@ export const TestForm = (props: questProps) => {
 
     const addQuestion = (text: string) => {
         setText("")
-        if (test.some(q => q.question === text)) {
+        if (test.some(q => q.text === text)) {
             return
         }
         const question = new Question()
-        question.question = text
+        question.text = text
         setTest([...test, {...question}])
     }
 
     const changeQuestion = (question: Question) => {
-        const newQuestions = test.filter(q => q.question !== question.question)
+        const newQuestions = test.filter(q => q.text !== question.text)
 
         setTest([...newQuestions, question])
     }
@@ -71,7 +71,7 @@ export const TestForm = (props: questProps) => {
             {
                 test.map((question, index) => {
                     return (
-                        <div key={`${index}-${question.question}`}>
+                        <div key={`${index}-${question.text}`}>
                             {index + 1}.
                             <button className={"btn btn-light"} onClick={() => deleteQuestion(question)}><img alt="/"
                                                                                                               src={trash}/>

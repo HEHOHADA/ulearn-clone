@@ -46,9 +46,6 @@ export const CourseForm: FC<IProps> = (props: IProps) => {
     const {initialValues = defaultCourseValue, onSubmit, title} = props
 
     const {form, generateInputs, setForm} = useForm<IVisibleCourse>(initialValues)
-
-
-    console.log(subscriptions)
     return (
         <form
             onSubmit={(event) => onSubmit(event, form)}

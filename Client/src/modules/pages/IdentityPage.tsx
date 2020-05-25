@@ -41,7 +41,7 @@ const{fetched}=useFetch(groupRequest)
     // }, [])
 
     const teachersGroup = () => {
-        return fetched && fetched.map(g => (
+        return fetched && fetched.map((g:any) => (
             <Link to={`/${g.course}`} key={`${g.name}-${g.course}`} className="module p-3 border">
                 <p className="text-primary m-0 font-weight-bold text-lg-left ">{g.name}</p>
                 <span className="text-primary">{g.course}</span>

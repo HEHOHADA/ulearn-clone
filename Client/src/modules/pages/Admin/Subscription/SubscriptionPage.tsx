@@ -12,18 +12,6 @@ export const SubscriptionPage = () => {
     const {request, loading} = useHttp()
     const [subscriptions, setSubscriptions] = useState<Array<ISubscription>>()
     const {fetched} = useFetch(subscriptionRequest)
-    // const fetchSubscription = useCallback(async () => {
-    //     try {
-    //         setSubscriptions(await request(subscriptionRequest))
-    //         console.log(subscriptions)
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    // }, [])
-    //
-    // useEffect(() => {
-    //     fetchSubscription()
-    // }, [])
 
     const onEditHandler = (id: number) => {
         history.push(`/admin/subscription/edit/${id}`)

@@ -48,9 +48,9 @@ export const TestItem = (props: Props) => {
 
     useEffect(() => {
         if (answer) {
-            change({question, points: point, answers: answer!})
+            change({text: question, points: point, answers: answer!})
         } else {
-            change({question, points: 0, answers: answer!})
+            change({text: question, points: 0, answers: answer!})
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [answer, isSubmitting])

@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, {FC, useState} from "react"
 import {SelectInput} from "../../../shared/utils/SelectInput"
 import {Question, TestForm} from "./TestForm"
 import {VideoElement} from "../../../shared/utils/VideoElement"
@@ -8,32 +8,37 @@ import {CodeEditor} from "../../../shared/utils/CodeEditor"
 
 const options = ["video", "code", "test"]
 
-enum Options {
+export enum Options {
     Video = "video",
     Code = "code",
     Test = "test"
 }
 
-export const ThemeForm = () => {
+interface IProps {
+    initialValues?: any,
+    onSubmit: (event: any, name: string, videoHref: string, test: Array<Question>, code: string, description: string, selectedItem?: string) => void
+    title?: string
+    loading: boolean
+}
 
+export const ThemeForm: FC<IProps> = (props: IProps) => {
+
+    const {onSubmit} = props
     const onSelect = (selectedOption: string) => {
         setSelectedItem(selectedOption)
     }
 
     const [selectedItem, setSelectedItem] = useState(Options.Video.toString())
 
+    const [name, setName] = useState("")
+    const [description, setDescription] = useState("")
     const [videoHref, setVideoHref] = useState("")
 
     const [test, setTest] = useState<Array<Question>>([])
     const [code, setCode] = useState('')
 
-    const submit = (event: any) => {
-        event.preventDefault()
-        console.log(code)
-        console.log('here', test, videoHref)
-    }
 
-    const props = {
+    const props1 = {
         onChange: (code: any) => setCode(code)
     }
 
@@ -53,10 +58,14 @@ export const ThemeForm = () => {
                             selectedItem === Options.Code &&
                             e.key === 'Enter' && e.preventDefault()
                         }}
-                        onSubmit={submit}>
+                        onSubmit={(event: any) => onSubmit(event, name, videoHref, test, code, description, selectedItem)}>
+                        <input className="form-control item" value={name}
+                               onChange={(event: any) => setName(event.target.value)}/>
+                        <input className="form-control item" value={description}
+                               onChange={(event: any) => setDescription(event.target.value)}/>
                         {
                             selectedItem === Options.Code ?
-                                <CodeEditor code={code} {...props}/>
+                                <CodeEditor code={code} {...props1}/>
                                 : selectedItem === Options.Video ?
                                 <VideoElement value={videoHref} onChange={setVideoHref}/> :
                                 <TestForm setTest={setTest} test={test}/>
