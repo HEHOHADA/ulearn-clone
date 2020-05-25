@@ -64,6 +64,7 @@ export interface ICourse {
 
 export interface IModule {
     id?: number
+    maxPoints?:number
     name: string
     codeTasks: Array<CodeTask>
     testTasks: Array<TestTask>
