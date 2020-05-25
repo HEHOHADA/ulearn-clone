@@ -67,5 +67,13 @@ namespace UlearnServices.Services
             _context.Modules.Remove(module);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<Module>> GetByCourse(int courseId)
+        {
+            return await _context.Modules
+                .Include(x => x.Course)
+                .Where(x => x.Course.Id == courseId)
+                .ToListAsync();
+        }
     }
 }

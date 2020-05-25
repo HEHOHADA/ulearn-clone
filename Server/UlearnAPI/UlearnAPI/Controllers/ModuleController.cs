@@ -42,6 +42,13 @@ namespace UlearnAPI.Controllers
             return module;
         }
 
+        // GET: api/Module/byCourse/5
+        [HttpGet("byCourse/{courseId}")]
+        public async Task<ActionResult<IEnumerable<Module>>> GetByCourse(int courseId)
+        {
+            return await _modulesService.GetByCourse(courseId);
+        }
+
         // PUT: api/Module/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
