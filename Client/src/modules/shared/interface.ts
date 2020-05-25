@@ -74,7 +74,7 @@ export interface IModule {
 export interface CommonTask {
     name: string
     description: string
-    id?: string
+    id?: number
 }
 
 export interface TestTask extends CommonTask {
@@ -88,7 +88,7 @@ export interface CodeTask extends CommonTask {
 }
 
 export interface VideoTask extends CommonTask {
-    video: string
+    videoHref: string
 }
 
 export interface ITheme {
