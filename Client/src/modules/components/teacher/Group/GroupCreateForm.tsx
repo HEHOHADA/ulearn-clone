@@ -36,11 +36,11 @@ export const GroupCreateForm = (props: Props) => {
         } catch (e) {
             console.log(e)
         }
-    }, [courses])
+    }, [])
 
     useEffect(() => {
         fetchCourse()
-    }, [fetchCourse])
+    }, [])
 
     const {initialValues = defaultGroupFormValues, onSubmit} = props
 

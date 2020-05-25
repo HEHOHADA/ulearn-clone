@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import {GroupCreateForm} from "../../components/teacher/Group/GroupCreateForm"
 import {useHttp} from "../../hooks/http.hook"
 import {useParams} from 'react-router-dom'

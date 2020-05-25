@@ -1,8 +1,7 @@
 import React from 'react'
 import {IVisibleModule, ModuleForm} from "../../../components/Admin/module/ModuleForm"
 import {useHttp} from "../../../hooks/http.hook";
-import {IVisibleCourse} from "../../../components/Admin/course/CourseForm";
-import {courseRequest, moduleRequest} from "../../../shared/request";
+import {moduleRequest} from "../../../shared/request";
 import {useParams} from "react-router-dom";
 
 export const ModuleCreate = () => {

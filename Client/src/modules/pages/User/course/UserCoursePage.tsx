@@ -13,14 +13,14 @@ export const UserCoursePage = () => {
     const {module, chooseTheme, theme, course} = useContext(UserContext)
 
     const {id} = useParams()
-    const {request} = useHttp()
+    // const {request} = useHttp()
 
-    const history = useHistory()
+    // const history = useHistory()
     const {fetched: courseItem} = useFetch(`${courseRequest}/${id}`)
     const {fetched: moduleItem} = useFetch(`${moduleRequest}/${module}`)
-    let moduleItems: any = []
-    let headerCourse: any = ''
-    let themas: any = ''
+    // let moduleItems: any = []
+    // let headerCourse: any = ''
+    // let themas: any = ''
     // const themeUrl = history.location.pathname.split('/')[3]
     //
     // useEffect(() => {

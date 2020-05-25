@@ -56,7 +56,7 @@ export interface ICourse {
     name: string | null
     subscription?: ISubscription
     description: string
-    id?: string
+    id?: number
     // themas: Array<ITheme>
 }
 

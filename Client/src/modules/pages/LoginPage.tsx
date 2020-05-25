@@ -84,7 +84,6 @@ export const LoginPage: FC = () => {
                         }
                         return 'text'
                     })}
-                    <button className="btn btn-primary btn-block" onClick={googleOauth}></button>
                     <button
                         disabled={loading}
                         className="btn btn-primary btn-block" type="submit">Log In
