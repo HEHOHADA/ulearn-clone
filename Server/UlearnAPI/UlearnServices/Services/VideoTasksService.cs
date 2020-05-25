@@ -38,6 +38,7 @@ namespace UlearnServices.Services
             {
                 Name = model.Name,
                 Description = model.Description,
+                VideoHref = model.VideoHref,
                 Module = await _context.Modules.FindAsync(model.ModuleId)
             };
 
@@ -51,8 +52,9 @@ namespace UlearnServices.Services
             var videoTask = await _context.VideoTasks.FindAsync(id);
             videoTask.Name = model.Name;
             videoTask.Description = model.Description;
+            videoTask.VideoHref = model.VideoHref;
             videoTask.Module = await _context.Modules.FindAsync(model.ModuleId);
-
+            
             _context.Entry(videoTask).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
