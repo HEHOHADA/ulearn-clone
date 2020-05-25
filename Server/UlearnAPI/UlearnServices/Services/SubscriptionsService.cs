@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using UlearnData;
 using UlearnData.Models;
+using UlearnServices.Models.Subscription;
 
 namespace UlearnServices.Services
 {
@@ -23,11 +24,6 @@ namespace UlearnServices.Services
         public bool SubscriptionExists(int id)
         {
             return _context.Subscriptions.Any(e => e.Id == id);
-        }
-
-        public async Task<List<Subscription>> GetAsync()
-        {
-            return await _context.Subscriptions.ToListAsync();
         }
 
         public async Task<Subscription> FindAsync(int id)
@@ -66,6 +62,34 @@ namespace UlearnServices.Services
         {
             _context.Subscriptions.Remove(subscription);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<Subscription>> GetSortedAsync(SearchQuery query)
+        {
+            IQueryable<Subscription> subscriptions = _context.Subscriptions;
+            if (query.SortType.HasValue)
+                switch (query.SortType)
+                {
+                    case SortType.PriceAscending:
+                        subscriptions = subscriptions.OrderBy(s => s.Price).AsQueryable();
+                        break;
+                    case SortType.PriceDescending:
+                        subscriptions = subscriptions.OrderByDescending(s => s.Price).AsQueryable();
+                        break;
+                    case SortType.LevelAscending:
+                        subscriptions = subscriptions.OrderBy(s => s.Level).AsQueryable();
+                        break;
+                    case SortType.LevelDescending:
+                        subscriptions = subscriptions.OrderByDescending(s => s.Level).AsQueryable();
+                        break;
+                }
+
+            if (query.Page != 0 && query.PageSize != 0)
+                subscriptions = subscriptions
+                    .Skip((query.Page - 1) * query.PageSize)
+                    .Take(query.PageSize);
+
+            return subscriptions.ToList();
         }
     }
 }
