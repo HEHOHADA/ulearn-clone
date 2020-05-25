@@ -90,20 +90,20 @@ namespace UlearnServices.Services
                         break;
                 }
 
-            if (query.FromLevel != 0 && query.ToLevel != 0)
+            if (query.FromLevel.HasValue && query.ToLevel.HasValue)
             {
                 subscriptions = subscriptions.Where(x => x.Level >= query.FromLevel && x.Level <= query.ToLevel);
             }
 
-            if (query.FromPrice != 0 && query.ToPrice != 0)
+            if (query.FromPrice.HasValue && query.ToPrice.HasValue)
             {
                 subscriptions = subscriptions.Where(x => x.Price >= query.FromPrice && x.Price <= query.ToPrice);
             }
 
-            if (query.Page != 0 && query.PageSize != 0)
+            if (query.Page.HasValue && query.PageSize.HasValue)
                 subscriptions = subscriptions
-                    .Skip((query.Page - 1) * query.PageSize)
-                    .Take(query.PageSize);
+                    .Skip((query.Page.Value - 1) * query.PageSize.Value)
+                    .Take(query.PageSize.Value);
 
             return subscriptions.ToList();
         }
