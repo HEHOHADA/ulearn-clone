@@ -65,16 +65,5 @@ namespace UlearnServices.Services
                 return null;
             return user.Subscription.Level >= course.Subscription.Level;
         }
-
-        public async Task<bool> IsInGroup(User user, int groupId)
-        {
-            var group = await _context.Groups
-                .Include(g => g.UserGroups)
-                .ThenInclude(userGroup => userGroup.User)
-                .FirstOrDefaultAsync(g => g.Id == groupId);
-
-            return group.UserGroups
-                .FirstOrDefault(userGroup => userGroup.User.Id == user.Id) != default;
-        }
     }
 }

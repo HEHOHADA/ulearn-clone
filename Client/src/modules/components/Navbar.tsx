@@ -27,7 +27,7 @@ export const Navbar = () => {
             links.push({name: "admin", link: '/admin'})
         }
         if (auth.role === 'Admin' || auth.role === 'Teacher') {
-            links.push({name: 'groups', link: '/group'})
+            links.push({name: 'groups', link: '/groups'})
         }
         return (
             <ul className="nav navbar-nav ml-auto">

@@ -14,9 +14,9 @@ export const validationAuthForm = (values: any) => {
 export const validationForm = (values: any) => {
 
     let errors: any = {}
-    if (values.password !== values.repeatPassword) {
-        errors.repeatPassword = 'Неправильно повторили пароль'
-    }else if(values.password.length <7){
+    if (values.password !== values["repeat Password"]) {
+        errors.password = 'Неправильно повторили пароль'
+    } else if (values.password.length < 6) {
         errors.password = 'Паролль должен содержать минимум 7 символов'
     }
 

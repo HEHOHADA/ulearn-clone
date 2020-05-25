@@ -49,7 +49,6 @@ export const GroupCreateForm = (props: Props) => {
     }
 
     return (
-
         <form
             onKeyPress={(e) => {
                 e.key === 'Enter' && e.preventDefault()

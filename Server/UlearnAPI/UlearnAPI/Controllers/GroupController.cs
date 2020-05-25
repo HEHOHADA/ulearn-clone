@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UlearnAPI.AOP;
@@ -15,22 +16,24 @@ namespace UlearnAPI.Controllers
     public class GroupController : ControllerBase
     {
         private readonly GroupsService _groupsService;
+        private readonly UserManager<User> _userManager;
 
-        public GroupController(GroupsService groupsService)
+        public GroupController(GroupsService groupsService, UserManager<User> userManager)
         {
             _groupsService = groupsService;
+            _userManager = userManager;
         }
 
         // GET: api/Group
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Group>>> GetGroups()
+        public async Task<ActionResult<IEnumerable<FullGroupDto>>> GetGroups()
         {
             return await _groupsService.GetAsync();
         }
 
         // GET: api/Group/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Group>> GetGroup(int id)
+        public async Task<ActionResult<FullGroupDto>> GetGroup(int id)
         {
             var group = await _groupsService.FindAsync(id);
 
@@ -46,10 +49,16 @@ namespace UlearnAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
-        [LogAuthorizeRoles("Admin")]
+        [Authorize(Roles = "Admin, Teacher")]
+        [LogAuthorizeRoles("Admin,Teacher")]
         public async Task<IActionResult> PutGroup(int id, GroupDto group)
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (!await _userManager.IsInRoleAsync(user, "Admin") && !await _groupsService.HasUser(user, id))
+            {
+                return Unauthorized();
+            }
+
             try
             {
                 await _groupsService.PutAsync(id, group);
@@ -60,7 +69,7 @@ namespace UlearnAPI.Controllers
                 {
                     return NotFound();
                 }
-                
+
                 throw;
             }
 
@@ -68,32 +77,33 @@ namespace UlearnAPI.Controllers
         }
 
         // POST: api/Group
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        [Authorize(Roles = "Admin")]
-        [LogAuthorizeRoles("Admin")]
-        public async Task<ActionResult<Group>> PostGroup(GroupDto group)
+        [Authorize(Roles = "Admin, Teacher")]
+        [LogAuthorizeRoles("Admin,Teacher")]
+        public async Task<ActionResult<FullGroupDto>> PostGroup(GroupDto group)
         {
             var newGroup = await _groupsService.CreateAsync(group);
-            return CreatedAtAction("GetGroup", new { id = newGroup.Id }, newGroup);
+            return CreatedAtAction("GetGroup", new {id = newGroup.Id}, newGroup);
         }
 
         // DELETE: api/Group/5
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
-        [LogAuthorizeRoles("Admin")]
-        public async Task<ActionResult<Group>> DeleteGroup(int id)
+        [Authorize(Roles = "Admin, Teacher")]
+        [LogAuthorizeRoles("Admin,Teacher")]
+        public async Task<ActionResult<FullGroupDto>> DeleteGroup(int id)
         {
-            var group = await _groupsService.FindAsync(id);
-            if (group == null)
+            var user = await _userManager.GetUserAsync(User);
+            if (!await _userManager.IsInRoleAsync(user, "Admin") && !await _groupsService.HasUser(user, id))
+            {
+                return Unauthorized();
+            }
+            
+            if (!_groupsService.GroupExists(id))
             {
                 return NotFound();
             }
 
-            await _groupsService.Remove(group);
-
-            return group;
+            return await _groupsService.Remove(id);
         }
     }
 }
