@@ -57,13 +57,17 @@ export interface ICourse {
     subscription?: ISubscription
     description: string
     id?: number
+    modules?: Array<IModule>
     // themas: Array<ITheme>
 }
 
+
 export interface IModule {
+    id?: number
     name: string
-    maxPoints: string
-    tasks: Array<ITheme>
+    codeTasks: Array<CodeTask>
+    testTasks: Array<TestTask>
+    videoTasks: Array<VideoTask>
 }
 
 interface CommonTheme {
@@ -75,12 +79,16 @@ interface CommonTheme {
 interface TestTask extends CommonTheme {
     questions: Array<Question>
 }
-interface CodeTask extends CommonTheme{
-    code:string
+
+interface CodeTask extends CommonTheme {
+    initialCode: string
+    points: number
 }
-interface VideoTask extends CommonTheme{
-    video:string
+
+interface VideoTask extends CommonTheme {
+    video: string
 }
+
 export interface ITheme {
     video?: any
     code?: any
