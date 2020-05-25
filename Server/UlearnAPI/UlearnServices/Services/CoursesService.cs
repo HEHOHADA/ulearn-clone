@@ -63,6 +63,10 @@ namespace UlearnServices.Services
             course.Description = model.Description;
             course.Name = model.Name;
             course.Subscription = await _context.Subscriptions.FindAsync(model.SubscriptionId);
+            if (course.Subscription == null)
+            {
+                throw new ArgumentException("No subscriptionId passed");
+            }
             
             _context.Entry(course).State = EntityState.Modified;
             await _context.SaveChangesAsync();
