@@ -23,14 +23,14 @@ namespace UlearnAPI.Controllers
 
         // GET: api/Group
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Group>>> GetGroups()
+        public async Task<ActionResult<IEnumerable<FullGroupDto>>> GetGroups()
         {
             return await _groupsService.GetAsync();
         }
 
         // GET: api/Group/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Group>> GetGroup(int id)
+        public async Task<ActionResult<FullGroupDto>> GetGroup(int id)
         {
             var group = await _groupsService.FindAsync(id);
 
@@ -68,12 +68,10 @@ namespace UlearnAPI.Controllers
         }
 
         // POST: api/Group
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [LogAuthorizeRoles("Admin")]
-        public async Task<ActionResult<Group>> PostGroup(GroupDto group)
+        public async Task<ActionResult<FullGroupDto>> PostGroup(GroupDto group)
         {
             var newGroup = await _groupsService.CreateAsync(group);
             return CreatedAtAction("GetGroup", new { id = newGroup.Id }, newGroup);
@@ -83,17 +81,14 @@ namespace UlearnAPI.Controllers
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         [LogAuthorizeRoles("Admin")]
-        public async Task<ActionResult<Group>> DeleteGroup(int id)
+        public async Task<ActionResult<FullGroupDto>> DeleteGroup(int id)
         {
-            var group = await _groupsService.FindAsync(id);
-            if (group == null)
+            if (!_groupsService.GroupExists(id))
             {
                 return NotFound();
             }
 
-            await _groupsService.Remove(group);
-
-            return group;
+            return await _groupsService.Remove(id);
         }
     }
 }
