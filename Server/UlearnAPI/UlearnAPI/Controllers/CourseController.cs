@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using UlearnAPI.AOP;
 using UlearnData.Models;
+using UlearnServices.Models.Course;
 using UlearnServices.Services;
 
 namespace UlearnAPI.Controllers
@@ -45,16 +47,12 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutCourse(int id, Course course)
+        [LogAuthorizeRoles("Admin")]
+        public async Task<IActionResult> PutCourse(int id, CourseDto course)
         {
-            if (id != course.Id)
-            {
-                return BadRequest();
-            }
-
             try
             {
-                await _coursesService.PutAsync(course);
+                await _coursesService.PutAsync(id, course);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -62,7 +60,7 @@ namespace UlearnAPI.Controllers
                 {
                     return NotFound();
                 }
-                
+
                 throw;
             }
 
@@ -74,15 +72,17 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Course>> PostCourse(Course course)
+        [LogAuthorizeRoles("Admin")]
+        public async Task<ActionResult<Course>> PostCourse(CourseDto course)
         {
-            return CreatedAtAction("GetCourse", new { id = course.Id },
-                await _coursesService.CreateAsync(course));
+            var newCourse = await _coursesService.CreateAsync(course);
+            return CreatedAtAction("GetCourse", new {id = newCourse.Id}, newCourse);
         }
 
         // DELETE: api/Course/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<ActionResult<Course>> DeleteCourse(int id)
         {
             var course = await _coursesService.FindAsync(id);
@@ -90,7 +90,7 @@ namespace UlearnAPI.Controllers
             {
                 return NotFound();
             }
-            
+
             await _coursesService.Remove(course);
 
             return course;

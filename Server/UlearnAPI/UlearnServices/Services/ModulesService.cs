@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using UlearnData;
 using UlearnData.Models;
+using UlearnServices.Models.Module;
 
 namespace UlearnServices.Services
 {
@@ -39,15 +40,24 @@ namespace UlearnServices.Services
                 .FirstOrDefaultAsync(module => module.Id == id);
         }
 
-        public async Task<Module> CreateAsync(Module module)
+        public async Task<Module> CreateAsync(ModuleDto model)
         {
+            var module = new Module
+            {
+                Name = model.Name,
+                Course = await _context.Courses.FindAsync(model.CourseId)
+            };
             _context.Modules.Add(module);
             await _context.SaveChangesAsync();
             return module;
         }
 
-        public async Task PutAsync(Module module)
+        public async Task PutAsync(int id, ModuleDto model)
         {
+            var module = await _context.Modules.FindAsync(id);
+            module.Course = await _context.Courses.FindAsync(model.CourseId);
+            module.Name = model.Name;
+            
             _context.Entry(module).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }

@@ -12,11 +12,15 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using UlearnAPI.Chat;
+using UlearnAPI.Middleware;
 using UlearnData;
 using UlearnData.Models;
 using UlearnServices.Services;
@@ -29,21 +33,20 @@ namespace UlearnAPI
         {
             Configuration = configuration;
         }
-
+        
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly("UlearnAPI")));
 
-            services.AddIdentity<User, IdentityRole>(options =>
-                {
-                    options.User.RequireUniqueEmail = true;
-                })
+            services.AddIdentity<User, IdentityRole>(options => { options.User.RequireUniqueEmail = true; })
                 .AddRoles<IdentityRole>()
                 .AddRoleManager<RoleManager<IdentityRole>>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -54,6 +57,14 @@ namespace UlearnAPI
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddGoogle(options =>
+                {
+                    IConfigurationSection googleAuthNSection =
+                        Configuration.GetSection("Authentication:Google");
+                    //FIXME: change secrets in appsettings.json
+                    options.ClientId = googleAuthNSection["ClientId"];
+                    options.ClientSecret = googleAuthNSection["ClientSecret"];
                 })
                 .AddJwtBearer(x =>
                 {
@@ -73,20 +84,25 @@ namespace UlearnAPI
             services.AddAuthorization();
             services.AddControllers();
             services.AddSwaggerDocument();
+            
+            services.AddMemoryCache();
+            services.AddResponseCompression();
 
-
-            services.AddTransient<SubscriptionsService>();
-            services.AddTransient<ModulesService>();
-            services.AddTransient<TestTasksService>();
-            services.AddTransient<CoursesService>();
-            services.AddTransient<GroupsService>();
-            services.AddTransient<CodeTasksService>();
-            services.AddTransient<VideoTasksService>();
+            services.AddScoped<SubscriptionsService>();
+            services.AddScoped<ModulesService>();
+            services.AddScoped<TestTasksService>();
+            services.AddScoped<CoursesService>();
+            services.AddScoped<GroupsService>();
+            services.AddScoped<CodeTasksService>();
+            services.AddScoped<VideoTasksService>();
+            services.AddScoped<AccountService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<MongoLogMiddleware>("logs.txt");
+            
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
             if (env.IsDevelopment())
@@ -96,6 +112,8 @@ namespace UlearnAPI
             }
 
             app.UseRouting();
+            
+            app.UseResponseCompression();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -105,6 +123,7 @@ namespace UlearnAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute("DefaultRoute", "api/{controller}/{action}/{id?}");
+                endpoints.MapHub<ChatHub>("/api/chat");
             });
 
             app.UseOpenApi();

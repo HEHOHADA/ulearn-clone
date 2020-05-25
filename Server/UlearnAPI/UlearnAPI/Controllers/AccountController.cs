@@ -2,17 +2,25 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Google.Apis.Auth;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using UlearnAPI.AOP;
 using UlearnData.Models;
+using UlearnServices.Models.Account;
+using UlearnServices.Services;
 
 namespace UlearnAPI.Controllers
 {
@@ -23,13 +31,17 @@ namespace UlearnAPI.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly AccountService _accountService;
+        private readonly IWebHostEnvironment _appEnvironment;
 
         public AccountController(UserManager<User> userManager, SignInManager<User> signInManager,
-            IConfiguration configuration)
+            IConfiguration configuration, AccountService accountService, IWebHostEnvironment appEnvironment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _accountService = accountService;
+            _appEnvironment = appEnvironment;
         }
 
         [HttpPost("login")]
@@ -97,6 +109,124 @@ namespace UlearnAPI.Controllers
             });
         }
 
+        [HttpPut("updateData")]
+        [SensitiveAuthorize]
+        public async Task<IActionResult> UpdateData([FromBody] UserInfoDto model)
+        {
+            var userId = User.FindFirstValue("sub");
+            var user = await _userManager.FindByIdAsync(userId);
+            await _userManager.SetUserNameAsync(user, model.Username);
+            await _userManager.SetEmailAsync(user, model.Email);
+            await _accountService.Update(userId, new UlearnServices.Models.Account.UserInfoDto
+            {
+                Firstname = model.Firstname, Lastname = model.Lastname
+            });
+            return Ok();
+        }
+
+        [HttpPost("changePassword")]
+        [SensitiveAuthorize]
+        public async Task<IActionResult> ChangePassword(PasswordDto model)
+        {
+            var userId = User.FindFirstValue("sub");
+            var user = await _userManager.FindByIdAsync(userId);
+            await _userManager.ChangePasswordAsync(user, model.Current, model.Password);
+            return Ok();
+        }
+
+        [HttpPost("setImage")]
+        [Authorize]
+        public async Task<IActionResult> SetImage(IFormFile file)
+        {
+            string fileName = new Guid() + new FileInfo(file.FileName).Extension;
+            using (var fileStream = new FileStream(_appEnvironment.WebRootPath + "/Files/" + fileName, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+
+            var userId = User.FindFirstValue("sub");
+            await _accountService.SetImage(userId, fileName);
+            return Ok();
+        }
+
+        [HttpPost("confirmTeacher")]
+        [SensitiveAuthorize]
+        public async Task<IActionResult> ConfirmTeacher()
+        {
+            var userId = User.FindFirstValue("sub");
+            await _accountService.ConfirmTeacher(userId);
+            return Ok();
+        }
+
+        [HttpPost("auth/google")]
+        public async Task<IActionResult> GoogleLogin(GoogleLogin request)
+        {
+            try
+            {
+                var user = await GetOrCreateExternalLoginUser("google", request.Subject, request.Email,
+                    request.GivenName, request.FamilyName);
+
+                return Ok(new {Token = await GenerateJwtToken(user)});
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        /*[HttpPost("auth/google")]
+        public async Task<IActionResult> GoogleLogin(GoogleLogin request)
+        {
+            try
+            {
+                var payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken,
+                    new GoogleJsonWebSignature.ValidationSettings
+                    {
+                        Audience = new[] {_configuration["Authentication:Google:ClientId"]}
+                    });
+                var user = await GetOrCreateExternalLoginUser("google", payload.Subject, payload.Email,
+                    payload.GivenName, payload.FamilyName);
+
+                return Ok(new {Token = await GenerateJwtToken(user)});
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }*/
+
+        private async Task<User> GetOrCreateExternalLoginUser(string provider, string key, string email,
+            string firstName, string lastName)
+        {
+            // Login already linked to a user
+            var user = await _userManager.FindByLoginAsync(provider, key);
+            if (user != null)
+                return user;
+
+            user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                // No user exists with this email address, we create a new one
+                user = new User
+                {
+                    Email = email,
+                    UserName = email,
+                    Firstname = firstName,
+                    Lastname = lastName
+                };
+
+                await _userManager.CreateAsync(user);
+            }
+
+            // Link the user to this login
+            var info = new UserLoginInfo(provider, key, provider.ToUpperInvariant());
+            var result = await _userManager.AddLoginAsync(user, info);
+            if (result.Succeeded)
+                return user;
+            return null;
+        }
+
+
         private async Task<string> GenerateJwtToken(User user)
         {
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(
@@ -126,22 +256,60 @@ namespace UlearnAPI.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public class LoginDto
+        [HttpGet("checkSubscription/{courseId}")]
+        [Authorize]
+        public async Task<ActionResult<bool>> CheckSubscription(int courseId)
         {
-            [Required] public string Login { get; set; }
-
-            [Required] public string Password { get; set; }
+            var user = await _userManager.GetUserAsync(User);
+            var result = await _accountService.IsCourseAvailable(user, courseId);
+            if (result.HasValue)
+                return Ok(new {HasAccess = result.Value});
+            return NotFound();
         }
+    }
 
-        public class RegisterDto
-        {
-            [Required] public string UserName { get; set; }
+    public class GoogleLogin
+    {
+        public string Email { get; set; }
+        public string GivenName { get; set; }
+        public string FamilyName { get; set; }
+        public string Subject { get; set; }
+    }
 
-            [Required] [EmailAddress] public string Email { get; set; }
+    /*public class GoogleLogin
+    {
+        public string IdToken { get; set; }
+    }*/
 
-            [Required]
-            [StringLength(100, ErrorMessage = "PASSWORD_MIN_LENGTH", MinimumLength = 6)]
-            public string Password { get; set; }
-        }
+    public class LoginDto
+    {
+        [Required] public string Login { get; set; }
+
+        [Required] public string Password { get; set; }
+    }
+
+    public class RegisterDto
+    {
+        [Required] public string UserName { get; set; }
+
+        [Required] [EmailAddress] public string Email { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = "PASSWORD_MIN_LENGTH", MinimumLength = 6)]
+        public string Password { get; set; }
+    }
+
+    public class UserInfoDto
+    {
+        [Required] public string Username { get; set; }
+        [Required] public string Email { get; set; }
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
+    }
+
+    public class PasswordDto
+    {
+        public string Current { get; set; }
+        public string Password { get; set; }
     }
 }

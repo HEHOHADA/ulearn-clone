@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using UlearnAPI.AOP;
 using UlearnData.Models;
 using UlearnServices.Services;
 
@@ -48,16 +49,12 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<IActionResult> PutSubscription(int id, Subscription subscription)
         {
-            if (id != subscription.Id)
-            {
-                return BadRequest();
-            }
-
             try
             {
-                await _subscriptionsService.PutAsync(subscription);
+                await _subscriptionsService.PutAsync(id, subscription);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -77,17 +74,18 @@ namespace UlearnAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")] 
         public async Task<ActionResult<Subscription>> PostSubscription(Subscription subscription)
         {
-            return CreatedAtAction("GetSubscription", new {id = subscription.Id},
-                await _subscriptionsService.CreateAsync(subscription));
+            var newSubscription = await _subscriptionsService.CreateAsync(subscription);
+            return CreatedAtAction("GetSubscription", new {id = newSubscription.Id}, newSubscription);
         }
 
 
         // DELETE: api/Subscription/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<ActionResult<Subscription>> DeleteSubscription(int id)
         {
             var subscription = await _subscriptionsService.FindAsync(id);

@@ -4,7 +4,7 @@ import {Question} from "./TestForm"
 import {IAnswer} from "../../../shared/interface"
 
 class Answer implements IAnswer {
-    answerText: string = ""
+    text: string = ""
     isCorrect: boolean = false
 }
 
@@ -29,7 +29,7 @@ export const QuestionForm = (props: Props) => {
     const addNewAnswer = (questionText: string) => {
         setText("")
         const answer = new Answer()
-        answer.answerText = questionText
+        answer.text = questionText
         const answers = question.answers.slice()
         console.log('ВОТ ТУТ', question)
         answers.push(answer)
@@ -48,7 +48,9 @@ export const QuestionForm = (props: Props) => {
 
     return (
         <div>
-            <div><textarea value={question.question} disabled={true} className="form-control"/></div>
+            <div><textarea value={question.text} disabled={true} className="form-control"/></div>
+            <label htmlFor={"points"}>Поинты:</label>
+            <div><input id="points" value={question.points} disabled={true} className="form-control"/></div>
             <br/>
             <div className="input-group mb-3">
                 <input
@@ -56,14 +58,16 @@ export const QuestionForm = (props: Props) => {
                     onKeyPress={(event: any) => event.key === 'Enter' && testText.trim() && addNewAnswer(testText) && event.stopPropagation()}
                     type="text" className="form-control" value={testText}
                     onChange={(event: any) => setText(event.target.value)}/>
-                <button className={"btn btn-light"} onClick={() => testText.trim() && addNewAnswer(testText)}>Добавить
+
+                <button type={"button"} className={"btn btn-light"}
+                        onClick={() => testText.trim() && addNewAnswer(testText)}>Добавить
                     вариант ответа
                 </button>
             </div>
             {
                 question.answers.map((answer, index) => {
                         return (
-                            <div className="input-group mb-3" key={`${index}-${answer.answerText}`}>
+                            <div className="input-group mb-3" key={`${index}-${answer.text}`}>
                                 {index + 1}.
                                 <div className="input-group-prepend ml-2">
                                     <div className="input-group-text">
@@ -73,7 +77,7 @@ export const QuestionForm = (props: Props) => {
                                                onChange={(event?: any) => setCorrect(question, answer, event)}/></div>
                                 </div>
                                 <input type="text" className="form-control"
-                                       value={answer.answerText} disabled={true}/>
+                                       value={answer.text} disabled={true}/>
                                 <button className={"btn btn-light"} onClick={() => deleteAnswer(answer)}><img alt="/"
                                                                                                               src={trash}/>
                                 </button>

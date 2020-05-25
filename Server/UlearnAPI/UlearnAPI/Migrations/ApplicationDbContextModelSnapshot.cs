@@ -150,6 +150,12 @@ namespace UlearnAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("SubscriptionId")
                         .HasColumnType("INTEGER");
 
@@ -227,11 +233,17 @@ namespace UlearnAPI.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("InitialCode")
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("ModuleId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -295,6 +307,9 @@ namespace UlearnAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Points")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("TaskId")
@@ -373,6 +388,9 @@ namespace UlearnAPI.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Points")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ModuleId");
@@ -446,6 +464,15 @@ namespace UlearnAPI.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Firstname")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ImageSrc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Lastname")
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("INTEGER");

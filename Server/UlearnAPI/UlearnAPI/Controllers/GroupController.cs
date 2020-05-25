@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using UlearnAPI.AOP;
 using UlearnData.Models;
+using UlearnServices.Models.Group;
 using UlearnServices.Services;
 
 namespace UlearnAPI.Controllers
@@ -45,16 +47,12 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutGroup(int id, Group group)
+        [LogAuthorizeRoles("Admin")]
+        public async Task<IActionResult> PutGroup(int id, GroupDto group)
         {
-            if (id != group.Id)
-            {
-                return BadRequest();
-            }
-
             try
             {
-                await _groupsService.PutAsync(group);
+                await _groupsService.PutAsync(id, group);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -74,15 +72,17 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Group>> PostGroup(Group group)
+        [LogAuthorizeRoles("Admin")]
+        public async Task<ActionResult<Group>> PostGroup(GroupDto group)
         {
-            return CreatedAtAction("GetGroup", new { id = @group.Id }, 
-                await _groupsService.CreateAsync(group));
+            var newGroup = await _groupsService.CreateAsync(group);
+            return CreatedAtAction("GetGroup", new { id = newGroup.Id }, newGroup);
         }
 
         // DELETE: api/Group/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<ActionResult<Group>> DeleteGroup(int id)
         {
             var group = await _groupsService.FindAsync(id);

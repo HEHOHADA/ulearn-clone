@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using UlearnData;
 using UlearnData.Models;
+using UlearnServices.Models.Course;
 
 namespace UlearnServices.Services
 {
@@ -25,6 +26,7 @@ namespace UlearnServices.Services
         {
             return await _context.Courses
                 .Include(course => course.Modules)
+                .Include(course => course.Subscription)
                 .ToListAsync();
         }
 
@@ -32,18 +34,31 @@ namespace UlearnServices.Services
         {
             return await _context.Courses
                 .Include(course => course.Modules)
+                .Include(course => course.Subscription)
                 .FirstOrDefaultAsync(course => course.Id == id);
         }
 
-        public async Task<Course> CreateAsync(Course course)
+        public async Task<Course> CreateAsync(CourseDto model)
         {
+            var course = new Course()
+            {
+                Name = model.Name,
+                Description = model.Description,
+                Subscription = await _context.Subscriptions.FindAsync(model.SubscriptionId)
+            };
             _context.Courses.Add(course);
             await _context.SaveChangesAsync();
             return course;
         }
 
-        public async Task PutAsync(Course course)
+        public async Task PutAsync(int id, CourseDto model)
         {
+            var course = await _context.Courses.FindAsync(id);
+            
+            course.Description = model.Description;
+            course.Name = model.Name;
+            course.Subscription = await _context.Subscriptions.FindAsync(model.SubscriptionId);
+            
             _context.Entry(course).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }

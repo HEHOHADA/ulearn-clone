@@ -13,7 +13,6 @@ export const SubscriptionPage = () => {
     const [subscriptions, setSubscriptions] = useState<Array<ISubscription>>()
     const {fetched} = useFetch(subscriptionRequest)
 
-
     const onEditHandler = (id: number) => {
         history.push(`/admin/subscription/edit/${id}`)
     }
