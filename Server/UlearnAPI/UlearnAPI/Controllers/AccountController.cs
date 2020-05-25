@@ -123,7 +123,7 @@ namespace UlearnAPI.Controllers
         {
             var userId = User.FindFirstValue("sub");
             await _accountService.Update(userId, model);
-            return Ok(new {});
+            return Ok(new { });
         }
 
         [HttpPost("changePassword")]
@@ -132,8 +132,13 @@ namespace UlearnAPI.Controllers
         {
             var userId = User.FindFirstValue("sub");
             var user = await _userManager.FindByIdAsync(userId);
-            await _userManager.ChangePasswordAsync(user, model.Current, model.Password);
-            return Ok(new {});
+            var result = await _userManager.ChangePasswordAsync(user, model.Current, model.Password);
+            if (result.Succeeded)
+            {
+                return Ok(new { });
+            }
+
+            return BadRequest();
         }
 
         [HttpPost("setImage")]
@@ -148,7 +153,7 @@ namespace UlearnAPI.Controllers
 
             var userId = User.FindFirstValue("sub");
             await _accountService.SetImage(userId, fileName);
-            return Ok(new {});
+            return Ok(new { });
         }
 
         [HttpPost("confirmTeacher")]
@@ -157,7 +162,7 @@ namespace UlearnAPI.Controllers
         {
             var userId = User.FindFirstValue("sub");
             await _accountService.ConfirmTeacher(userId);
-            return Ok(new {});
+            return Ok(new { });
         }
 
         [HttpPost("auth/google")]
