@@ -90,6 +90,16 @@ namespace UlearnServices.Services
                         break;
                 }
 
+            if (query.FromLevel != 0 && query.ToLevel != 0)
+            {
+                subscriptions = subscriptions.Where(x => x.Level >= query.FromLevel && x.Level <= query.ToLevel);
+            }
+
+            if (query.FromPrice != 0 && query.ToPrice != 0)
+            {
+                subscriptions = subscriptions.Where(x => x.Price >= query.FromPrice && x.Price <= query.ToPrice);
+            }
+
             if (query.Page != 0 && query.PageSize != 0)
                 subscriptions = subscriptions
                     .Skip((query.Page - 1) * query.PageSize)
