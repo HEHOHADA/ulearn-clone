@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using UlearnAPI.AOP;
 using UlearnData.Models;
 using UlearnServices.Services;
 
@@ -45,6 +46,7 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<IActionResult> PutModule(int id, Module module)
         {
             if (id != module.Id)
@@ -74,6 +76,7 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<ActionResult<Module>> PostModule(int courseId, Module module)
         {
             var newModule = await _modulesService.CreateAsync(courseId, module);
@@ -83,6 +86,7 @@ namespace UlearnAPI.Controllers
         // DELETE: api/Module/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<ActionResult<Module>> DeleteModule(int id)
         {
             var module = await _modulesService.FindAsync(id);

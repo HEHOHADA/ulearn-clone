@@ -12,12 +12,15 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using UlearnAPI.Chat;
+using UlearnAPI.Middleware;
 using UlearnData;
 using UlearnData.Models;
 using UlearnServices.Services;
@@ -81,7 +84,9 @@ namespace UlearnAPI
             services.AddAuthorization();
             services.AddControllers();
             services.AddSwaggerDocument();
-
+            
+            services.AddMemoryCache();
+            services.AddResponseCompression();
 
             services.AddScoped<SubscriptionsService>();
             services.AddScoped<ModulesService>();
@@ -96,6 +101,8 @@ namespace UlearnAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<MongoLogMiddleware>("logs.txt");
+            
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
             if (env.IsDevelopment())
@@ -105,6 +112,8 @@ namespace UlearnAPI
             }
 
             app.UseRouting();
+            
+            app.UseResponseCompression();
 
             app.UseAuthentication();
             app.UseAuthorization();

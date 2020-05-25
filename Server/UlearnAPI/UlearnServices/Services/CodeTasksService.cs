@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using UlearnData;
+using UlearnData.Models;
 using UlearnData.Models.Tasks.CodeTask;
 
 namespace UlearnServices.Services
@@ -60,5 +61,14 @@ namespace UlearnServices.Services
                 .Where(result => result.Group.Id == groupId && result.Sender.Id == userId)
                 .ToListAsync();
         }
+
+        public async Task<List<CodeTaskResult>> GetGroupResults(int groupId)
+        {
+            return await _context.CodeTaskResults
+                .Include(result => result.Group)
+                .Where(result => result.Group.Id == groupId)
+                .ToListAsync();
+        }
+
     }
 }
