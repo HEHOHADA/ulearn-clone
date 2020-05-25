@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -46,6 +47,10 @@ namespace UlearnServices.Services
                 Description = model.Description,
                 Subscription = await _context.Subscriptions.FindAsync(model.SubscriptionId)
             };
+            if (course.Subscription == null)
+            {
+                throw new ArgumentException("No subscriptionId passed");
+            }
             _context.Courses.Add(course);
             await _context.SaveChangesAsync();
             return course;
