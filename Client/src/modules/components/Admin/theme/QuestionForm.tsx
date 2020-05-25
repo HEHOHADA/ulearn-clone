@@ -48,7 +48,7 @@ export const QuestionForm = (props: Props) => {
 
     return (
         <div>
-            <div><textarea value={question.question} disabled={true} className="form-control"/></div>
+            <div><textarea value={question.text} disabled={true} className="form-control"/></div>
             <br/>
             <div className="input-group mb-3">
                 <input

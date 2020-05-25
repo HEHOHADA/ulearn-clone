@@ -12,20 +12,8 @@ export const SubscriptionPage = () => {
     const {request, loading} = useHttp()
     const [subscriptions, setSubscriptions] = useState<Array<ISubscription>>()
     const {fetched} = useFetch(subscriptionRequest)
-    // const fetchSubscription = useCallback(async () => {
-    //     try {
-    //         setSubscriptions(await request(subscriptionRequest))
-    //         console.log(subscriptions)
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    // }, [])
-    //
-    // useEffect(() => {
-    //     fetchSubscription()
-    // }, [])
 
-    const onEditHandler = (id: string) => {
+    const onEditHandler = (id: number) => {
         history.push(`/admin/subscription/edit/${id}`)
     }
 
@@ -33,7 +21,7 @@ export const SubscriptionPage = () => {
         history.push(`/admin/subscription/create`)
     }
 
-    const onDeleteHandler = async (id: string) => {
+    const onDeleteHandler = async (id: number) => {
         try {
             const deleted = await request(`${subscriptionRequest}/${id}`, 'DELETE')
             const newSubs = subscriptions!.filter((sub: ISubscription) => sub.id !== deleted.id)

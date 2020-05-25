@@ -14,7 +14,7 @@ export const TestThema = (props: Props) => {
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     const selectedChange = (question: IQuestion) => {
-        const newForm = form?.filter(f => f.question !== question.question)
+        const newForm = form?.filter(f => f.text !== question.text)
         if (newForm !== form) {
             if (newForm) {
                 setForm([...newForm])
@@ -40,8 +40,8 @@ export const TestThema = (props: Props) => {
         return test.map((t, i) => {
             return (
                 <div key={`${i}-${t.answers}`}>
-                    <h4 className="header-line m-2">{i + 1}.<strong> {t.question}</strong></h4>
-                    <TestItem isSubmitting={isSubmitting} change={selectedChange} question={t.question} number={i}
+                    <h4 className="header-line m-2">{i + 1}.<strong> {t.text}</strong></h4>
+                    <TestItem isSubmitting={isSubmitting} change={selectedChange} question={t.text} number={i}
                               answers={t.answers}/>
                 </div>
             )

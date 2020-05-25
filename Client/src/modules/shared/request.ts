@@ -10,5 +10,6 @@ export const testTackRequest = URL + "api/TestTask"
 export const teacherConfirm = URL + "api/teacher/confirm"
 export const videoTaskRequest = URL+"api/VideoTask"
 export const codeTaskRequest = URL+"api/CodeTask"
+export const api = URL+"api"
 
 

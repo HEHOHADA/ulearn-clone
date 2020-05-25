@@ -19,7 +19,7 @@ export const Theme = (props: Props) => {
     //     //request to server body api
     // }, [])
     // const data: ITheme = {video: "https://www.youtube.com/watch?v=VnG7ej56lWw", name: ''}
-    const data: ITheme = {name: 'name', code: 'const c=(a,b)=>a+b'}
+    //const data: ITheme = {name: 'name', code: 'const c=(a,b)=>a+b'}
     // const data: ITheme = {
     //     name: 'name',
     //     test: [{
@@ -36,9 +36,9 @@ export const Theme = (props: Props) => {
 
     return (
         <div>
-            {data.video && <VideoThema url={data.video} name={"video"}/>}
+            {/*{data.video && <VideoThema url={data.video} name={"video"}/>}
             {data.code && <CodeThema name={data.name} initialCode={data.code}/>}
-            {data.test && <TestThema test={data.test}/>}
+            {data.test && <TestThema test={data.test}/>}*/}
         </div>
     )
 }
