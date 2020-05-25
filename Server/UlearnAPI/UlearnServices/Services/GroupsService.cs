@@ -44,7 +44,7 @@ namespace UlearnServices.Services
                     Id = x.Id,
                     Name = x.Name,
                     CourseId = x.Course.Id,
-                    Users = x.UserGroups
+                    Emails = x.UserGroups
                         .Select(y => y.User.Email)
                         .ToList()
                 })
@@ -63,7 +63,7 @@ namespace UlearnServices.Services
                 Id = group.Id,
                 Name = group.Name,
                 CourseId = group.Course.Id,
-                Users = group.UserGroups
+                Emails = group.UserGroups
                     .Select(x => x.User.Email)
                     .ToList()
             };
@@ -100,7 +100,7 @@ namespace UlearnServices.Services
                 Id = group.Id,
                 Name = group.Name,
                 CourseId = group.Course.Id,
-                Users = group.UserGroups
+                Emails = group.UserGroups
                     .Select(x => x.User.Email)
                     .ToList()
             };
@@ -144,7 +144,7 @@ namespace UlearnServices.Services
                 Id = group.Id,
                 Name = group.Name,
                 CourseId = group.Course.Id,
-                Users = group.UserGroups
+                Emails = group.UserGroups
                     .Select(x => x.User.Email)
                     .ToList()
             };
