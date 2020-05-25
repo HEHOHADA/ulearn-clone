@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using UlearnData;
 using UlearnData.Models;
 using UlearnData.Models.Tasks.CodeTask;
+using UlearnServices.Models.Tasks.CodeTask;
 
 namespace UlearnServices.Services
 {
@@ -32,17 +33,28 @@ namespace UlearnServices.Services
             return await _context.CodeTasks.FindAsync(id);
         }
 
-        public async Task<CodeTask> CreateAsync(int moduleId, CodeTask codeTask)
+        public async Task<CodeTask> CreateAsync(CodeTaskDto model)
         {
-            var module = await _context.Modules.FindAsync(moduleId);
-            codeTask.Module = module;
+            var codeTask = new CodeTask
+            {
+                Name = model.Name,
+                Description = model.Description,
+                InitialCode = model.InitialCode,
+                Module = await _context.Modules.FindAsync(model.ModuleId)
+            };
             _context.CodeTasks.Add(codeTask);
             await _context.SaveChangesAsync();
             return codeTask;
         }
 
-        public async Task PutAsync(CodeTask codeTask)
+        public async Task PutAsync(int id, CodeTaskDto model)
         {
+            var codeTask = await _context.CodeTasks.FindAsync(id);
+            codeTask.Name = model.Name;
+            codeTask.Description = model.Description;
+            codeTask.InitialCode = model.InitialCode;
+            codeTask.Module = await _context.Modules.FindAsync(model.ModuleId);
+
             _context.Entry(codeTask).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
@@ -52,7 +64,7 @@ namespace UlearnServices.Services
             _context.CodeTasks.Remove(codeTask);
             await _context.SaveChangesAsync();
         }
-        
+
         public async Task<List<CodeTaskResult>> GetResults(int taskId, int groupId, string userId)
         {
             return await _context.CodeTaskResults
@@ -69,6 +81,5 @@ namespace UlearnServices.Services
                 .Where(result => result.Group.Id == groupId)
                 .ToListAsync();
         }
-
     }
 }
