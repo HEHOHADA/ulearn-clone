@@ -15,7 +15,11 @@ namespace UlearnServices.Attributes
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             ErrorMessage = ErrorMessageString;
-            var currentValue = (int)value;
+            var currentValue = (int?)value;
+            if (!currentValue.HasValue)
+            {
+                return ValidationResult.Success;
+            }
 
             var property = validationContext.ObjectType.GetProperty(_comparisonProperty);
 
