@@ -43,7 +43,6 @@ export const TestForm = (props: questProps) => {
 
     const changeQuestion = (question: Question) => {
         const newQuestions = test.filter(q => q.question !== question.question)
-
         setTest([...newQuestions, question])
     }
 
@@ -63,8 +62,11 @@ export const TestForm = (props: questProps) => {
 
                        onChange={(event: any) => setText(event.target.value)}/>
                 <button
-
-                    className={"btn btn-light"} onClick={() => text.trim() && addQuestion(text)}>Добавить вопрос
+                    className={"btn btn-light"} onClick={(event) => {
+                    text.trim()
+                    addQuestion(text)
+                    event.preventDefault()
+                }}>Добавить вопрос
                 </button>
             </div>
 

@@ -6,7 +6,7 @@ import {useHttp} from '../hooks/http.hook'
 import {AuthContext} from '../context/AuthContext'
 import {UserContext} from '../context/UserContext'
 import {useFetch} from '../hooks/fetch.hook'
-import {courseRequest} from '../shared/request'
+import {checkSubscription, courseRequest} from '../shared/request'
 
 export const HomePage = (props: RouteComponentProps) => {
 
@@ -14,26 +14,23 @@ export const HomePage = (props: RouteComponentProps) => {
     const {loading, request} = useHttp()
     const auth = useContext(AuthContext)
     const {chooseTheme} = useContext(UserContext)
-    const {fetched} = useFetch(courseRequest)
-    const onClickHandler = (course: ICourse) => {
-        if (!auth.userId) {
+    const {fetched, isBusy} = useFetch(courseRequest)
+    const onClickHandler = async (course: ICourse) => {
+        if (!auth.isAuth) {
             history.push('/login')
         }
-        const link = `course/${course.id}`
-        const courseId = link.split("/")[1]
+        const id = course.id
+        const link = `course/${id}`
+        // const courseId = link.split("/")[1]
         //substype
-        const data = request(`${process.env.API}/api/user/subscription/`,
-            'GET',
-            {id: courseId})
-
+        const data = await request(`${checkSubscription}/${id}`)
 
         //if have subscription redirect to course page
-        if (data) {
-            chooseTheme({course: courseId})
+        if (data.hasAccess) {
+            chooseTheme({course: id})
             history.push(link)
         } else {
             // redirect to payment page
-
         }
 
     }
@@ -43,7 +40,6 @@ export const HomePage = (props: RouteComponentProps) => {
         {description: "321321321 312 321 312 3123 213 123", id: "1", name: "3", subscription: {}},
         {description: "321321321 312 321 312 3123 213 123", id: "2", name: "3", subscription: {}},
     ]
-
 
     return (
         <main className="page catalog-page">
@@ -59,13 +55,11 @@ export const HomePage = (props: RouteComponentProps) => {
                             <div className="col-md-9">
                                 <div className="products">
                                     <div className="row no-gutters">
-                                        <HomeCourses courses={fetched&&fetched.length ? fetched : courses}
-                                                     onClick={onClickHandler}
-                                                     loading={loading}/>
+                                        {!isBusy && <HomeCourses courses={fetched && fetched.length ? fetched : courses}
+                                                                 onClick={onClickHandler}
+                                                                 loading={loading}/>
+                                        }
                                     </div>
-                                    <nav>
-                                        <ul className="pagination"/>
-                                    </nav>
                                 </div>
                             </div>
                         </div>

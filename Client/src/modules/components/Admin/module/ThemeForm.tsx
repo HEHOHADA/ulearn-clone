@@ -29,8 +29,9 @@ export const ThemeForm = () => {
 
     const submit = (event: any) => {
         event.preventDefault()
+        debugger
         console.log(code)
-        console.log('here', test, videoHref)
+        console.log('here 1', test, videoHref)
     }
 
     const props = {

@@ -14,7 +14,7 @@ export const GroupEditPage = () => {
     const onSubmit = (event: any, form: any) => {
         event.preventDefault()
 
-        const response = request(`${groupRequest}/edit/${id}`, 'PUT', {...form})
+        const response = request(`${groupRequest}/${id}`, 'PUT', {...form})
     }
     return (
         <main className="page">
