@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using UlearnAPI.AOP;
 using UlearnData;
 using UlearnData.Models.Tasks.VideoTask;
+using UlearnServices.Models.Tasks.VideoTask;
 using UlearnServices.Services;
 
 namespace UlearnAPI.Controllers
@@ -51,16 +52,11 @@ namespace UlearnAPI.Controllers
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
         [LogAuthorizeRoles("Admin")]
-        public async Task<IActionResult> PutVideoTask(int id, VideoTask videoTask)
+        public async Task<IActionResult> PutVideoTask(int id, VideoTaskDto videoTask)
         {
-            if (id != videoTask.Id)
-            {
-                return BadRequest();
-            }
-
             try
             {
-                await _videoTasksService.PutAsync(videoTask);
+                await _videoTasksService.PutAsync(id, videoTask);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -81,9 +77,9 @@ namespace UlearnAPI.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [LogAuthorizeRoles("Admin")]
-        public async Task<ActionResult<VideoTask>> PostVideoTask(int moduleId, VideoTask videoTask)
+        public async Task<ActionResult<VideoTask>> PostVideoTask(VideoTaskDto videoTask)
         {
-            var newVideoTask = await _videoTasksService.CreateAsync(moduleId, videoTask);
+            var newVideoTask = await _videoTasksService.CreateAsync(videoTask);
             return CreatedAtAction("GetVideoTask", new {id = newVideoTask.Id}, newVideoTask);
         }
 
