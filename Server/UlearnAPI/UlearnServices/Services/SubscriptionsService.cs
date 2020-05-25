@@ -46,11 +46,17 @@ namespace UlearnServices.Services
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
                 });
             }
+
             return subscription;
         }
 
-        public async Task PutAsync(Subscription subscription)
+        public async Task PutAsync(int id, Subscription model)
         {
+            var subscription = await _context.Subscriptions.FindAsync(id);
+            subscription.Name = model.Name;
+            subscription.Level = model.Level;
+            subscription.Price = model.Price;
+
             _context.Entry(subscription).State = EntityState.Modified;
             var updatedCount = await _context.SaveChangesAsync();
             if (updatedCount > 0)

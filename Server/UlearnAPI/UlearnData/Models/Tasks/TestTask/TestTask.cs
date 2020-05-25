@@ -8,6 +8,7 @@ namespace UlearnData.Models.Tasks.TestTask
         
         public string Name { get; set; }
         public string Description { get; set; }
+        public int Points { get; set; }
         
         public List<TestQuestion> Questions { get; set; }
         

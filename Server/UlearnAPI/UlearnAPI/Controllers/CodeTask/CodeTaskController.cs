@@ -11,6 +11,7 @@ using UlearnAPI.AOP;
 using UlearnData;
 using UlearnData.Models;
 using UlearnData.Models.Tasks.CodeTask;
+using UlearnServices.Models.Tasks.CodeTask;
 using UlearnServices.Services;
 
 namespace UlearnAPI.Controllers
@@ -57,16 +58,11 @@ namespace UlearnAPI.Controllers
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
         [LogAuthorizeRoles("Admin")]
-        public async Task<IActionResult> PutCodeTask(int id, CodeTask codeTask)
+        public async Task<IActionResult> PutCodeTask(int id, CodeTaskDto codeTask)
         {
-            if (id != codeTask.Id)
-            {
-                return BadRequest();
-            }
-
             try
             {
-                await _codeTasksService.PutAsync(codeTask);
+                await _codeTasksService.PutAsync(id, codeTask);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -87,9 +83,9 @@ namespace UlearnAPI.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [LogAuthorizeRoles("Admin")]
-        public async Task<ActionResult<CodeTask>> PostCodeTask(int moduleId, CodeTask codeTask)
+        public async Task<ActionResult<CodeTask>> PostCodeTask(CodeTaskDto codeTask)
         {
-            var newCodeTask = await _codeTasksService.CreateAsync(moduleId, codeTask);
+            var newCodeTask = await _codeTasksService.CreateAsync(codeTask);
             return CreatedAtAction("GetCodeTask", new {id = newCodeTask.Id}, newCodeTask);
         }
 
