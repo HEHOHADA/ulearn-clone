@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using UlearnData.Models;
 
 namespace UlearnAPI.AOP
@@ -24,6 +25,11 @@ namespace UlearnAPI.AOP
             var user = await userManager.FindByIdAsync(context.HttpContext.User.FindFirstValue("sub"));
             if (await userManager.IsLockedOutAsync(user))
             {
+                var logger = context.HttpContext.RequestServices.GetService<ILogger<LogAuthorizeRolesAttribute>>();
+                logger.LogInformation($"User {user.Id} " +
+                                      $"is forbidden to access {context.HttpContext.Request.Path} " +
+                                      $"{context.HttpContext.Request.Method} " +
+                                      $"at {DateTime.Now} due to lockout");
                 context.Result = new StatusCodeResult((int) System.Net.HttpStatusCode.Forbidden);
             }
         }
