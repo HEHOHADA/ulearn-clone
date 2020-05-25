@@ -25,7 +25,7 @@ export const ThemeCreate = () => {
                 body.points = codePoints
             }
             selectedItem === Options.Video
-                ? body.video = videoHref
+                ? body.videoHref = videoHref
                 : body.questions = enteredQuestions
         }
         await request(`${api}/${selectedItem}Task`, 'POST', body)

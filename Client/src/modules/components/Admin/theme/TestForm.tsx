@@ -11,7 +11,7 @@ export class Question implements IQuestion {
 
 export class Answer implements IAnswer {
     text: string = ""
-    isCorrect: boolean = false
+    isRight: boolean = false
 }
 
 
