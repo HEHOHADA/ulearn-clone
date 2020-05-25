@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using UlearnAPI.AOP;
 using UlearnData.Models;
 using UlearnServices.Services;
 
@@ -48,6 +49,7 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<IActionResult> PutSubscription(int id, Subscription subscription)
         {
             if (id != subscription.Id)
@@ -78,6 +80,7 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<ActionResult<Subscription>> PostSubscription(Subscription subscription)
         {
             var newSubscription = await _subscriptionsService.CreateAsync(subscription);
@@ -88,6 +91,7 @@ namespace UlearnAPI.Controllers
         // DELETE: api/Subscription/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<ActionResult<Subscription>> DeleteSubscription(int id)
         {
             var subscription = await _subscriptionsService.FindAsync(id);

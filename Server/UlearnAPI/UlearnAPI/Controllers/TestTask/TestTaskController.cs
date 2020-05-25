@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using UlearnAPI.AOP;
+using UlearnData.Models;
 using UlearnData.Models.Tasks.TestTask;
 using UlearnServices.Services;
 
@@ -14,9 +16,9 @@ namespace UlearnAPI.Controllers
     public class TestTaskController : ControllerBase
     {
         private readonly TestTasksService _testTasksService;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
 
-        public TestTaskController(TestTasksService testTasksService, UserManager<IdentityUser> userManager)
+        public TestTaskController(TestTasksService testTasksService, UserManager<User> userManager)
         {
             _testTasksService = testTasksService;
             _userManager = userManager;
@@ -48,6 +50,7 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<IActionResult> PutTestTask(int id, TestTask testTask)
         {
             if (id != testTask.Id)
@@ -76,6 +79,7 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<ActionResult<TestTask>> PostTestTask(int moduleId, TestTask testTask)
         {
             var newTestTask = await _testTasksService.CreateAsync(moduleId, testTask);
@@ -85,6 +89,7 @@ namespace UlearnAPI.Controllers
         // DELETE: api/TestTask/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<ActionResult<TestTask>> DeleteTestTask(int id)
         {
             var testTask = await _testTasksService.FindAsync(id);
@@ -100,7 +105,7 @@ namespace UlearnAPI.Controllers
 
         [HttpGet("results")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<TestQuestionAnswerResult>>> GetResults(int id, int groupId)
+        public async Task<ActionResult<IEnumerable<TestQuestionAnswerResult>>> GetResults(int id, [FromQuery] int groupId)
         {
             var user = await _userManager.GetUserAsync(User);
             return await _testTasksService.GetResults(id, groupId, user.Id);

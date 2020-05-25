@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using UlearnAPI.AOP;
 using UlearnData.Models;
+using UlearnServices.Models.Module;
 using UlearnServices.Services;
 
 namespace UlearnAPI.Controllers
@@ -45,16 +47,12 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutModule(int id, Module module)
+        [LogAuthorizeRoles("Admin")]
+        public async Task<IActionResult> PutModule(int id, ModuleDto module)
         {
-            if (id != module.Id)
-            {
-                return BadRequest();
-            }
-
             try
             {
-                await _modulesService.PutAsync(module);
+                await _modulesService.PutAsync(id, module);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -74,15 +72,17 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Module>> PostModule(int courseId, Module module)
+        [LogAuthorizeRoles("Admin")]
+        public async Task<ActionResult<Module>> PostModule(ModuleDto module)
         {
-            var newModule = await _modulesService.CreateAsync(courseId, module);
+            var newModule = await _modulesService.CreateAsync(module);
             return CreatedAtAction("GetModule", new {id = newModule.Id}, newModule);
         }
 
         // DELETE: api/Module/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<ActionResult<Module>> DeleteModule(int id)
         {
             var module = await _modulesService.FindAsync(id);

@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using UlearnData;
 using UlearnData.Models;
 using UlearnServices.Models.Account;
@@ -36,6 +39,26 @@ namespace UlearnServices.Services
         {
             var user = await _context.Users.FindAsync(userId);
             await _userManager.AddToRoleAsync(user, "Teacher");
+        }
+
+        public async Task<bool?> IsCourseAvailable(User user, int courseId)
+        {
+            var course = await _context.Courses
+                .FirstOrDefaultAsync(c => c.Id == courseId);
+            if (course == default)
+                return null;
+            return user.Subscription.Level >= course.Subscription.Level;
+        }
+
+        public async Task<bool> IsInGroup(User user, int groupId)
+        {
+            var group = await _context.Groups
+                .Include(g => g.UserGroups)
+                    .ThenInclude(userGroup => userGroup.User)
+                .FirstOrDefaultAsync(g => g.Id == groupId);
+
+            return group.UserGroups
+                .FirstOrDefault(userGroup => userGroup.User.Id == user.Id) != default;
         }
     }
 }

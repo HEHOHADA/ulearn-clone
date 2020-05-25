@@ -1,6 +1,5 @@
-import React, {useCallback, useContext, useEffect, useState} from 'react'
+import React, {useContext} from 'react'
 import {IdentityForm} from "../components/identity/IdentityForm";
-import {IGroup} from "../shared/interface";
 import {Link} from "react-router-dom";
 import {IdentityPicture} from "../components/identity/IdentityPicture";
 import {AuthContext} from "../context/AuthContext";
@@ -27,7 +26,8 @@ export const IdentityPage = () => {
     //     {name: 'group 2', course: "course 2"}
     // ]
     // const [groups, setGroups] = useState<Array<IGroup>>()
-const{fetched}=useFetch(groupRequest)
+    const {fetched} = useFetch(groupRequest)
+
     // const fetchGroups = useCallback(async () => {
     //     try {
     //         setGroups(await request(groupRequest))

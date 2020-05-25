@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using UlearnAPI.AOP;
 using UlearnData;
 using UlearnData.Models.Tasks.VideoTask;
 using UlearnServices.Services;
@@ -49,6 +50,7 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<IActionResult> PutVideoTask(int id, VideoTask videoTask)
         {
             if (id != videoTask.Id)
@@ -78,6 +80,7 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<ActionResult<VideoTask>> PostVideoTask(int moduleId, VideoTask videoTask)
         {
             var newVideoTask = await _videoTasksService.CreateAsync(moduleId, videoTask);
@@ -87,6 +90,7 @@ namespace UlearnAPI.Controllers
         // DELETE: api/VideoTask/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
+        [LogAuthorizeRoles("Admin")]
         public async Task<ActionResult<VideoTask>> DeleteVideoTask(int id)
         {
             var videoTask = await _videoTasksService.FindAsync(id);

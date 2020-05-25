@@ -26,6 +26,7 @@ namespace UlearnServices.Services
         {
             return await _context.Courses
                 .Include(course => course.Modules)
+                .Include(course => course.Subscription)
                 .ToListAsync();
         }
 
@@ -33,6 +34,7 @@ namespace UlearnServices.Services
         {
             return await _context.Courses
                 .Include(course => course.Modules)
+                .Include(course => course.Subscription)
                 .FirstOrDefaultAsync(course => course.Id == id);
         }
 

@@ -104,8 +104,8 @@ export interface IAnswer {
 
 export interface IGroup {
     name: string
-    course: any
-    participants?: Array<string>
+    courseId: any
+    userGroups?: Array<string>
 }
 
 

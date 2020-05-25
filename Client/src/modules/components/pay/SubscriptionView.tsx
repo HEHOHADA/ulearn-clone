@@ -28,7 +28,7 @@ export const SubscriptionView = (props: Props) => {
 
     const subscriptionHandler = () => {
 
-        return subscription.map(sub => (
+        return subscription.map((sub: any) => (
             <div className="col-md-5 col-lg-4" key={`${sub.name}-${sub.price}`}>
                 <div className="clean-pricing-item">
                     <div className="heading">
