@@ -1,9 +1,10 @@
-import {useHttp} from "../../../hooks/http.hook";
-import {useParams, useHistory} from "react-router-dom";
-import {useFetch} from "../../../hooks/fetch.hook";
-import {courseRequest, moduleRequest, subscriptionRequest} from "../../../shared/request";
-import {ICourse, IModule, ISubscription} from "../../../shared/interface";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react"
+
+import {useHttp} from "../../../hooks/http.hook"
+import {useHistory, useParams} from "react-router-dom"
+import {useFetch} from "../../../hooks/fetch.hook"
+import {courseRequest, moduleRequest} from "../../../shared/request"
+import {ICourse, IModule} from "../../../shared/interface"
 
 export const ModulePage = () => {
     const {request} = useHttp()
@@ -47,13 +48,12 @@ export const ModulePage = () => {
             {
                 modules.map((module, index) => {
                     return (
-                        <div className="col-md-5 col-lg-4" key={`${module.name}-${module.maxPoints}`}>
+                        <div className="col-md-5 col-lg-4" key={`${module.name}-${module.id}`}>
                             <div className="clean-pricing-item">
                                 <div className="heading">
                                     <h3>{module.name}</h3>
                                 </div>
                                 <div className="price">
-                                    <h4><small>Макс</small>{module.maxPoints}</h4>
                                 </div>
                                 <button onClick={() => onEdit(module.id!)}
                                         className="btn btn-outline-primary btn-block"

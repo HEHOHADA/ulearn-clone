@@ -115,6 +115,7 @@ export interface IGroup {
     name: string
     courseId?: any
     emails?: Array<string>
+    id?:number
 }
 
 
