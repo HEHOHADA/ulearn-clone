@@ -20,7 +20,7 @@ namespace UlearnServices.Services
             _userManager = userManager;
         }
 
-        public async Task Update(string userId, UserInfo model)
+        public async Task Update(string userId, UserInfoDto model)
         {
             var user = await _context.Users.FindAsync(userId);
             user.Firstname = model.Firstname;

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UlearnData.Models;
+using UlearnServices.Models.Course;
 using UlearnServices.Services;
 
 namespace UlearnAPI.Controllers
@@ -45,16 +46,11 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutCourse(int id, Course course)
+        public async Task<IActionResult> PutCourse(int id, CourseDto course)
         {
-            if (id != course.Id)
-            {
-                return BadRequest();
-            }
-
             try
             {
-                await _coursesService.PutAsync(course);
+                await _coursesService.PutAsync(id, course);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -74,7 +70,7 @@ namespace UlearnAPI.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Course>> PostCourse(Course course)
+        public async Task<ActionResult<Course>> PostCourse(CourseDto course)
         {
             var newCourse = await _coursesService.CreateAsync(course);
             return CreatedAtAction("GetCourse", new {id = newCourse.Id}, newCourse);
