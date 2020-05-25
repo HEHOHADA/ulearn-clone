@@ -73,6 +73,7 @@ namespace UlearnServices.Services
 
             group.UserGroups = (await Task.WhenAll(model.Emails
                     .Select(x => _userManager.FindByEmailAsync(x))))
+                    .Where(x => x != null)
                 .Select(x => new UserGroup
                 {
                     Group = group,
@@ -131,6 +132,17 @@ namespace UlearnServices.Services
                     .Select(x => x.User.Email)
                     .ToList()
             };
+        }
+        
+        public async Task<bool> HasUser(User user, int groupId)
+        {
+            var group = await _context.Groups
+                .Include(g => g.UserGroups)
+                .ThenInclude(userGroup => userGroup.User)
+                .FirstOrDefaultAsync(g => g.Id == groupId);
+
+            return group.UserGroups
+                .FirstOrDefault(userGroup => userGroup.User.Id == user.Id) != default;
         }
     }
 }

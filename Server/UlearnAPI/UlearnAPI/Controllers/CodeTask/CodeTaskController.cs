@@ -21,12 +21,12 @@ namespace UlearnAPI.Controllers
     public class CodeTaskController : ControllerBase
     {
         private readonly CodeTasksService _codeTasksService;
-        private readonly AccountService _accountService;
+        private readonly GroupsService _groupService;
         private readonly UserManager<User> _userManager;
 
-        public CodeTaskController(CodeTasksService codeTasksService, AccountService accountService, UserManager<User> userManager)
+        public CodeTaskController(CodeTasksService codeTasksService, GroupsService groupService, UserManager<User> userManager)
         {
-            _accountService = accountService;
+            _groupService = groupService;
             _codeTasksService = codeTasksService;
             _userManager = userManager;
         }
@@ -120,7 +120,7 @@ namespace UlearnAPI.Controllers
         public async Task<ActionResult<IEnumerable<CodeTaskResult>>> GetGroupResults([FromQuery] int groupId)
         {
             var user = await _userManager.GetUserAsync(User);
-            if (!await _userManager.IsInRoleAsync(user, "Admin") && !await _accountService.IsInGroup(user, groupId))
+            if (!await _userManager.IsInRoleAsync(user, "Admin") && !await _groupService.HasUser(user, groupId))
             {
                 return Unauthorized();
             }

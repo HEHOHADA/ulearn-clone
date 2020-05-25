@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UlearnAPI.AOP;
@@ -15,10 +16,12 @@ namespace UlearnAPI.Controllers
     public class GroupController : ControllerBase
     {
         private readonly GroupsService _groupsService;
+        private readonly UserManager<User> _userManager;
 
-        public GroupController(GroupsService groupsService)
+        public GroupController(GroupsService groupsService, UserManager<User> userManager)
         {
             _groupsService = groupsService;
+            _userManager = userManager;
         }
 
         // GET: api/Group
@@ -46,10 +49,16 @@ namespace UlearnAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
-        [LogAuthorizeRoles("Admin")]
+        [Authorize(Roles = "Admin, Teacher")]
+        [LogAuthorizeRoles("Admin,Teacher")]
         public async Task<IActionResult> PutGroup(int id, GroupDto group)
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (!await _userManager.IsInRoleAsync(user, "Admin") && !await _groupsService.HasUser(user, id))
+            {
+                return Unauthorized();
+            }
+
             try
             {
                 await _groupsService.PutAsync(id, group);
@@ -60,7 +69,7 @@ namespace UlearnAPI.Controllers
                 {
                     return NotFound();
                 }
-                
+
                 throw;
             }
 
@@ -69,20 +78,26 @@ namespace UlearnAPI.Controllers
 
         // POST: api/Group
         [HttpPost]
-        [Authorize(Roles = "Admin")]
-        [LogAuthorizeRoles("Admin")]
+        [Authorize(Roles = "Admin, Teacher")]
+        [LogAuthorizeRoles("Admin,Teacher")]
         public async Task<ActionResult<FullGroupDto>> PostGroup(GroupDto group)
         {
             var newGroup = await _groupsService.CreateAsync(group);
-            return CreatedAtAction("GetGroup", new { id = newGroup.Id }, newGroup);
+            return CreatedAtAction("GetGroup", new {id = newGroup.Id}, newGroup);
         }
 
         // DELETE: api/Group/5
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
-        [LogAuthorizeRoles("Admin")]
+        [Authorize(Roles = "Admin, Teacher")]
+        [LogAuthorizeRoles("Admin,Teacher")]
         public async Task<ActionResult<FullGroupDto>> DeleteGroup(int id)
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (!await _userManager.IsInRoleAsync(user, "Admin") && !await _groupsService.HasUser(user, id))
+            {
+                return Unauthorized();
+            }
+            
             if (!_groupsService.GroupExists(id))
             {
                 return NotFound();
