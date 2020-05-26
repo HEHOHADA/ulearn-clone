@@ -57,13 +57,17 @@ namespace UlearnServices.Services
             await _userManager.AddToRoleAsync(user, "Teacher");
         }
 
-        public async Task<bool?> IsCourseAvailable(User user, int courseId)
+        public async Task<bool?> IsCourseAvailable(string userId, int courseId)
         {
+            var subscription = _context.Users
+                .Include(x => x.Subscription)
+                .First(x => x.Id == userId)
+                .Subscription;
             var course = await _context.Courses
                 .FirstOrDefaultAsync(c => c.Id == courseId);
             if (course == default)
                 return null;
-            return user.Subscription.Level >= course.Subscription.Level;
+            return subscription.Level >= course.Subscription.Level;
         }
     }
 }

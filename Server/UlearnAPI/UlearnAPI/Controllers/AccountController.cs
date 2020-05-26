@@ -267,8 +267,8 @@ namespace UlearnAPI.Controllers
         [Authorize]
         public async Task<ActionResult<bool>> CheckSubscription(int courseId)
         {
-            var user = await _userManager.GetUserAsync(User);
-            var result = await _accountService.IsCourseAvailable(user, courseId);
+            var userId = User.FindFirstValue("sub");
+            var result = await _accountService.IsCourseAvailable(userId, courseId);
             if (result.HasValue)
                 return Ok(new {HasAccess = result.Value});
             return NotFound();
