@@ -20,11 +20,27 @@ namespace UlearnServices.Services
             _userManager = userManager;
         }
 
-        public async Task Update(string userId, UserInfoDto model)
+        public async Task<FullUserInfoDto> Get(string userId)
         {
-            var user = await _context.Users.FindAsync(userId);
+            var user = await _userManager.FindByIdAsync(userId);
+            return new FullUserInfoDto
+            {
+                Email = user.Email,
+                Username = user.UserName,
+                Firstname = user.Firstname,
+                Lastname = user.Lastname
+            };
+        }
+
+        public async Task Update(string userId, FullUserInfoDto model)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            await _userManager.SetUserNameAsync(user, model.Username);
+            await _userManager.SetEmailAsync(user, model.Email);
             user.Firstname = model.Firstname;
             user.Lastname = model.Lastname;
+
             await _context.SaveChangesAsync();
         }
 
@@ -41,24 +57,17 @@ namespace UlearnServices.Services
             await _userManager.AddToRoleAsync(user, "Teacher");
         }
 
-        public async Task<bool?> IsCourseAvailable(User user, int courseId)
+        public async Task<bool?> IsCourseAvailable(string userId, int courseId)
         {
+            var subscription = _context.Users
+                .Include(x => x.Subscription)
+                .First(x => x.Id == userId)
+                .Subscription;
             var course = await _context.Courses
                 .FirstOrDefaultAsync(c => c.Id == courseId);
             if (course == default)
                 return null;
-            return user.Subscription.Level >= course.Subscription.Level;
-        }
-
-        public async Task<bool> IsInGroup(User user, int groupId)
-        {
-            var group = await _context.Groups
-                .Include(g => g.UserGroups)
-                    .ThenInclude(userGroup => userGroup.User)
-                .FirstOrDefaultAsync(g => g.Id == groupId);
-
-            return group.UserGroups
-                .FirstOrDefault(userGroup => userGroup.User.Id == user.Id) != default;
+            return subscription.Level >= course.Subscription.Level;
         }
     }
 }

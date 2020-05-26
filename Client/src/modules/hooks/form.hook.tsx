@@ -1,7 +1,7 @@
-import React, {useState} from "react";
-import {FormInput} from "../shared/utils/FormInput";
-import {getKeyValue} from "../shared/utils/getKeyValue";
-import {ObjectKeys} from "../shared/interface";
+import React, {useState} from "react"
+import {FormInput} from "../shared/utils/FormInput"
+import {getKeyValue} from "../shared/utils/getKeyValue"
+import {ObjectKeys} from "../shared/interface"
 
 // interface Some<T> {
 //     array: Array<{
@@ -32,7 +32,6 @@ export const useForm = <T extends {}>(initialValues: T) => {
     const generateInputs = (condition?: (key: string) => string, array: Array<keyof T> = keys) =>
 
         array.map((key, index) => {
-
             let type = "text"
             if (condition) type = condition(key)
             return (
@@ -58,7 +57,7 @@ export const useForm = <T extends {}>(initialValues: T) => {
         const {name, value, type} = event.target
         let changed
         if (type === 'number') {
-            changed = parseInt(value)
+            changed = parseInt(value || '')
         } else {
             changed = value
         }

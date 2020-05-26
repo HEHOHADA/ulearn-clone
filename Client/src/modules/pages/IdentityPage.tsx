@@ -1,11 +1,12 @@
-import React, {useContext} from 'react'
-import {IdentityForm} from "../components/identity/IdentityForm";
-import {Link} from "react-router-dom";
-import {IdentityPicture} from "../components/identity/IdentityPicture";
-import {AuthContext} from "../context/AuthContext";
-import {useHttp} from "../hooks/http.hook";
-import {groupRequest, teacherConfirm} from "../shared/request";
-import {useFetch} from "../hooks/fetch.hook";
+import React, {useContext, useState} from 'react'
+import {Link} from "react-router-dom"
+import {IdentityForm} from "../components/identity/IdentityForm"
+import {IdentityPicture} from "../components/identity/IdentityPicture"
+import {AuthContext} from "../context/AuthContext"
+import {useHttp} from "../hooks/http.hook"
+import {accountRequest, groupRequest, teacherConfirm} from "../shared/request"
+import {useFetch} from "../hooks/fetch.hook"
+import {GoogleMap} from "../shared/utils/GoogleMap"
 
 
 interface settings {
@@ -16,33 +17,21 @@ interface settings {
 
 export const IdentityPage = () => {
     const auth = useContext(AuthContext)
-    const {request, loading} = useHttp()
+    const {request, loading, error} = useHttp()
+    // const [errors, setErrors] = useState()
+
     const settings: Array<settings> = [
         {name: "Profile settings", value: ["username", "email", "lastname", "firstname"]},
         {name: "Password settings", value: ["current", "password", "repeat Password"]}
     ]
-    // const groups: Array<IGroup> = [
-    //     {name: 'group anme', course: "course 1"},
-    //     {name: 'group 2', course: "course 2"}
-    // ]
-    // const [groups, setGroups] = useState<Array<IGroup>>()
-    const {fetched} = useFetch(groupRequest)
 
-    // const fetchGroups = useCallback(async () => {
-    //     try {
-    //         setGroups(await request(groupRequest))
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    // }, [])
-    //
-    // useEffect(() => {
-    //     if (auth.role === 'Teacher' || auth.role === 'Admin') fetchGroups()
-    // }, [])
+    const {fetched: fetchedIdentity, isBusy} = useFetch<any>(accountRequest)
 
-    const teachersGroup = async () => {
-        return fetched.map((g: any) => (
-            <Link to={`/${g.course}`} key={`${g.name}-${g.course}`} className="module p-3 border">
+    const {fetched} = useFetch<any>(groupRequest)
+
+    const teachersGroup = () => {
+        return fetched && fetched.map((g: any) => (
+            <Link to={`/group/${g.id}`} key={`${g.name}-${g.course}`} className="module p-3 border">
                 <p className="text-primary m-0 font-weight-bold text-lg-left ">{g.name}</p>
                 <span className="text-primary">{g.course}</span>
             </Link>
@@ -52,29 +41,38 @@ export const IdentityPage = () => {
     const submitData = async (event: any, form: any) => {
         event.preventDefault()
         if (form.password) {
-            if (form.password === form.repeatPassword) {
-
-            }
+            await request(`${accountRequest}/changePassword`, 'POST', {
+                password: form.password,
+                current: form.current
+            })
+        } else {
+            await request(`${accountRequest}/updateData`, 'PUT', {...form})
         }
         // const response = await request('/teacher/confirm', "POST", form)
     }
 
     const confirmTeacherAccount = async () => {
-        const response = await request(teacherConfirm, "POST")
+        await request(teacherConfirm, "POST")
     }
 
     const settingsCreate = () => {
         let flag = ''
+        let props = {}
         return settings.map(({value, name}, index) => {
             if (index === 1) {
                 flag = 'mb-3'
+
+            } else {
+                props = {
+                    initialValues: {...fetchedIdentity}
+                }
             }
             return (
                 <div className={`card shadow ${flag}`} key={`${name}-${index}`}>
                     <div className="card-header py-3">
                         <p className="text-primary m-0 font-weight-bold">{name}</p>
                     </div>
-                    <IdentityForm loading={loading} submit={submitData} formNames={value}/>
+                    <IdentityForm {...props} loading={loading} error={error} submit={submitData} formNames={value}/>
                 </div>
             )
         })
@@ -92,10 +90,11 @@ export const IdentityPage = () => {
                         <div>
                             <div className="card mb-3">
                                 <div className="card-body text-center shadow justify-content-between">
-                                    {auth.role === 'teacher' ? teachersGroup() :
+                                    {auth.role === 'teacher' || auth.role === 'Admin' ? teachersGroup() :
                                         <button disabled={loading} className="btn btn-info"
                                                 onClick={confirmTeacherAccount}>Confirm
                                             teacher account</button>}
+                                    <GoogleMap/>
                                 </div>
                             </div>
                         </div>
@@ -103,7 +102,8 @@ export const IdentityPage = () => {
                     <div className="col-lg-8">
                         <div className="row">
                             <div className="col">
-                                {settingsCreate()}
+                                {error && <span className="alert-warning">{error}</span>}
+                                {!isBusy && settingsCreate()}
                             </div>
                         </div>
                     </div>

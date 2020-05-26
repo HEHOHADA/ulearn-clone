@@ -4,8 +4,8 @@ import {Loader} from "../../shared/utils/Loader"
 
 
 interface Props {
-    onClick: (id: string) => void
-    onDelete?: (id: string) => void
+    onClick: (id: number) => void
+    onDelete?: (id: number) => void
     text: string
     subscription?: ISubscription[]
     loading: boolean

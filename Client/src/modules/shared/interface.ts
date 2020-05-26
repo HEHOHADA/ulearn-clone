@@ -1,3 +1,5 @@
+import {Question} from "../components/Admin/theme/TestForm";
+
 export interface Token {
     aud: string
     exp: number
@@ -44,7 +46,7 @@ export interface Course {
 }
 
 export interface ISubscription {
-    id?:number
+    id?: number
     name: string
     price: number
     level?: number
@@ -52,41 +54,66 @@ export interface ISubscription {
 
 export interface ICourse {
     name: string | null
-    subscription: {}
+    subscription?: ISubscription
     description: string
-    id?: string
+    id?: number
+    modules?: Array<IModule>
     // themas: Array<ITheme>
 }
 
+
 export interface IModule {
+    id?: number
+    maxPoints?: number
     name: string
-    maxPoints: string
-    modules: Array<ITheme>
+    codeTasks: Array<CodeTask>
+    testTasks: Array<TestTask>
+    videoTasks: Array<VideoTask>
+}
+
+export interface CommonTask {
+    name: string
+    description: string
+    id?: number
+}
+
+export interface TestTask extends CommonTask {
+    points?: number
+    questions: Array<Question>
+}
+
+export interface CodeTask extends CommonTask {
+    initialCode: string
+    points: number
+}
+
+export interface VideoTask extends CommonTask {
+    videoHref: string
 }
 
 export interface ITheme {
-
-    name: string
     video?: any
     code?: any
     test?: Array<IQuestion>
 }
 
+
 export interface IQuestion {
-    question: string
+    text: string
     answers: Array<IAnswer>
     points: number
 }
 
 export interface IAnswer {
-    answerText: string
-    isCorrect: boolean
+    text: string
+    isRight: boolean
 }
 
 export interface IGroup {
     name: string
-    courseId: any
-    userGroups?: Array<string>
+    courseId?: any
+    emails?: Array<string>
+    id?:number
 }
 
 

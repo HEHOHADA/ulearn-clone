@@ -44,6 +44,14 @@ namespace UlearnAPI.Controllers
             _appEnvironment = appEnvironment;
         }
 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Get()
+        {
+            var userId = User.FindFirstValue("sub");
+            return Ok(await _accountService.Get(userId));
+        }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
@@ -111,17 +119,11 @@ namespace UlearnAPI.Controllers
 
         [HttpPut("updateData")]
         [SensitiveAuthorize]
-        public async Task<IActionResult> UpdateData([FromBody] UserInfoDto model)
+        public async Task<IActionResult> UpdateData([FromBody] FullUserInfoDto model)
         {
             var userId = User.FindFirstValue("sub");
-            var user = await _userManager.FindByIdAsync(userId);
-            await _userManager.SetUserNameAsync(user, model.Username);
-            await _userManager.SetEmailAsync(user, model.Email);
-            await _accountService.Update(userId, new UlearnServices.Models.Account.UserInfoDto
-            {
-                Firstname = model.Firstname, Lastname = model.Lastname
-            });
-            return Ok();
+            await _accountService.Update(userId, model);
+            return Ok(new { });
         }
 
         [HttpPost("changePassword")]
@@ -130,8 +132,13 @@ namespace UlearnAPI.Controllers
         {
             var userId = User.FindFirstValue("sub");
             var user = await _userManager.FindByIdAsync(userId);
-            await _userManager.ChangePasswordAsync(user, model.Current, model.Password);
-            return Ok();
+            var result = await _userManager.ChangePasswordAsync(user, model.Current, model.Password);
+            if (result.Succeeded)
+            {
+                return Ok(new { });
+            }
+
+            return BadRequest();
         }
 
         [HttpPost("setImage")]
@@ -146,7 +153,7 @@ namespace UlearnAPI.Controllers
 
             var userId = User.FindFirstValue("sub");
             await _accountService.SetImage(userId, fileName);
-            return Ok();
+            return Ok(new { });
         }
 
         [HttpPost("confirmTeacher")]
@@ -155,7 +162,7 @@ namespace UlearnAPI.Controllers
         {
             var userId = User.FindFirstValue("sub");
             await _accountService.ConfirmTeacher(userId);
-            return Ok();
+            return Ok(new { });
         }
 
         [HttpPost("auth/google")]
@@ -256,14 +263,14 @@ namespace UlearnAPI.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        [HttpGet("checkSubscription")]
+        [HttpGet("checkSubscription/{courseId}")]
         [Authorize]
-        public async Task<ActionResult<bool>> CheckSubscription([FromQuery] int groupId)
+        public async Task<ActionResult<bool>> CheckSubscription(int courseId)
         {
-            var user = await _userManager.GetUserAsync(User);
-            var result = await _accountService.IsCourseAvailable(user, groupId);
+            var userId = User.FindFirstValue("sub");
+            var result = await _accountService.IsCourseAvailable(userId, courseId);
             if (result.HasValue)
-                return result.Value;
+                return Ok(new {HasAccess = result.Value});
             return NotFound();
         }
     }
@@ -297,14 +304,6 @@ namespace UlearnAPI.Controllers
         [Required]
         [StringLength(100, ErrorMessage = "PASSWORD_MIN_LENGTH", MinimumLength = 6)]
         public string Password { get; set; }
-    }
-
-    public class UserInfoDto
-    {
-        [Required] public string Username { get; set; }
-        [Required] public string Email { get; set; }
-        public string Firstname { get; set; }
-        public string Lastname { get; set; }
     }
 
     public class PasswordDto

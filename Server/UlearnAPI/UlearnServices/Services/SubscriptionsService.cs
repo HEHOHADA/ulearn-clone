@@ -42,11 +42,17 @@ namespace UlearnServices.Services
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
                 });
             }
+
             return subscription;
         }
 
-        public async Task PutAsync(Subscription subscription)
+        public async Task PutAsync(int id, Subscription model)
         {
+            var subscription = await _context.Subscriptions.FindAsync(id);
+            subscription.Name = model.Name;
+            subscription.Level = model.Level;
+            subscription.Price = model.Price;
+
             _context.Entry(subscription).State = EntityState.Modified;
             var updatedCount = await _context.SaveChangesAsync();
             if (updatedCount > 0)
@@ -84,10 +90,23 @@ namespace UlearnServices.Services
                         break;
                 }
 
-            if (query.Page != 0 && query.PageSize != 0)
+            if (query.FromLevel.HasValue && query.FromLevel != 0 && 
+                query.ToLevel.HasValue && query.ToLevel != 0)
+            {
+                subscriptions = subscriptions.Where(x => x.Level >= query.FromLevel && x.Level <= query.ToLevel);
+            }
+
+            if (query.FromPrice.HasValue && query.FromPrice != 0 &&
+                query.ToPrice.HasValue && query.ToPrice != 0)
+            {
+                subscriptions = subscriptions.Where(x => x.Price >= query.FromPrice && x.Price <= query.ToPrice);
+            }
+
+            if (query.Page.HasValue && query.Page != 0 && 
+                query.PageSize.HasValue && query.PageSize != 0)
                 subscriptions = subscriptions
-                    .Skip((query.Page - 1) * query.PageSize)
-                    .Take(query.PageSize);
+                    .Skip((query.Page.Value - 1) * query.PageSize.Value)
+                    .Take(query.PageSize.Value);
 
             return subscriptions.ToList();
         }

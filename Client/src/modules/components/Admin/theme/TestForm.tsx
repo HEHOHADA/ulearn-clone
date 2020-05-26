@@ -6,17 +6,17 @@ import {QuestionForm} from "./QuestionForm"
 export class Question implements IQuestion {
     answers: Array<Answer> = []
     points: number = 0
-    question: string = ""
+    text: string = ""
 }
 
 export class Answer implements IAnswer {
-    answerText: string = ""
-    isCorrect: boolean = false
+    text: string = ""
+    isRight: boolean = false
 }
 
 
 interface questProps {
-    test: Array<Question>,
+    questions: Array<Question>,
     setTest: any
 }
 
@@ -26,29 +26,32 @@ export const TestForm = (props: questProps) => {
     //     event.preventDefault()
     // }
 
-    const {test, setTest} = props
+    const {questions, setTest} = props
 
     const [text, setText] = useState("")
 
+    const [points, setPoints] = useState(0)
 
-    const addQuestion = (text: string) => {
+    const addQuestion = (text: string,points:number) => {
         setText("")
-        if (test.some(q => q.question === text)) {
+        setPoints(0)
+        if (questions.some(q => q.text === text)) {
             return
         }
         const question = new Question()
-        question.question = text
-        setTest([...test, {...question}])
+        question.text = text
+        question.points=points
+        setTest([...questions, {...question}])
     }
 
     const changeQuestion = (question: Question) => {
-        const newQuestions = test.filter(q => q.question !== question.question)
+        const newQuestions = questions.filter(q => q.text !== question.text)
 
         setTest([...newQuestions, question])
     }
 
     const deleteQuestion = (deletedQuestion: Question) => {
-        const newQuestions = test.filter(question => question !== deletedQuestion)
+        const newQuestions = questions.filter(question => question !== deletedQuestion)
         setTest([...newQuestions])
     }
 
@@ -56,22 +59,32 @@ export const TestForm = (props: questProps) => {
         <div>
             <div className="input-group mb-3">
                 <input type="text" className="form-control" value={text}
-                       onKeyUp={(e) => {
+                       /*onKeyUp={(e) => {
 
                            e.key === 'Enter' && text.trim() && addQuestion(text) && e.preventDefault()
-                       }}
+                       }}*/
 
                        onChange={(event: any) => setText(event.target.value)}/>
-                <button
+                <input type="number" className="form-control" value={points}
+                       /*onKeyUp={(e) => {
 
-                    className={"btn btn-light"} onClick={() => text.trim() && addQuestion(text)}>Добавить вопрос
+                           e.key === 'Enter' && text.trim() && addQuestion(text) && e.preventDefault()
+                       }}*/
+
+                       onChange={(event: any) => setPoints(parseInt(event.target.value))}/>
+                <button
+                    className={"btn btn-light"} onClick={(event) => {
+                    text.trim()
+                    addQuestion(text,points)
+                    event.preventDefault()
+                }}>Добавить вопрос
                 </button>
             </div>
 
             {
-                test.map((question, index) => {
+                questions.map((question, index) => {
                     return (
-                        <div key={`${index}-${question.question}`}>
+                        <div key={`${index}-${question.text}`}>
                             {index + 1}.
                             <button className={"btn btn-light"} onClick={() => deleteQuestion(question)}><img alt="/"
                                                                                                               src={trash}/>

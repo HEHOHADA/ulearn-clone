@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react'
-import {useParams} from 'react-router-dom';
-import {CreditCard} from "../components/pay/CreditCard";
-import {ISubscription} from "../shared/interface";
+import {useParams} from 'react-router-dom'
+import {CreditCard} from "../components/pay/CreditCard"
+import {ISubscription} from "../shared/interface"
+import {useHttp} from "../hooks/http.hook"
 
 
 export const PaymentPage = () => {
@@ -10,11 +11,14 @@ export const PaymentPage = () => {
     useEffect(() => {
         //request to api
     }, [id])
+    const {request} = useHttp()
     const [isSubmitting, setIsSubmitting] = useState(false)
+    // const {isBusy, fetched, loading} = useFetch('')
     let subscription: ISubscription | any = []
-    const changeFormHandler = (form: any) => {
+    const changeFormHandler = async (form: any) => {
         form.product = ''
         console.log(form)
+       await request('payment')
     }
     return (
         <main className="page payment-page">
@@ -27,7 +31,6 @@ export const PaymentPage = () => {
                     </div>
                     <form onSubmit={(event) => {
                         event.preventDefault()
-                        console.log('here')
                         setIsSubmitting(true)
                     }
                     }>
@@ -37,7 +40,8 @@ export const PaymentPage = () => {
                                 <p className="item-name">{subscription.name}</p>
                                 <p className="item-description">{subscription.level}</p>
                             </div>
-                            <div className="total"><span>Total</span><span className="price">{subscription.price}</span></div>
+                            <div className="total"><span>Total</span><span className="price">{subscription.price}</span>
+                            </div>
                         </div>
                         <CreditCard isSubmitting={isSubmitting} changeFormHandler={changeFormHandler}/>
 

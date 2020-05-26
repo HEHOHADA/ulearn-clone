@@ -46,14 +46,9 @@ namespace UlearnAPI.Controllers
         [LogAuthorizeRoles("Admin")]
         public async Task<IActionResult> PutSubscription(int id, Subscription subscription)
         {
-            if (id != subscription.Id)
-            {
-                return BadRequest();
-            }
-
             try
             {
-                await _subscriptionsService.PutAsync(subscription);
+                await _subscriptionsService.PutAsync(id, subscription);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -73,8 +68,7 @@ namespace UlearnAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        [Authorize(Roles = "Admin")]
-        [LogAuthorizeRoles("Admin")]
+        [Authorize(Roles = "Admin")] 
         public async Task<ActionResult<Subscription>> PostSubscription(Subscription subscription)
         {
             var newSubscription = await _subscriptionsService.CreateAsync(subscription);

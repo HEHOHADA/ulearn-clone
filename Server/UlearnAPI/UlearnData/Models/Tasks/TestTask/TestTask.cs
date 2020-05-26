@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace UlearnData.Models.Tasks.TestTask
 {
@@ -8,9 +9,10 @@ namespace UlearnData.Models.Tasks.TestTask
         
         public string Name { get; set; }
         public string Description { get; set; }
+        public int Points { get; set; }
         
         public List<TestQuestion> Questions { get; set; }
         
-        public Module Module { get; set; }
+        [JsonIgnore] public Module Module { get; set; }
     }
 }

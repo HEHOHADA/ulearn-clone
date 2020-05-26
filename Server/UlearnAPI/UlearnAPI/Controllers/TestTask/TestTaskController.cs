@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using UlearnAPI.AOP;
 using UlearnData.Models;
 using UlearnData.Models.Tasks.TestTask;
+using UlearnServices.Models.Tasks.TestTask;
 using UlearnServices.Services;
 
 namespace UlearnAPI.Controllers
@@ -51,16 +52,11 @@ namespace UlearnAPI.Controllers
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
         [LogAuthorizeRoles("Admin")]
-        public async Task<IActionResult> PutTestTask(int id, TestTask testTask)
+        public async Task<IActionResult> PutTestTask(int id, TestTaskDto testTask)
         {
-            if (id != testTask.Id)
-            {
-                return BadRequest();
-            }
-
             try
             {
-                await _testTasksService.PutAsync(testTask);
+                await _testTasksService.PutAsync(id, testTask);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -80,9 +76,9 @@ namespace UlearnAPI.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [LogAuthorizeRoles("Admin")]
-        public async Task<ActionResult<TestTask>> PostTestTask(int moduleId, TestTask testTask)
+        public async Task<ActionResult<TestTask>> PostTestTask(TestTaskDto testTask)
         {
-            var newTestTask = await _testTasksService.CreateAsync(moduleId, testTask);
+            var newTestTask = await _testTasksService.CreateAsync(testTask);
             return CreatedAtAction("GetTestTask", new { id = newTestTask.Id }, newTestTask);
         }
 

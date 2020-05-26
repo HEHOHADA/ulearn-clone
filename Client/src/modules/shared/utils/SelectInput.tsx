@@ -11,7 +11,6 @@ interface Props {
 
 export const SelectInput = (props: Props) => {
     const onChange = (func: (label: string) => void, event: any) => {
-        console.log(event.target.selectedOptions)
         const chosenOpt = event.target.selectedOptions[0].value
         func(chosenOpt)
         setSelected(chosenOpt)

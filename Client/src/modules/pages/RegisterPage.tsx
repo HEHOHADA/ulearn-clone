@@ -1,9 +1,9 @@
 import React, {FC, useContext} from 'react'
+import jwt from 'jsonwebtoken'
+import {useHistory} from 'react-router-dom'
 import {IData, RegisterModel, Token} from "../shared/interface"
 import {useHttp} from "../hooks/http.hook"
-import {useHistory} from 'react-router-dom'
 import {useForm} from "../hooks/form.hook"
-import jwt from 'jsonwebtoken'
 import {AuthContext} from "../context/AuthContext"
 import {registerRequest} from "../shared/request"
 import {validationAuthForm} from "../shared/validation/validationAuthForm"

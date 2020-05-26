@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UlearnData;
 using UlearnData.Models;
+using UlearnServices.Models.Account;
 using UlearnServices.Models.Group;
 
 namespace UlearnServices.Services
@@ -25,23 +27,49 @@ namespace UlearnServices.Services
             return _context.Modules.Any(e => e.Id == id);
         }
 
-        public async Task<List<Group>> GetAsync()
+        public async Task<List<FullGroupDto>> GetAsync()
         {
-            return await _context.Groups
-                .Include(group => group.UserGroups)
-                .ThenInclude(userGroup => userGroup.User)
-                .ToListAsync();
+            var a = (await _context.Groups
+                .Include(x => x.Course)
+                .Include(x => x.UserGroups)
+                .ThenInclude(x => x.User)
+                .ToListAsync());
+            return (await _context.Groups
+                    .Include(x => x.Course)
+                    .Include(x => x.UserGroups)
+                    .ThenInclude(x => x.User)
+                    .ToListAsync())
+                .Select(x => new FullGroupDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    CourseId = x.Course.Id,
+                    Emails = x.UserGroups
+                        .Select(y => y.User.Email)
+                        .ToList()
+                })
+                .ToList();
         }
 
-        public async Task<Group> FindAsync(int id)
+        public async Task<FullGroupDto> FindAsync(int id)
         {
-            return await _context.Groups
-                .Include(group => group.UserGroups)
-                .ThenInclude(userGroup => userGroup.User)
+            var group = await _context.Groups
+                .Include(x => x.Course)
+                .Include(x => x.UserGroups)
+                .ThenInclude(x => x.User)
                 .FirstOrDefaultAsync(module => module.Id == id);
+            return new FullGroupDto
+            {
+                Id = group.Id,
+                Name = group.Name,
+                CourseId = group.Course.Id,
+                Emails = group.UserGroups
+                    .Select(x => x.User.Email)
+                    .ToList()
+            };
         }
 
-        public async Task<Group> CreateAsync(GroupDto model)
+        public async Task<FullGroupDto> CreateAsync(GroupDto model)
         {
             var group = new Group
             {
@@ -49,8 +77,14 @@ namespace UlearnServices.Services
                 Course = await _context.Courses.FindAsync(model.CourseId),
             };
 
+            if (group.Course == null)
+            {
+                throw new ArgumentException();
+            }
+
             group.UserGroups = (await Task.WhenAll(model.Emails
                     .Select(x => _userManager.FindByEmailAsync(x))))
+                    .Where(x => x != null)
                 .Select(x => new UserGroup
                 {
                     Group = group,
@@ -60,7 +94,16 @@ namespace UlearnServices.Services
 
             _context.Groups.Add(group);
             await _context.SaveChangesAsync();
-            return group;
+
+            return new FullGroupDto
+            {
+                Id = group.Id,
+                Name = group.Name,
+                CourseId = group.Course.Id,
+                Emails = group.UserGroups
+                    .Select(x => x.User.Email)
+                    .ToList()
+            };
         }
 
         public async Task PutAsync(int id, GroupDto model)
@@ -68,6 +111,11 @@ namespace UlearnServices.Services
             var group = await _context.Groups.FindAsync(id);
 
             group.Course = await _context.Courses.FindAsync(model.CourseId);
+            if (group.Course == null)
+            {
+                throw new ArgumentException();
+            }
+            
             group.UserGroups = (await Task.WhenAll(model.Emails
                     .Select(x => _userManager.FindByEmailAsync(x))))
                 .Select(x => new UserGroup
@@ -81,10 +129,36 @@ namespace UlearnServices.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task Remove(Group group)
+        public async Task<FullGroupDto> Remove(int id)
         {
+            var group = _context.Groups
+                .Include(x => x.Course)
+                .Include(x => x.UserGroups)
+                .ThenInclude(x => x.User)
+                .First(x => x.Id == id);
+
             _context.Groups.Remove(group);
             await _context.SaveChangesAsync();
+            return new FullGroupDto
+            {
+                Id = group.Id,
+                Name = group.Name,
+                CourseId = group.Course.Id,
+                Emails = group.UserGroups
+                    .Select(x => x.User.Email)
+                    .ToList()
+            };
+        }
+        
+        public async Task<bool> HasUser(User user, int groupId)
+        {
+            var group = await _context.Groups
+                .Include(g => g.UserGroups)
+                .ThenInclude(userGroup => userGroup.User)
+                .FirstOrDefaultAsync(g => g.Id == groupId);
+
+            return group.UserGroups
+                .FirstOrDefault(userGroup => userGroup.User.Id == user.Id) != default;
         }
     }
 }

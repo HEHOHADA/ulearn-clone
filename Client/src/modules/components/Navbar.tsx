@@ -1,10 +1,10 @@
 import React, {useContext, useState} from 'react'
-import {NavLink, useHistory} from "react-router-dom";
-import {ILink} from "../shared/interface";
-import {AuthContext} from "../context/AuthContext";
+import {NavLink, useHistory} from "react-router-dom"
+import {ILink} from "../shared/interface"
+import {AuthContext} from "../context/AuthContext"
 
 
-export const Navbar = (props: any) => {
+export const Navbar = () => {
 
     const history = useHistory()
     const auth = useContext(AuthContext)
@@ -27,7 +27,7 @@ export const Navbar = (props: any) => {
             links.push({name: "admin", link: '/admin'})
         }
         if (auth.role === 'Admin' || auth.role === 'Teacher') {
-            links.push({name: 'groups', link: '/group'})
+            links.push({name: 'groups', link: '/groups'})
         }
         return (
             <ul className="nav navbar-nav ml-auto">

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,9 @@ namespace UlearnServices.Services
         public async Task<List<Course>> GetAsync()
         {
             return await _context.Courses
-                .Include(course => course.Modules)
+                .Include(course => course.Modules).ThenInclude(module => module.TestTasks)
+                .Include(course => course.Modules).ThenInclude(module => module.CodeTasks)
+                .Include(course => course.Modules).ThenInclude(module => module.VideoTasks)
                 .Include(course => course.Subscription)
                 .ToListAsync();
         }
@@ -33,7 +36,9 @@ namespace UlearnServices.Services
         public async Task<Course> FindAsync(int id)
         {
             return await _context.Courses
-                .Include(course => course.Modules)
+                .Include(course => course.Modules).ThenInclude(module => module.TestTasks)
+                .Include(course => course.Modules).ThenInclude(module => module.CodeTasks)
+                .Include(course => course.Modules).ThenInclude(module => module.VideoTasks)
                 .Include(course => course.Subscription)
                 .FirstOrDefaultAsync(course => course.Id == id);
         }
@@ -46,6 +51,10 @@ namespace UlearnServices.Services
                 Description = model.Description,
                 Subscription = await _context.Subscriptions.FindAsync(model.SubscriptionId)
             };
+            if (course.Subscription == null)
+            {
+                throw new ArgumentException("No subscriptionId passed");
+            }
             _context.Courses.Add(course);
             await _context.SaveChangesAsync();
             return course;
@@ -54,10 +63,14 @@ namespace UlearnServices.Services
         public async Task PutAsync(int id, CourseDto model)
         {
             var course = await _context.Courses.FindAsync(id);
-            
+
             course.Description = model.Description;
             course.Name = model.Name;
             course.Subscription = await _context.Subscriptions.FindAsync(model.SubscriptionId);
+            if (course.Subscription == null)
+            {
+                throw new ArgumentException("No subscriptionId passed");
+            }
             
             _context.Entry(course).State = EntityState.Modified;
             await _context.SaveChangesAsync();

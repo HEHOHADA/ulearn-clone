@@ -15,7 +15,7 @@ export const TestItem = (props: Props) => {
     const {question, answers, isSubmitting, change} = props
 
     const initialClasses = answers.reduce(function (result: Map<string, string>, item: IAnswer) {
-        result.set(item.answerText, '')
+        result.set(item.text, '')
         return result
     }, new Map<string, string>())
 
@@ -27,7 +27,7 @@ export const TestItem = (props: Props) => {
 
     const changeHandler = (event: any) => {
         let newSelection = event.target.value
-        const ans = answers.find(a => a.answerText === newSelection)
+        const ans = answers.find(a => a.text === newSelection)
         const newArray = answer?.filter(a => a !== ans)
         if (newArray && newArray?.length !== answer?.length) {
             if (newArray) {
@@ -39,7 +39,7 @@ export const TestItem = (props: Props) => {
 
             const newResult = answer ? [...answer, ans!] : [ans!]
             setAnswers(newResult)
-            if (!ans!.isCorrect) {
+            if (!ans!.isRight) {
                 setPoint(0)
             }
         }
@@ -48,9 +48,9 @@ export const TestItem = (props: Props) => {
 
     useEffect(() => {
         if (answer) {
-            change({question, points: point, answers: answer!})
+            change({text: question, points: point, answers: answer!})
         } else {
-            change({question, points: 0, answers: answer!})
+            change({text: question, points: 0, answers: answer!})
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [answer, isSubmitting])
@@ -65,8 +65,8 @@ export const TestItem = (props: Props) => {
     const validate = () => {
         let classe: Map<string, string> = new Map()
         answer && answer.forEach((a) => {
-            const inputClass = a.isCorrect ? "alert-success" : 'alert-danger'
-            classe.set(a.answerText, inputClass)
+            const inputClass = a.isRight ? "alert-success" : 'alert-danger'
+            classe.set(a.text, inputClass)
         })
         setClasses(classe)
     }

@@ -1,8 +1,9 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import {IModule} from "../../../shared/interface"
+import {ICourse, IModule} from '../../../shared/interface'
 
 interface Props {
+    course:ICourse
     id?: string
     isActive?: boolean
     onClick?: () => void
@@ -11,16 +12,16 @@ interface Props {
         max: number
     }
     title?: string
-    header:string
+    header?:string
     module?:Array<IModule>
     onChooseModule: (data: { theme?: any, module?: any, course?: any }) => void
 }
 
 export const Course = (props: Props) => {
 
-    const {onChooseModule} = props
+    const {onChooseModule,course} = props
 
-    const array = [{id: 1, name: '31321', points: 1, maxPoints: 5}]
+    // const array = [{id: 1, name: '31321', points: 1, maxPoints: 5}]
 
     const onChooseModuleHandler = (id: any) => {
         console.log('here', id)
@@ -28,12 +29,12 @@ export const Course = (props: Props) => {
     }
     // const {id} = useParams()
     const renderModules = () => {
-        return array.map((m, index) => (
+        return course.modules!.map((m, index) => (
             <li className="list-group-item module" key={`${m.id}-${m.name}`}>
                 <button className="btn btn-link" onClick={() => onChooseModuleHandler(m.id)}>
                     <div>{m.name}</div>
                 </button>
-                <span>{m.points}/{m.maxPoints}</span>
+                <span>{m.maxPoints}</span>
             </li>
         ))
     }

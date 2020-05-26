@@ -11,6 +11,7 @@ using UlearnAPI.AOP;
 using UlearnData;
 using UlearnData.Models;
 using UlearnData.Models.Tasks.CodeTask;
+using UlearnServices.Models.Tasks.CodeTask;
 using UlearnServices.Services;
 
 namespace UlearnAPI.Controllers
@@ -20,12 +21,12 @@ namespace UlearnAPI.Controllers
     public class CodeTaskController : ControllerBase
     {
         private readonly CodeTasksService _codeTasksService;
-        private readonly AccountService _accountService;
+        private readonly GroupsService _groupService;
         private readonly UserManager<User> _userManager;
 
-        public CodeTaskController(CodeTasksService codeTasksService, AccountService accountService, UserManager<User> userManager)
+        public CodeTaskController(CodeTasksService codeTasksService, GroupsService groupService, UserManager<User> userManager)
         {
-            _accountService = accountService;
+            _groupService = groupService;
             _codeTasksService = codeTasksService;
             _userManager = userManager;
         }
@@ -57,16 +58,11 @@ namespace UlearnAPI.Controllers
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
         [LogAuthorizeRoles("Admin")]
-        public async Task<IActionResult> PutCodeTask(int id, CodeTask codeTask)
+        public async Task<IActionResult> PutCodeTask(int id, CodeTaskDto codeTask)
         {
-            if (id != codeTask.Id)
-            {
-                return BadRequest();
-            }
-
             try
             {
-                await _codeTasksService.PutAsync(codeTask);
+                await _codeTasksService.PutAsync(id, codeTask);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -87,9 +83,9 @@ namespace UlearnAPI.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [LogAuthorizeRoles("Admin")]
-        public async Task<ActionResult<CodeTask>> PostCodeTask(int moduleId, CodeTask codeTask)
+        public async Task<ActionResult<CodeTask>> PostCodeTask(CodeTaskDto codeTask)
         {
-            var newCodeTask = await _codeTasksService.CreateAsync(moduleId, codeTask);
+            var newCodeTask = await _codeTasksService.CreateAsync(codeTask);
             return CreatedAtAction("GetCodeTask", new {id = newCodeTask.Id}, newCodeTask);
         }
 
@@ -124,7 +120,7 @@ namespace UlearnAPI.Controllers
         public async Task<ActionResult<IEnumerable<CodeTaskResult>>> GetGroupResults([FromQuery] int groupId)
         {
             var user = await _userManager.GetUserAsync(User);
-            if (!await _userManager.IsInRoleAsync(user, "Admin") && !await _accountService.IsInGroup(user, groupId))
+            if (!await _userManager.IsInRoleAsync(user, "Admin") && !await _groupService.HasUser(user, groupId))
             {
                 return Unauthorized();
             }

@@ -1,17 +1,17 @@
 import React from 'react'
 
-import {CodeThema} from "../../../components/User/ThemaTypes/CodeThema"
-import {ITheme} from "../../../shared/interface"
-import {VideoThema} from '../../../components/User/ThemaTypes/VideoThema'
-import {TestThema} from "../../../components/User/ThemaTypes/TestThema"
+import {CodeThema} from '../../../components/User/ThemaTypes/CodeThema'
+import {ITheme} from '../../../shared/interface'
+import {VideoThema} from "../../../components/User/ThemaTypes/VideoThema"
+import {TestThema} from '../../../components/User/ThemaTypes/TestThema'
 
 interface Props {
-    id?: any
+    theme?: any
     nextThema: any
 }
 
 export const Theme = (props: Props) => {
-    const {id} = props
+    const {theme} = props
     // const {request, loading} = useHttp()
     //
     // let themaType = ''
@@ -19,7 +19,7 @@ export const Theme = (props: Props) => {
     //     //request to server body api
     // }, [])
     // const data: ITheme = {video: "https://www.youtube.com/watch?v=VnG7ej56lWw", name: ''}
-    const data: ITheme = {name: 'name', code: 'const c=(a,b)=>a+b'}
+    //const data: ITheme = {name: 'name', code: 'const c=(a,b)=>a+b'}
     // const data: ITheme = {
     //     name: 'name',
     //     test: [{
@@ -36,9 +36,9 @@ export const Theme = (props: Props) => {
 
     return (
         <div>
-            {data.video && <VideoThema url={data.video} name={"video"}/>}
-            {data.code && <CodeThema name={data.name} initialCode={data.code}/>}
-            {data.test && <TestThema test={data.test}/>}
+            {theme && theme.questions && <TestThema test={theme.questions}/>}
+            {theme && theme.videoHref && <VideoThema url={theme.videoHref} name={"video"}/>}
+            {theme && theme.initialCode && <CodeThema name={theme.name} initialCode={theme.initialCode}/>}
         </div>
     )
 }

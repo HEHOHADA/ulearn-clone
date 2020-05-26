@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using UlearnData;
 using UlearnData.Models.Tasks.VideoTask;
+using UlearnServices.Models.Tasks.VideoTask;
 
 namespace UlearnServices.Services
 {
@@ -31,17 +32,29 @@ namespace UlearnServices.Services
             return await _context.VideoTasks.FindAsync(id);
         }
 
-        public async Task<VideoTask> CreateAsync(int moduleId, VideoTask videoTask)
+        public async Task<VideoTask> CreateAsync(VideoTaskDto model)
         {
-            var module = await _context.Modules.FindAsync(moduleId);
-            videoTask.Module = module;
+            var videoTask = new VideoTask
+            {
+                Name = model.Name,
+                Description = model.Description,
+                VideoHref = model.VideoHref,
+                Module = await _context.Modules.FindAsync(model.ModuleId)
+            };
+
             _context.VideoTasks.Add(videoTask);
             await _context.SaveChangesAsync();
             return videoTask;
         }
 
-        public async Task PutAsync(VideoTask videoTask)
+        public async Task PutAsync(int id, VideoTaskDto model)
         {
+            var videoTask = await _context.VideoTasks.FindAsync(id);
+            videoTask.Name = model.Name;
+            videoTask.Description = model.Description;
+            videoTask.VideoHref = model.VideoHref;
+            videoTask.Module = await _context.Modules.FindAsync(model.ModuleId);
+            
             _context.Entry(videoTask).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
