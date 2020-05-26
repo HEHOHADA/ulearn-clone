@@ -18,7 +18,7 @@ export const GroupReviewPage = () => {
             fetched && fetched.map((code: any) => (
                 <li className="list-group-item module" key={code.id}>
                     <Link to={'/'}>
-                        <div>{code.task}</div>
+                        <div>{code.name}</div>
                     </Link>
                     <div>{code.email}</div>
 
@@ -35,7 +35,7 @@ export const GroupReviewPage = () => {
         <main className="page">
             <div className="container pt-3">
                 <h2 className="pb-3">
-                    Пришедшие код
+                    Пришедший код
                 </h2>
                 <div>
                     <ul>

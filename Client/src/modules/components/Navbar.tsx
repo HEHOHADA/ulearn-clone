@@ -3,7 +3,6 @@ import {NavLink, useHistory} from "react-router-dom"
 import {ILink} from "../shared/interface"
 import {AuthContext} from "../context/AuthContext"
 
-
 export const Navbar = () => {
 
     const history = useHistory()

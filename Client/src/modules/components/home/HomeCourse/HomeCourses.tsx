@@ -27,7 +27,7 @@ export const HomeCourses = (props: Props) => {
     const courseHandler = (course: ICourse) =>
         (
             <div className="col-12 col-md-6 col-lg-4" key={`${course.id}`}>
-                <div className="clean-product-item">
+                <div className="clean-product-item m-2">
                     <div className="product-name"><Link to={`course/${course.id}`}>{course.name}</Link>
                     </div>
                     <div className="about">
