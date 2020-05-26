@@ -8,6 +8,9 @@ export const FooterLinks = () => {
     const links: Footer[] = [{
         name: "Get started",
         link: [{link: "/", name: "Home"}, {link: "/subscription", name: "Subscription"}]
+    }, {
+        name: "Usage",
+        link: [{link: "/chat", name: "Chat"}, {link: 'account', name: "Account"}]
     }]
 
 

@@ -1,17 +1,18 @@
 import React from 'react'
 
 import {CodeThema} from '../../../components/User/ThemaTypes/CodeThema'
-import {ITheme} from '../../../shared/interface'
 import {VideoThema} from "../../../components/User/ThemaTypes/VideoThema"
 import {TestThema} from '../../../components/User/ThemaTypes/TestThema'
+import {Loader} from "../../../shared/utils/Loader";
 
 interface Props {
     theme?: any
     nextThema: any
+    loading: boolean
 }
 
 export const Theme = (props: Props) => {
-    const {theme} = props
+    const {theme, loading} = props
     // const {request, loading} = useHttp()
     //
     // let themaType = ''
@@ -32,7 +33,9 @@ export const Theme = (props: Props) => {
     //         points: 5
     //     }]
     // }
-
+    if (loading) {
+        return <Loader/>
+    }
 
     return (
         <div>
