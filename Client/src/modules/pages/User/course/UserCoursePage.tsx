@@ -31,19 +31,22 @@ export const UserCoursePage = () => {
                 let response
                 if (!theme) {
                     response = await request(`${api}/${splits[1]}/${splits[0]}`)
+
                 }
-                const theme1: any = {theme: {...response ?? theme, receivedPoints: result?.points ?? 0}}
-                // eslint-disable-next-line
-                const _ = splits[1] === "codeTask" && result?.code
-                    ? theme1.code = result.code
+                const theme1 = {theme: {...response??theme, receivedPoints: result?.points ?? 0}}
+                const a = splits[1] === "codeTask" && result?.usersCode
+                    ? theme1.theme.initailCode = result.usersCode
                     : splits[1] === "testTask" && result?.answers ? theme1.theme.questions = result.answers : {}
-                chooseTheme({theme: theme1})
+                chooseTheme(theme1)
             }
         }
-        themeFetch()
+        let mount = true
+        setTimeout(() => themeFetch(), 400)
+        return () => {
+            mount = false
+        }
         // eslint-disable-next-line
     }, [themeId])
-
     return (
         <main className="page">
             <div className="container">

@@ -9,6 +9,7 @@ interface Props {
         points: number
         comment: string
     }
+    onSubmit: (event: any, form: any) => void
 }
 
 export const defaultReviewForm = {
@@ -17,17 +18,12 @@ export const defaultReviewForm = {
 }
 export const ReviewCode = (props: Props) => {
 
-    const {initialValues = defaultReviewForm} = props
+    const {initialValues = defaultReviewForm, onSubmit} = props
     const {form, changeHandler} = useForm(initialValues)
 
 
-    const onSubmit = (event: any) => {
-        event.preventDefault()
-        console.log(form)
-    }
-
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={(event: any) => onSubmit(event, form)}>
             <FormInput onChange={changeHandler} name={'points'} formValue={form.points} type={"number"}/>
             <Textarea onChange={changeHandler} name={"comment"} formValue={form.comment}/>
             <button

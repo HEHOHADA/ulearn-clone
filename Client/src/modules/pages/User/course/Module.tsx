@@ -24,6 +24,7 @@ export const Module = (props: Props) => {
     }
 
     const onChooseThemaHandler = (theme: any) => {
+
         onChooseTheme({course: course, module: id, theme: theme})
     }
 
