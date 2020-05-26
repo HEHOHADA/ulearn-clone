@@ -22,9 +22,9 @@ export const SubscriptionView = (props: Props) => {
         }], loading, onDelete
     } = props
 
-    if (loading) {
+    /*if (loading) {
         return <Loader/>
-    }
+    }*/
 
     const subscriptionHandler = () => {
 
