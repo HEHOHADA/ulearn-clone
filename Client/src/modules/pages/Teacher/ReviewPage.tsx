@@ -1,15 +1,12 @@
 import React from 'react'
 import {ReviewCode} from "./Review/ReviewCode";
 import {CodeEditor} from "../../shared/utils/CodeEditor"
-import {useParams} from 'react-router-dom'
-import {useHttp} from "../../hooks/http.hook"
-import {useFetch} from "../../hooks/fetch.hook";
 
 
 export const ReviewPage = () => {
-    const {id} = useParams()
-    const {request} = useHttp()
-    const{fetched} = useFetch(`code/${id}`)
+    // const {id} = useParams()
+    // const {request} = useHttp()
+    // const{fetched} = useFetch(`code/${id}`)
 
     const propsCode = {
         readOnly: true

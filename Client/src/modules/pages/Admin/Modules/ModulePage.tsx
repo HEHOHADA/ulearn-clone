@@ -12,13 +12,13 @@ export const ModulePage = () => {
 
     useEffect(() => {
         if (!isBusy) {
-            console.log('fetched', fetched)
             fetched?.modules!.map(module => {
                 module.maxPoints = module.codeTasks.map(task => task.points).reduce((a, b) => a + b, 0)
                     + module.testTasks.map(task => task.points!).reduce((a, b) => a + b, 0)
             })
             setModules(fetched?.modules!)
         }
+        // eslint-disable-next-line
     }, [isBusy])
     const [modules, setModules] = useState<IModule[]>([]);
     const history = useHistory()
@@ -39,9 +39,11 @@ export const ModulePage = () => {
             console.log(e)
         }
     }
+
     const onAddTheme = (moduleId: number) => {
         history.push(`/admin/course/${courseId}/module/${moduleId}/theme/create`)
     }
+
     return (
         <div>
             {

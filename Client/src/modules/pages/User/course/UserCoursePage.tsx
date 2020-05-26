@@ -33,8 +33,9 @@ export const UserCoursePage = () => {
                     response = await request(`${api}/${splits[1]}/${splits[0]}`)
 
                 }
-                const theme1 = {theme: {...response??theme, receivedPoints: result?.points ?? 0}}
-                const a = splits[1] === "codeTask" && result?.usersCode
+                const theme1 = {theme: {...response ?? theme, receivedPoints: result?.points ?? 0}}
+                // eslint-disable-next-line
+                const _ = splits[1] === "codeTask" && result?.usersCode
                     ? theme1.theme.initailCode = result.usersCode
                     : splits[1] === "testTask" && result?.answers ? theme1.theme.questions = result.answers : {}
                 chooseTheme(theme1)

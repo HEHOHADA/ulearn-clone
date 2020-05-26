@@ -15,9 +15,9 @@ export const ThemePage = () => {
     const {fetched, isBusy} = useFetch<IModule>(`${moduleRequest}/${moduleId}`)
     useEffect(() => {
         if (!isBusy) {
-            console.log('fetched', fetched)
             setModule(fetched)
         }
+        // eslint-disable-next-line
     }, [isBusy])
     const [module, setModule] = useState<IModule>();
 

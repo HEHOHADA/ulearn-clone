@@ -30,13 +30,13 @@ const subscriptionNames = (subscriptions: Array<ISubscription>) => {
 
 export const CourseForm: FC<IProps> = (props: IProps) => {
     const {loading} = useHttp()
-    const {request} = useHttp()
     const [subscriptions, setSubscriptions] = useState<Array<ISubscription>>([])
     const {fetched, isBusy} = useFetch<Array<ISubscription>>(subscriptionRequest)
     useEffect(() => {
         if (!isBusy) {
             setSubscriptions(fetched!)
         }
+        // eslint-disable-next-line
     }, [isBusy])
     // useEffect(() => {
     //     if (!isBusy) {
