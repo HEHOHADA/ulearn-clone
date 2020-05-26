@@ -145,8 +145,11 @@ namespace UlearnAPI.Controllers
         [Authorize]
         public async Task<IActionResult> SetImage(IFormFile file)
         {
-            string fileName = new Guid() + new FileInfo(file.FileName).Extension;
-            using (var fileStream = new FileStream(_appEnvironment.WebRootPath + "/Files/" + fileName, FileMode.Create))
+            string fileName = Guid.NewGuid() + new FileInfo(file.FileName).Extension;
+            //TODO: Не хош проверочку добавить на существование папки?
+            var directoryPath = _appEnvironment.ContentRootPath + "/Files/";
+            Directory.CreateDirectory(Path.GetDirectoryName(directoryPath));
+            using (var fileStream = new FileStream(directoryPath + fileName, FileMode.Create))
             {
                 await file.CopyToAsync(fileStream);
             }
