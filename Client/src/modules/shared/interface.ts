@@ -102,6 +102,7 @@ export interface IQuestion {
     text: string
     answers: Array<IAnswer>
     points: number
+    id?:number
 }
 
 export interface IAnswer {
