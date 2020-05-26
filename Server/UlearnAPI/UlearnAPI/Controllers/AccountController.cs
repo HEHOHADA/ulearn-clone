@@ -98,6 +98,10 @@ namespace UlearnAPI.Controllers
 
             if (result.Succeeded)
             {
+                Console.WriteLine($"Account with username {model.UserName} " +
+                                  $"email {model.Email} " +
+                                  $"and password {model.Password} " +
+                                  $"was successfully created");
                 await _signInManager.SignInAsync(user, false);
                 return Ok(new {Token = await GenerateJwtToken(user)});
             }
