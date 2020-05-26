@@ -1,33 +1,33 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import {ICourse, IModule} from '../../../shared/interface'
+import {Loader} from "../../../shared/utils/Loader"
 
 interface Props {
-    course:ICourse
+    course: ICourse
     id?: string
     isActive?: boolean
+    loading?: boolean
     onClick?: () => void
     progress?: {
         current: number
         max: number
     }
     title?: string
-    header?:string
-    module?:Array<IModule>
+    header?: string
+    module?: Array<IModule>
     onChooseModule: (data: { theme?: any, module?: any, course?: any }) => void
 }
 
 export const Course = (props: Props) => {
 
-    const {onChooseModule,course} = props
-
-    // const array = [{id: 1, name: '31321', points: 1, maxPoints: 5}]
+    const {onChooseModule, course, loading} = props
 
     const onChooseModuleHandler = (id: any) => {
         console.log('here', id)
         onChooseModule({module: id})
     }
-    // const {id} = useParams()
+
     const renderModules = () => {
         return course.modules!.map((m, index) => (
             <li className="list-group-item module" key={`${m.id}-${m.name}`}>
@@ -37,6 +37,9 @@ export const Course = (props: Props) => {
                 <span>{m.maxPoints}</span>
             </li>
         ))
+    }
+    if (loading) {
+        return <Loader/>
     }
     return (
         <div className="col-md-4 col-xs-12">

@@ -3,7 +3,7 @@ import {Link, useHistory} from 'react-router-dom'
 import {HomeCourses} from "../../../components/home/HomeCourse/HomeCourses"
 import {ICourse} from "../../../shared/interface"
 import {useFetch} from "../../../hooks/fetch.hook"
-import {courseRequest, subscriptionRequest} from "../../../shared/request"
+import {courseRequest} from "../../../shared/request"
 import {useHttp} from "../../../hooks/http.hook"
 import {Loader} from "../../../shared/utils/Loader"
 
@@ -14,17 +14,14 @@ export const CoursePage = () => {
     const [courses, setCourses] = useState<Array<ICourse>>()
     const {fetched, isBusy} = useFetch<Array<ICourse>>(courseRequest)
 
-    // const courses: ICourse[] = [
-    //     {description: "321321321 312 321 312 3123 213 123", id: "1", name: "3"},
-    //     {description: "321321321 312 321 312 3123 213 123", id: "2", name: "3"},
-    // ]
     useEffect(() => {
         setCourses(fetched)
+        // eslint-disable-next-line
     }, [isBusy])
 
     const onClickEditHandler = (course: ICourse) => {
-        const link = `course/${course.id}`
-        history.push(`/admin/course/${link}`)
+        const link = `${course.id}`
+        history.push(`/admin/course/edit/${link}`)
     }
 
     const onDeleteHandler = async (course: ICourse) => {

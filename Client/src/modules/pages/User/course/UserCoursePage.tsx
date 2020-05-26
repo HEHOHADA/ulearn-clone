@@ -5,9 +5,9 @@ import {Theme} from './Theme'
 import {Course} from "./Course"
 import {UserContext} from "../../../context/UserContext"
 import {useFetch} from "../../../hooks/fetch.hook"
-import {api, courseRequest, moduleRequest} from "../../../shared/request"
-import {ICourse, IModule} from "../../../shared/interface";
-import {useHttp} from "../../../hooks/http.hook";
+import {api, courseRequest} from "../../../shared/request"
+import {ICourse} from "../../../shared/interface"
+import {useHttp} from "../../../hooks/http.hook"
 
 export const UserCoursePage = () => {
 
@@ -20,7 +20,7 @@ export const UserCoursePage = () => {
     const themeId = location.split('/')[3]
 
     const {fetched: courseItem, isBusy: isBusyCourse, loading: courseLoading} = useFetch<ICourse>(`${courseRequest}/${id}`)
-    const {fetched: moduleItem, isBusy: isBusyModule, loading: moduleLoading} = useFetch<IModule>(`${moduleRequest}/${module}`)
+
 
     useEffect(() => {
         const themeFetch = async () => {
@@ -33,16 +33,16 @@ export const UserCoursePage = () => {
             }
         }
         themeFetch()
+        // eslint-disable-next-line
     }, [themeId])
     return (
         <main className="page">
             <div className="container">
                 <div className="row">
                     {module ?
-                        !isBusyModule &&
-                        <Module loading={moduleLoading} theme={moduleItem} id={module} course={course ? course : id}
+                        <Module id={module} course={course ? course : id}
                                 onChooseTheme={chooseTheme}/> :
-                        !isBusyCourse && <Course course={courseItem!} onChooseModule={chooseTheme}/>}
+                        !isBusyCourse && <Course loading={courseLoading} course={courseItem!} onChooseModule={chooseTheme}/>}
                     <div className="col-md-8 col-xs-12">
                         <div className="container">
                             <Theme loading={loading} theme={theme} nextThema={chooseTheme}/>

@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import {Link, useHistory} from 'react-router-dom'
-import {groupRequest, subscriptionRequest} from "../../shared/request"
+import {groupRequest} from "../../shared/request"
 import {useFetch} from "../../hooks/fetch.hook"
 import {Loader} from "../../shared/utils/Loader"
-import {IGroup, ISubscription} from "../../shared/interface";
+import {IGroup} from "../../shared/interface";
 import {useHttp} from "../../hooks/http.hook";
 
 export const GroupsPage = () => {
@@ -15,8 +15,10 @@ export const GroupsPage = () => {
 
 
     useEffect(() => {
-        setGroups(fetched)
-    }, [isBusy])
+        if (!isBusy) {
+            setGroups(fetched)
+        }
+    }, [isBusy, fetched])
 
     const onEditGroup = (group: number) => {
         history.push(`/group/edit/${group}`)

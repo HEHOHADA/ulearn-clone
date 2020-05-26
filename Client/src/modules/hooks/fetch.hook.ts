@@ -12,7 +12,6 @@ export const useFetch = <T>(url: string) => {
         setIsBusy(true)
         try {
             setFetched(await request(url))
-
         } catch (e) {
             console.log(e)
         } finally {

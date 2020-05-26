@@ -16,6 +16,7 @@ import {UserContext} from './modules/context/UserContext'
 import {useUser} from "./modules/hooks/user.hook"
 import {PaymentPage} from "./modules/pages/PaymentPage"
 import {ChatRavil} from "./modules/pages/ChatRavil";
+import {SubscriptionPage} from "./modules/pages/SubscriptionPage";
 
 
 const App: FC = () => {
@@ -40,6 +41,7 @@ const App: FC = () => {
                         <AppRoute exact path={'/'} component={HomePage} layout={MainLayout}/>
                         <AppRoute exact path={'/pay/:id'} component={PaymentPage} layout={MainLayout}/>
                         <AppRoute path={'/course/:id'} component={UserCoursePage} layout={MainLayout}/>
+                        <AppRoute path={'/subscription'} component={SubscriptionPage} layout={MainLayout}/>
                         {isAuth && <AppRoute exact path={'/account'} component={IdentityPage} layout={MainLayout}/>}
                         {isAuth && <AppRoute exact path={'/chat'} component={ChatRavil} layout={MainLayout}/>}
                         {!isAuth && <AppRoute exact path={'/login'} component={LoginPage} layout={AuthLayout}/>}
