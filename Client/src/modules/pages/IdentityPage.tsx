@@ -4,7 +4,7 @@ import {IdentityForm} from "../components/identity/IdentityForm"
 import {IdentityPicture} from "../components/identity/IdentityPicture"
 import {AuthContext} from "../context/AuthContext"
 import {useHttp} from "../hooks/http.hook"
-import {accountRequest, groupRequest, teacherConfirm} from "../shared/request"
+import {accountRequest, fileDownloadRequest, groupRequest, teacherConfirm} from "../shared/request"
 import {useFetch} from "../hooks/fetch.hook"
 import {GoogleMap} from "../shared/utils/GoogleMap"
 
@@ -85,7 +85,7 @@ export const IdentityPage = () => {
                 <div className="row mb-3">
                     <div className="col-lg-4">
                         <div className="card mb-3">
-                            <IdentityPicture/>
+                            {!isBusy && <IdentityPicture initialValue={`${fileDownloadRequest}?filename=${fetchedIdentity.imageSrc}`}/>}
                         </div>
                         <div>
                             <div className="card mb-3">
