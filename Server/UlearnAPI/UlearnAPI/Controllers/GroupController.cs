@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -82,7 +83,8 @@ namespace UlearnAPI.Controllers
         [LogAuthorizeRoles("Admin,Teacher")]
         public async Task<ActionResult<FullGroupDto>> PostGroup(GroupDto group)
         {
-            var newGroup = await _groupsService.CreateAsync(group);
+            var userId = User.FindFirstValue("sub");
+            var newGroup = await _groupsService.CreateAsync(userId, group);
             return CreatedAtAction("GetGroup", new {id = newGroup.Id}, newGroup);
         }
 
@@ -104,6 +106,14 @@ namespace UlearnAPI.Controllers
             }
 
             return await _groupsService.Remove(id);
+        }
+
+        [HttpGet("ByUser")]
+        [Authorize]
+        public async Task<List<FullGroupDto>> GetByUser()
+        {
+            var userId = User.FindFirstValue("sub");
+            return await _groupsService.GetByUser(userId);
         }
     }
 }

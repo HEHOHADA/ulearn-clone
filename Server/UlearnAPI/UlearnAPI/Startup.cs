@@ -152,7 +152,7 @@ namespace UlearnAPI
         {
             var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            string[] roleNames = {"Admin"};
+            string[] roleNames = {"Admin","Teacher"};
 
             foreach (var roleName in roleNames)
             {

@@ -73,13 +73,6 @@ namespace UlearnAPI.Controllers
 
                 model.Login = user.UserName;
             }
-            else
-            {
-                if (!new Regex(@"^[a-zA-Z0-9]*$").IsMatch(model.Login))
-                {
-                    return BadRequest(new {Message = new[] {"Username is not valid"}});
-                }
-            }
 
             var result = await _signInManager.PasswordSignInAsync(model.Login, model.Password, false, false);
 
@@ -105,6 +98,10 @@ namespace UlearnAPI.Controllers
 
             if (result.Succeeded)
             {
+                Console.WriteLine($"Account with username {model.UserName} " +
+                                  $"email {model.Email} " +
+                                  $"and password {model.Password} " +
+                                  $"was successfully created");
                 await _signInManager.SignInAsync(user, false);
                 return Ok(new {Token = await GenerateJwtToken(user)});
             }
@@ -165,7 +162,8 @@ namespace UlearnAPI.Controllers
         {
             var userId = User.FindFirstValue("sub");
             await _accountService.ConfirmTeacher(userId);
-            return Ok(new { });
+            var user = await _userManager.FindByIdAsync(userId);
+            return Ok(new {Token = await GenerateJwtToken(user)});
         }
 
         [HttpPost("auth/google")]
