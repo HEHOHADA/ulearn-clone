@@ -26,7 +26,7 @@ export const HomePage = (props: RouteComponentProps) => {
         const data = await request(`${checkSubscription}/${id}`)
 
         //if have subscription redirect to course page
-        if (data.hasAccess) {
+        if (data && data.hasAccess) {
             chooseTheme({course: id})
             history.push(link)
         } else {

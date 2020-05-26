@@ -1,5 +1,5 @@
 import React, {FC} from 'react'
-import {BrowserRouter, Switch, Route} from "react-router-dom"
+import {BrowserRouter, Route, Switch} from "react-router-dom"
 import {MainLayout} from "./modules/shared/layout/MainLayout"
 import {AppRoute} from "./routes/AppRoute"
 import {HomePage} from "./modules/pages/HomePage"
@@ -26,6 +26,7 @@ const App: FC = () => {
 
     let isAdmin = role === 'Admin'
     let isAuth = !!token
+    console.log(token)
     let isTeacher = role === 'teacher'
     const teacherRoutes = useTeacherRoute()
 

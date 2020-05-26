@@ -10,20 +10,22 @@ interface Props {
     id: number
     points: number
     receivedPoints: number
+    sended: boolean
 }
 
 export const CodeTheme = (props: Props) => {
-    const {receivedPoints,points,name, initialCode = '', description = '', id} = props
+    const {receivedPoints, points, name, initialCode = '', description = '', id, sended = false} = props
     const [code, setCode] = useState(initialCode)
     const propsCode = {
-        onChange: (code: any) => setCode(code)
+        onChange: (code: any) => setCode(code),
+        readOnly: sended
     }
     const {request} = useHttp()
 
     const onSubmit = async (event: any) => {
         event.preventDefault()
         try {
-         await request(`${codeTaskRequest}result/confirm`, 'POST', {
+            await request(`${codeTaskRequest}result/confirm`, 'POST', {
                 codeTaskId: id,
                 code: code
             })

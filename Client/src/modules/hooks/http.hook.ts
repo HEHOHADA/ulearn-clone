@@ -8,10 +8,10 @@ export const useHttp = () => {
     const auth = useContext(AuthContext)
     const request = useCallback(async (url, method = 'GET', body = null, headers = {}) => {
         setLoading(true)
+        const token = auth.token
         try {
-
             if (!headers['Authorization'])
-                headers['Authorization'] = `Bearer ${auth.token}`
+                headers['Authorization'] = `Bearer ${token}`
 
             if (body && !headers['Content-Type']) {
                 body = JSON.stringify(body)
@@ -26,7 +26,6 @@ export const useHttp = () => {
                 throw new Error('Что-то пошло не так')
             }
             const data = await response.json()
-            console.log(data)
             if (data.message) {
                 throw new Error(data.message || 'Что-то пошло не так')
 
@@ -37,7 +36,7 @@ export const useHttp = () => {
             setLoading(false)
             setError(e.message)
         }
-    }, [auth.token])
+    }, [])
 
     const clearError = useCallback(() => setError(null), [])
 
