@@ -14,3 +14,4 @@ export const codeTaskRequest = URL + "api/CodeTask"
 export const api = URL + "api"
 export const groupReviewRequest = URL + 'api/CodeTask/groupResults'
 export const checkSubscription = URL + 'api/account/checkSubscription'
+export const paySubscription = URL + 'api/subscription/pay'

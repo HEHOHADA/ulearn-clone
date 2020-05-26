@@ -30,6 +30,9 @@ export const HomePage = (props: RouteComponentProps) => {
             chooseTheme({course: id})
             history.push(link)
         } else {
+            if(data.subscriptionId){
+                history.push(`pay/${data.subscriptionId}`)
+            }
             // redirect to payment page
         }
 
