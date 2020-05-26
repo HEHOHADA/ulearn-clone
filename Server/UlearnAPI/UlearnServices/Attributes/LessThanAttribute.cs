@@ -16,7 +16,7 @@ namespace UlearnServices.Attributes
         {
             ErrorMessage = ErrorMessageString;
             var currentValue = (int?)value;
-            if (!currentValue.HasValue)
+            if (!currentValue.HasValue || currentValue == 0)
             {
                 return ValidationResult.Success;
             }
