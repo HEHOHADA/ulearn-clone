@@ -1,43 +1,47 @@
-import React, {useCallback, useEffect} from 'react'
-import {HomeCourses} from "../components/home/HomeCourse/HomeCourses"
-import {Course} from "../shared/interface"
-import {RouteComponentProps} from "react-router-dom";
+import React, {useContext} from 'react'
+import {HomeCourses} from '../components/home/HomeCourse/HomeCourses'
+import {ICourse} from '../shared/interface'
+import {RouteComponentProps} from "react-router"
+import {useHttp} from '../hooks/http.hook'
+import {AuthContext} from '../context/AuthContext'
+import {UserContext} from '../context/UserContext'
+import {useFetch} from '../hooks/fetch.hook'
+import {checkSubscription, courseRequest} from '../shared/request'
 
 export const HomePage = (props: RouteComponentProps) => {
 
     const {history} = props
-
-    const onClickHandler = (link: string) => {
+    const {loading, request} = useHttp()
+    const auth = useContext(AuthContext)
+    const {chooseTheme} = useContext(UserContext)
+    const {fetched, isBusy} = useFetch<Array<ICourse>>(courseRequest)
+    const onClickHandler = async (course: ICourse) => {
+        if (!auth.isAuth) {
+            history.push('/login')
+        }
+        const id = course.id
+        const link = `course/${id}`
+        // const courseId = link.split("/")[1]
+        //substype
+        const data = await request(`${checkSubscription}/${id}`)
 
         //if have subscription redirect to course page
-        if (true) {
-
+        if (data.hasAccess) {
+            chooseTheme({course: id})
             history.push(link)
-
         } else {
+            if (data.subscriptionId) {
+                history.push(`pay/${data.subscriptionId}`)
+            }
             // redirect to payment page
         }
 
     }
 
-// will be replace for api connect
-    const courses: Course[] = [
-        {description: "321321321 312 321 312 3123 213 123", id: "1", name: "3", time: new Date()},
-        {description: "321321321 312 321 312 3123 213 123", id: "2", name: "3", time: new Date()},
+    const courses: ICourse[] = [
+        {description: "321321321 312 321 312 3123 213 123", id: 1, name: "3"},
+        {description: "321321321 312 321 312 3123 213 123", id: 2, name: "3"},
     ]
-
-    const fetchCourse = useCallback(async () => {
-        try {
-            // using api
-        } catch (e) {
-            //catching errors
-        }
-    }, [])
-
-    useEffect(() => {
-        fetchCourse()
-    }, [fetchCourse])
-
 
     return (
         <main className="page catalog-page">
@@ -50,14 +54,15 @@ export const HomePage = (props: RouteComponentProps) => {
                     </div>
                     <div className="content">
                         <div className="row">
-                            <div className="col-md-9">
+                            <div className="col-md-12">
                                 <div className="products">
                                     <div className="row no-gutters">
-                                        <HomeCourses courses={courses} onClick={onClickHandler}/>
+                                        {!isBusy && <HomeCourses
+                                            courses={fetched && fetched.length ? fetched : courses}
+                                            onClick={onClickHandler}
+                                            loading={loading}/>
+                                        }
                                     </div>
-                                    <nav>
-                                        <ul className="pagination"/>
-                                    </nav>
                                 </div>
                             </div>
                         </div>

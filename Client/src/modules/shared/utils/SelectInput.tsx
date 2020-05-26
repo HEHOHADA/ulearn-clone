@@ -1,33 +1,38 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 interface Props {
-    onSelect: (event:any) => void
-    options: [{
-        value: string
-        text: string
-    }]
-
+    onSelect: (event: any) => void
+    data: Array<any>
     label: string
-    value: string
+    name: string
+    value: any
+    optionName?: Array<string>
 }
 
 export const SelectInput = (props: Props) => {
-    const {onSelect, options} = props
+    const onChange = (func: (label: string) => void, event: any) => {
+        const chosenOpt = event.target.selectedOptions[0].value
+        func(chosenOpt)
+        setSelected(chosenOpt)
+    }
+    const {onSelect, data, name, value, optionName} = props
+    const [selected, setSelected] = useState(value)
     const htmlFor = `${props.label}-${Math.random()}`
     return (
         <div>
             <label htmlFor={htmlFor}>{props.label}</label>
             <select
+                value={selected}
+                name={name}
                 className="custom-select custom-select-lg mb-3"
                 id={htmlFor}
-                value={props.value}
-                onChange={onSelect}
+                onChange={(event: any) => onChange(onSelect, event)}
             >
-                {options.map((option, index) => {
+                {data && data.map((option, index) => {
                     return <option
-                        key={option.value + index}
-                        value={option.value}>
-                        {option.text}
+                        key={option + index}
+                        value={option}>
+                        {(optionName && optionName[index]) ? optionName[index] : option}
                     </option>
                 })}
             </select>
