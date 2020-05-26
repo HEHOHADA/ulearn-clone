@@ -10,6 +10,8 @@ using UlearnServices.Services.TestTasks;
 
 namespace UlearnAPI.Controllers.TestTasks
 {
+    [Route("api/{controller}")]
+    [ApiController]
     public class TestTaskResultController : Controller
     {
         private readonly TestTaskResultService _testTaskResultService;

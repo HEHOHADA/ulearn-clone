@@ -1,20 +1,16 @@
-import React, {useEffect} from 'react'
-import {Link, useParams} from "react-router-dom"
-import {useHttp} from "../../hooks/http.hook"
+import React from 'react'
+import {Link, useHistory, useParams} from "react-router-dom"
 import {useFetch} from "../../hooks/fetch.hook"
 import {groupReviewRequest} from "../../shared/request"
 
 export const GroupReviewPage = () => {
 
     const {id} = useParams()
-    const {request} = useHttp()
-
-    useEffect(() => {
-        // request(`api/groups/${id}`, "GET")
-    }, [id])
+    const history = useHistory()
     const {fetched} = useFetch<any>(`${groupReviewRequest}/${id}`)
-    const onEditHandler = () => {
 
+    const onEditHandler = (id: any) => {
+        history.push(`/code/${id}`)
     }
 
     const reviewHandler = () => {
@@ -24,10 +20,11 @@ export const GroupReviewPage = () => {
                     <Link to={'/'}>
                         <div>{code.task}</div>
                     </Link>
-                    <div>{}</div>
+                    <div>{code.email}</div>
 
-                    <button type="button" onClick={onEditHandler} className="btn btn-primary">Изменить</button>
-                    <span className="badge badge-primary badge-pill">5/5</span>
+                    <button type="button" onClick={() => onEditHandler(code.id)} className="btn btn-primary">Изменить
+                    </button>
+                    <span className="badge badge-primary badge-pill">{code.points}</span>
                 </li>
             ))
 

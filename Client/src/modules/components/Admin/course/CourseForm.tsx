@@ -38,24 +38,7 @@ export const CourseForm: FC<IProps> = (props: IProps) => {
             setSubscriptions(fetched!)
         }
     }, [isBusy])
-    // useEffect(() => {
-    //     if (!isBusy) {
-    //         setSubscriptions(fetched)
-    //         console.log('here')
-    //     }
-    // }, [isBusy])
 
-    // const fetchCourse = useCallback(async () => {
-    //     try {
-    //         setSubscriptions(await request(subscriptionRequest, 'GET'))
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    // }, [])
-    //
-    // useEffect(() => {
-    //     fetchCourse()
-    // }, [])
 
     const {initialValues = defaultCourseValue, onSubmit, title} = props
 
