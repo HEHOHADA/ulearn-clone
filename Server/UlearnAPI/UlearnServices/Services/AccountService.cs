@@ -29,7 +29,8 @@ namespace UlearnServices.Services
                 Email = user.Email,
                 Username = user.UserName,
                 Firstname = user.Firstname,
-                Lastname = user.Lastname
+                Lastname = user.Lastname,
+                ImageSrc = user.ImageSrc
             };
         }
 

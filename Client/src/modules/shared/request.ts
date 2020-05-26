@@ -18,4 +18,5 @@ export const checkSubscription = URL + 'api/account/checkSubscription'
 export const paySubscription = URL + 'api/subscription/pay'
 export const codeReviewRequest = URL + 'api/codeTaskResult/forReview'
 export const codeDoReviewRequest = URL + 'api/codeTaskResult/review'
+export const fileDownloadRequest = URL + "api/files/download"
 
