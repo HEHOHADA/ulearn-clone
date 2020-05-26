@@ -38,7 +38,7 @@ const App: FC = () => {
                 <BrowserRouter>
                     <Switch>
                         <AppRoute exact path={'/'} component={HomePage} layout={MainLayout}/>
-                        <AppRoute exact path={'/pay'} component={PaymentPage} layout={MainLayout}/>
+                        <AppRoute exact path={'/pay/:id'} component={PaymentPage} layout={MainLayout}/>
                         <AppRoute path={'/course/:id'} component={UserCoursePage} layout={MainLayout}/>
                         {isAuth && <AppRoute exact path={'/account'} component={IdentityPage} layout={MainLayout}/>}
                         {isAuth && <AppRoute exact path={'/chat'} component={ChatRavil} layout={MainLayout}/>}

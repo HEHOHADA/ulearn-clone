@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using UlearnData;
 using UlearnData.Models;
+using UlearnServices.Models;
 using UlearnServices.Models.Subscription;
 
 namespace UlearnServices.Services
@@ -109,6 +110,22 @@ namespace UlearnServices.Services
                     .Take(query.PageSize.Value);
 
             return subscriptions.ToList();
+        }
+
+        public async Task Pay(string userId, PaymentRequest paymentRequest)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            user.Subscription = await _context.Subscriptions.FindAsync(paymentRequest.Product);
+            if (user.Subscription == null)
+            {
+                throw new ArgumentException("no subscriptionId passed");
+            }
+            await _context.SaveChangesAsync();
+            Console.WriteLine($"Number {paymentRequest.CardNumber} " +
+                              $"Holder {paymentRequest.CardHolder} " +
+                              $"Month {paymentRequest.Month} " +
+                              $"Year {paymentRequest.Year} " +
+                              $"CVC {paymentRequest.CVC} ");
         }
     }
 }

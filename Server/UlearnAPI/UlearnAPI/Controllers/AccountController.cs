@@ -269,9 +269,9 @@ namespace UlearnAPI.Controllers
         {
             var userId = User.FindFirstValue("sub");
             var result = await _accountService.IsCourseAvailable(userId, courseId);
-            if (result.HasValue)
-                return Ok(new {HasAccess = result.Value});
-            return NotFound();
+            if (result.HasAccess)
+                return Ok(new {HasAccess = true});
+            return Ok(new {SubscriptionId = result.course.Subscription.Id});
         }
     }
 
