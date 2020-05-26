@@ -23,13 +23,13 @@ namespace UlearnAPI.Controllers
             if (fileName == null)  
                 return Content("filename not present");  
   
-            var path = _appEnvironment.WebRootPath + "/Files/" + fileName;
+            var path = _appEnvironment.ContentRootPath + "/Files/" + fileName;
 
             var bytes = System.IO.File.ReadAllBytes(path);
 
             new FileExtensionContentTypeProvider().TryGetContentType(fileName, out var contentType);
             contentType ??= "application/octet-stream";
             return File(bytes, contentType);  
-        } 
+        }
     }
 }

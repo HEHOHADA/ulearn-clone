@@ -1,38 +1,45 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
+import {ICourse, IModule} from '../../../shared/interface'
+import {Loader} from "../../../shared/utils/Loader"
 
 interface Props {
+    course: ICourse
     id?: string
     isActive?: boolean
+    loading?: boolean
     onClick?: () => void
     progress?: {
         current: number
         max: number
     }
     title?: string
-    onChooseModule: (data: { thema?: any, module?: any, course?: any }) => void
+    header?: string
+    module?: Array<IModule>
+    onChooseModule: (data: { theme?: any, module?: any, course?: any }) => void
 }
 
 export const Course = (props: Props) => {
 
-    const {onChooseModule} = props
-
-    const array = [{id: 1, name: '31321', points: 1, maxPoints: 5}]
+    const {onChooseModule, course, loading} = props
 
     const onChooseModuleHandler = (id: any) => {
         console.log('here', id)
         onChooseModule({module: id})
     }
-    // const {id} = useParams()
+
     const renderModules = () => {
-        return array.map((m, index) => (
+        return course.modules!.map((m, index) => (
             <li className="list-group-item module" key={`${m.id}-${m.name}`}>
                 <button className="btn btn-link" onClick={() => onChooseModuleHandler(m.id)}>
                     <div>{m.name}</div>
                 </button>
-                <span>{m.points}/{m.maxPoints}</span>
+                <span>{m.maxPoints}</span>
             </li>
         ))
+    }
+    if (loading) {
+        return <Loader/>
     }
     return (
         <div className="col-md-4 col-xs-12">

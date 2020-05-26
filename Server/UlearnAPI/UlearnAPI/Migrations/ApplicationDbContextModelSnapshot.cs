@@ -224,7 +224,7 @@ namespace UlearnAPI.Migrations
                     b.ToTable("Subscriptions");
                 });
 
-            modelBuilder.Entity("UlearnData.Models.Tasks.CodeTask.CodeTask", b =>
+            modelBuilder.Entity("UlearnData.Models.Tasks.CodeTasks.CodeTask", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -233,11 +233,17 @@ namespace UlearnAPI.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("InitialCode")
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("ModuleId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -246,16 +252,22 @@ namespace UlearnAPI.Migrations
                     b.ToTable("CodeTasks");
                 });
 
-            modelBuilder.Entity("UlearnData.Models.Tasks.CodeTask.CodeTaskResult", b =>
+            modelBuilder.Entity("UlearnData.Models.Tasks.CodeTasks.CodeTaskResult", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Code")
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("CodeTaskId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("GroupId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Points")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("SenderId")
@@ -272,7 +284,7 @@ namespace UlearnAPI.Migrations
                     b.ToTable("CodeTaskResults");
                 });
 
-            modelBuilder.Entity("UlearnData.Models.Tasks.CodeTask.CodeTaskReview", b =>
+            modelBuilder.Entity("UlearnData.Models.Tasks.CodeTasks.CodeTaskReview", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -297,10 +309,13 @@ namespace UlearnAPI.Migrations
                     b.ToTable("CodeTaskReviews");
                 });
 
-            modelBuilder.Entity("UlearnData.Models.Tasks.TestTask.TestQuestion", b =>
+            modelBuilder.Entity("UlearnData.Models.Tasks.TestTasks.TestQuestion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Points")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("TaskId")
@@ -316,7 +331,7 @@ namespace UlearnAPI.Migrations
                     b.ToTable("TestQuestions");
                 });
 
-            modelBuilder.Entity("UlearnData.Models.Tasks.TestTask.TestQuestionAnswer", b =>
+            modelBuilder.Entity("UlearnData.Models.Tasks.TestTasks.TestQuestionAnswer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -338,7 +353,7 @@ namespace UlearnAPI.Migrations
                     b.ToTable("TestQuestionAnswers");
                 });
 
-            modelBuilder.Entity("UlearnData.Models.Tasks.TestTask.TestQuestionAnswerResult", b =>
+            modelBuilder.Entity("UlearnData.Models.Tasks.TestTasks.TestQuestionAnswerResult", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -364,7 +379,7 @@ namespace UlearnAPI.Migrations
                     b.ToTable("QuestionAnswerResults");
                 });
 
-            modelBuilder.Entity("UlearnData.Models.Tasks.TestTask.TestTask", b =>
+            modelBuilder.Entity("UlearnData.Models.Tasks.TestTasks.TestTask", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -378,6 +393,9 @@ namespace UlearnAPI.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -386,7 +404,36 @@ namespace UlearnAPI.Migrations
                     b.ToTable("TestTasks");
                 });
 
-            modelBuilder.Entity("UlearnData.Models.Tasks.VideoTask.VideoTask", b =>
+            modelBuilder.Entity("UlearnData.Models.Tasks.TestTasks.TestTaskResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SenderId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("TaskId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("SenderId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("TestTaskResults");
+                });
+
+            modelBuilder.Entity("UlearnData.Models.Tasks.VideoTasks.VideoTask", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -399,6 +446,9 @@ namespace UlearnAPI.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("VideoHref")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -408,7 +458,7 @@ namespace UlearnAPI.Migrations
                     b.ToTable("VideoTasks");
                 });
 
-            modelBuilder.Entity("UlearnData.Models.Tasks.VideoTask.VideoTaskResult", b =>
+            modelBuilder.Entity("UlearnData.Models.Tasks.VideoTasks.VideoTaskResult", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -605,16 +655,16 @@ namespace UlearnAPI.Migrations
                         .HasForeignKey("CourseId");
                 });
 
-            modelBuilder.Entity("UlearnData.Models.Tasks.CodeTask.CodeTask", b =>
+            modelBuilder.Entity("UlearnData.Models.Tasks.CodeTasks.CodeTask", b =>
                 {
                     b.HasOne("UlearnData.Models.Module", "Module")
                         .WithMany("CodeTasks")
                         .HasForeignKey("ModuleId");
                 });
 
-            modelBuilder.Entity("UlearnData.Models.Tasks.CodeTask.CodeTaskResult", b =>
+            modelBuilder.Entity("UlearnData.Models.Tasks.CodeTasks.CodeTaskResult", b =>
                 {
-                    b.HasOne("UlearnData.Models.Tasks.CodeTask.CodeTask", "CodeTask")
+                    b.HasOne("UlearnData.Models.Tasks.CodeTasks.CodeTask", "CodeTask")
                         .WithMany()
                         .HasForeignKey("CodeTaskId");
 
@@ -627,11 +677,11 @@ namespace UlearnAPI.Migrations
                         .HasForeignKey("SenderId");
                 });
 
-            modelBuilder.Entity("UlearnData.Models.Tasks.CodeTask.CodeTaskReview", b =>
+            modelBuilder.Entity("UlearnData.Models.Tasks.CodeTasks.CodeTaskReview", b =>
                 {
-                    b.HasOne("UlearnData.Models.Tasks.CodeTask.CodeTaskResult", "Result")
+                    b.HasOne("UlearnData.Models.Tasks.CodeTasks.CodeTaskResult", "Result")
                         .WithOne("Review")
-                        .HasForeignKey("UlearnData.Models.Tasks.CodeTask.CodeTaskReview", "CodeTaskResultId")
+                        .HasForeignKey("UlearnData.Models.Tasks.CodeTasks.CodeTaskReview", "CodeTaskResultId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -640,23 +690,23 @@ namespace UlearnAPI.Migrations
                         .HasForeignKey("TeacherId");
                 });
 
-            modelBuilder.Entity("UlearnData.Models.Tasks.TestTask.TestQuestion", b =>
+            modelBuilder.Entity("UlearnData.Models.Tasks.TestTasks.TestQuestion", b =>
                 {
-                    b.HasOne("UlearnData.Models.Tasks.TestTask.TestTask", "Task")
+                    b.HasOne("UlearnData.Models.Tasks.TestTasks.TestTask", "Task")
                         .WithMany("Questions")
                         .HasForeignKey("TaskId");
                 });
 
-            modelBuilder.Entity("UlearnData.Models.Tasks.TestTask.TestQuestionAnswer", b =>
+            modelBuilder.Entity("UlearnData.Models.Tasks.TestTasks.TestQuestionAnswer", b =>
                 {
-                    b.HasOne("UlearnData.Models.Tasks.TestTask.TestQuestion", "Question")
+                    b.HasOne("UlearnData.Models.Tasks.TestTasks.TestQuestion", "Question")
                         .WithMany("Answers")
                         .HasForeignKey("QuestionId");
                 });
 
-            modelBuilder.Entity("UlearnData.Models.Tasks.TestTask.TestQuestionAnswerResult", b =>
+            modelBuilder.Entity("UlearnData.Models.Tasks.TestTasks.TestQuestionAnswerResult", b =>
                 {
-                    b.HasOne("UlearnData.Models.Tasks.TestTask.TestQuestionAnswer", "Answer")
+                    b.HasOne("UlearnData.Models.Tasks.TestTasks.TestQuestionAnswer", "Answer")
                         .WithMany()
                         .HasForeignKey("AnswerId");
 
@@ -669,21 +719,14 @@ namespace UlearnAPI.Migrations
                         .HasForeignKey("SenderId");
                 });
 
-            modelBuilder.Entity("UlearnData.Models.Tasks.TestTask.TestTask", b =>
+            modelBuilder.Entity("UlearnData.Models.Tasks.TestTasks.TestTask", b =>
                 {
                     b.HasOne("UlearnData.Models.Module", "Module")
                         .WithMany("TestTasks")
                         .HasForeignKey("ModuleId");
                 });
 
-            modelBuilder.Entity("UlearnData.Models.Tasks.VideoTask.VideoTask", b =>
-                {
-                    b.HasOne("UlearnData.Models.Module", "Module")
-                        .WithMany("VideoTasks")
-                        .HasForeignKey("ModuleId");
-                });
-
-            modelBuilder.Entity("UlearnData.Models.Tasks.VideoTask.VideoTaskResult", b =>
+            modelBuilder.Entity("UlearnData.Models.Tasks.TestTasks.TestTaskResult", b =>
                 {
                     b.HasOne("UlearnData.Models.Group", "Group")
                         .WithMany()
@@ -693,7 +736,29 @@ namespace UlearnAPI.Migrations
                         .WithMany()
                         .HasForeignKey("SenderId");
 
-                    b.HasOne("UlearnData.Models.Tasks.VideoTask.VideoTask", "VideoTask")
+                    b.HasOne("UlearnData.Models.Tasks.TestTasks.TestTask", "Task")
+                        .WithMany()
+                        .HasForeignKey("TaskId");
+                });
+
+            modelBuilder.Entity("UlearnData.Models.Tasks.VideoTasks.VideoTask", b =>
+                {
+                    b.HasOne("UlearnData.Models.Module", "Module")
+                        .WithMany("VideoTasks")
+                        .HasForeignKey("ModuleId");
+                });
+
+            modelBuilder.Entity("UlearnData.Models.Tasks.VideoTasks.VideoTaskResult", b =>
+                {
+                    b.HasOne("UlearnData.Models.Group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId");
+
+                    b.HasOne("UlearnData.Models.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId");
+
+                    b.HasOne("UlearnData.Models.Tasks.VideoTasks.VideoTask", "VideoTask")
                         .WithMany()
                         .HasForeignKey("VideoTaskId");
                 });

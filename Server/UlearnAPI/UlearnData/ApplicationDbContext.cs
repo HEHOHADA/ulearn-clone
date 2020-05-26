@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using UlearnData.Models;
-using UlearnData.Models.Tasks.CodeTask;
-using UlearnData.Models.Tasks.TestTask;
-using UlearnData.Models.Tasks.VideoTask;
+using UlearnData.Models.Tasks.CodeTasks;
+using UlearnData.Models.Tasks.TestTasks;
+using UlearnData.Models.Tasks.VideoTasks;
 
 namespace UlearnData
 {
@@ -22,6 +22,8 @@ namespace UlearnData
         public DbSet<VideoTask> VideoTasks { get; set; }
         public DbSet<VideoTaskResult> VideoTaskResults { get; set; }
         
+        public DbSet<TestTaskResult> TestTaskResults { get; set; }
+         
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Module> Modules { get; set; }

@@ -1,13 +1,20 @@
 import React from 'react'
-import {GroupCreateForm} from "../../components/teacher/Group/GroupCreateForm";
-import {useHttp} from "../../hooks/http.hook";
+import {GroupCreateForm} from "../../components/teacher/Group/GroupCreateForm"
+import {useHttp} from "../../hooks/http.hook"
+import {groupRequest} from "../../shared/request"
+import {IGroup} from "../../shared/interface"
+import {useHistory} from 'react-router-dom'
 
 export const GroupCreatePage = () => {
     const {request} = useHttp()
-    const onSubmit = (event: any, form: any) => {
+    const history = useHistory()
+    const onSubmit = async (event: any, form: IGroup) => {
         event.preventDefault()
+        form.courseId = parseInt(form.courseId)
+        const response = await request(groupRequest, 'POST', {...form})
 
-        const response = request('api/groups/create', 'POST', form)
+        console.log(response)
+        history.push('/groups')
     }
 
     return (

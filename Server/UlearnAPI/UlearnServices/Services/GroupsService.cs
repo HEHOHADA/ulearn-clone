@@ -1,19 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UlearnData;
 using UlearnData.Models;
+using UlearnServices.Models.Account;
+using UlearnServices.Models.Group;
 
 namespace UlearnServices.Services
 {
     public class GroupsService
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public GroupsService(ApplicationDbContext context)
+        public GroupsService(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public bool GroupExists(int id)
@@ -21,39 +27,158 @@ namespace UlearnServices.Services
             return _context.Modules.Any(e => e.Id == id);
         }
 
-        public async Task<List<Group>> GetAsync()
+        public async Task<List<FullGroupDto>> GetAsync()
         {
-            return await _context.Groups
-                .Include(group => group.UserGroups)
-                    .ThenInclude(userGroup => userGroup.User)
-                .ToListAsync();
+            return (await _context.Groups
+                    .Include(x => x.Course)
+                    .Include(x => x.UserGroups)
+                    .ThenInclude(x => x.User)
+                    .ToListAsync())
+                .Select(x => new FullGroupDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    CourseId = x.Course.Id,
+                    Emails = x.UserGroups
+                        .Select(y => y.User.Email)
+                        .ToList()
+                })
+                .ToList();
         }
 
-        public async Task<Group> FindAsync(int id)
+        public async Task<FullGroupDto> FindAsync(int id)
         {
-            return await _context.Groups
-                .Include(group => group.UserGroups)
-                    .ThenInclude(userGroup => userGroup.User)
+            var group = await _context.Groups
+                .Include(x => x.Course)
+                .Include(x => x.UserGroups)
+                .ThenInclude(x => x.User)
                 .FirstOrDefaultAsync(module => module.Id == id);
+            return new FullGroupDto
+            {
+                Id = group.Id,
+                Name = group.Name,
+                CourseId = group.Course.Id,
+                Emails = group.UserGroups
+                    .Select(x => x.User.Email)
+                    .ToList()
+            };
         }
 
-        public async Task<Group> CreateAsync(Group group)
+        public async Task<FullGroupDto> CreateAsync(string userId, GroupDto model)
         {
+            var group = new Group
+            {
+                Name = model.Name,
+                Course = await _context.Courses.FindAsync(model.CourseId),
+            };
+
+            if (group.Course == null)
+            {
+                throw new ArgumentException();
+            }
+            
+            var users = (await Task.WhenAll(model.Emails
+                    .Select(x => _userManager.FindByEmailAsync(x))))
+                .ToList();
+            users.Add(await _context.Users.FindAsync(userId));
+            
+            group.UserGroups = users
+                .Where(x => x != null)
+                .Select(x => new UserGroup
+                {
+                    Group = group,
+                    User = x
+                })
+                .ToList();
+
             _context.Groups.Add(group);
             await _context.SaveChangesAsync();
-            return group;
+
+            return new FullGroupDto
+            {
+                Id = group.Id,
+                Name = group.Name,
+                CourseId = group.Course.Id,
+                Emails = group.UserGroups
+                    .Select(x => x.User.Email)
+                    .ToList()
+            };
         }
 
-        public async Task PutAsync(Group group)
+        public async Task PutAsync(int id, GroupDto model)
         {
+            var group = await _context.Groups.FindAsync(id);
+
+            group.Course = await _context.Courses.FindAsync(model.CourseId);
+            if (group.Course == null)
+            {
+                throw new ArgumentException();
+            }
+
+            group.UserGroups = (await Task.WhenAll(model.Emails
+                    .Select(x => _userManager.FindByEmailAsync(x))))
+                .Select(x => new UserGroup
+                {
+                    Group = group,
+                    User = x
+                })
+                .ToList();
+
             _context.Entry(group).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
 
-        public async Task Remove(Group group)
+        public async Task<FullGroupDto> Remove(int id)
         {
+            var group = _context.Groups
+                .Include(x => x.Course)
+                .Include(x => x.UserGroups)
+                .ThenInclude(x => x.User)
+                .First(x => x.Id == id);
+
             _context.Groups.Remove(group);
             await _context.SaveChangesAsync();
+            return new FullGroupDto
+            {
+                Id = group.Id,
+                Name = group.Name,
+                CourseId = group.Course.Id,
+                Emails = group.UserGroups
+                    .Select(x => x.User.Email)
+                    .ToList()
+            };
+        }
+
+        public async Task<bool> HasUser(User user, int groupId)
+        {
+            var group = await _context.Groups
+                .Include(g => g.UserGroups)
+                .ThenInclude(userGroup => userGroup.User)
+                .FirstOrDefaultAsync(g => g.Id == groupId);
+
+            return group.UserGroups
+                .FirstOrDefault(userGroup => userGroup.User.Id == user.Id) != default;
+        }
+
+        public async Task<List<FullGroupDto>> GetByUser(string userId)
+        {
+            return (await _context.Groups
+                    .Include(x => x.Course)
+                    .Include(x => x.UserGroups)
+                    .ThenInclude(x => x.User)
+                    .ToListAsync())
+                .Where(x => x.UserGroups != null &&
+                            x.UserGroups.Any(y => y.User != null && y.User.Id == userId))
+                .Select(x => new FullGroupDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    CourseId = x.Course.Id,
+                    Emails = x.UserGroups
+                        .Select(y => y.User.Email)
+                        .ToList()
+                })
+                .ToList();
         }
     }
 }

@@ -12,15 +12,22 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using UlearnAPI.Chat;
+using UlearnAPI.Middleware;
 using UlearnData;
 using UlearnData.Models;
 using UlearnServices.Services;
+using UlearnServices.Services.CodeTasks;
+using UlearnServices.Services.TestTasks;
+using UlearnServices.Services.VideoTasks;
 
 namespace UlearnAPI
 {
@@ -30,7 +37,7 @@ namespace UlearnAPI
         {
             Configuration = configuration;
         }
-
+        
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -55,6 +62,14 @@ namespace UlearnAPI
                     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
+                .AddGoogle(options =>
+                {
+                    IConfigurationSection googleAuthNSection =
+                        Configuration.GetSection("Authentication:Google");
+                    //FIXME: change secrets in appsettings.json
+                    options.ClientId = googleAuthNSection["ClientId"];
+                    options.ClientSecret = googleAuthNSection["ClientSecret"];
+                })
                 .AddJwtBearer(x =>
                 {
                     x.RequireHttpsMetadata = false;
@@ -69,11 +84,20 @@ namespace UlearnAPI
                         ClockSkew = TimeSpan.Zero
                     };
                 });
+            
+            // requires using Microsoft.Extensions.Options
+            services.Configure<UlearnDatabaseSettings>(
+                Configuration.GetSection(nameof(UlearnDatabaseSettings)));
+
+            services.AddSingleton<IUlearnDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<UlearnDatabaseSettings>>().Value);
 
             services.AddAuthorization();
             services.AddControllers();
             services.AddSwaggerDocument();
-
+            
+            services.AddMemoryCache();
+            services.AddResponseCompression();
 
             services.AddScoped<SubscriptionsService>();
             services.AddScoped<ModulesService>();
@@ -83,20 +107,28 @@ namespace UlearnAPI
             services.AddScoped<CodeTasksService>();
             services.AddScoped<VideoTasksService>();
             services.AddScoped<AccountService>();
+            services.AddScoped<LoggingService>();
+            services.AddScoped<CodeTaskResultService>();
+            services.AddScoped<VideoTaskResultService>();
+            services.AddScoped<TestTaskResultService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<MongoLogMiddleware>();
+            
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
             if (env.IsDevelopment())
             {
-                app.UseCors(builder => builder.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader());
+                app.UseCors(builder => builder.WithOrigins("http://localhost:3000").AllowCredentials().AllowAnyMethod().AllowAnyHeader());
                 app.UseDeveloperExceptionPage();
             }
 
             app.UseRouting();
+            
+            app.UseResponseCompression();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -120,7 +152,7 @@ namespace UlearnAPI
         {
             var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            string[] roleNames = {"Admin"};
+            string[] roleNames = {"Admin","Teacher"};
 
             foreach (var roleName in roleNames)
             {

@@ -1,13 +1,13 @@
 import React, {FC, useContext} from 'react'
-import {IData, LoginModel, Token} from "../shared/interface";
-import {AuthContext} from "../context/AuthContext";
-import {useHttp} from "../hooks/http.hook";
-import jwt from 'jsonwebtoken'
 import {useHistory} from "react-router-dom"
-import {useForm} from "../hooks/form.hook";
-import {loginRequest} from "../shared/request";
-import {validationAuthForm} from "../shared/validation/validationAuthForm";
-import {Loader} from "../shared/utils/Loader";
+import {GoogleLogin} from 'react-google-login'
+import jwt from 'jsonwebtoken'
+import {IData, LoginModel, Token} from "../shared/interface"
+import {AuthContext} from "../context/AuthContext"
+import {useHttp} from "../hooks/http.hook"
+import {useForm} from "../hooks/form.hook"
+import {loginRequest} from "../shared/request"
+import {validationAuthForm} from "../shared/validation/validationAuthForm"
 
 
 export const LoginPage: FC = () => {
@@ -19,10 +19,22 @@ export const LoginPage: FC = () => {
         login: '',
         password: ''
     }
+    const responseGoogle = async (response: any) => {
+        const data: IData = await request(loginRequest, 'POST', {...response})
+        const decoded = jwt.decode(data.token!)
+        const token = decoded as Token
+        const role = token.role
+        auth.login(data.token, token.sub, role)
+
+        if (role === 'Admin') {
+            history.push('/admin/')
+        } else history.push('/')
+    }
 
     const {form, generateInputs, validation, errors} = useForm<LoginModel>(initialValues)
 
     const loginHandler = async (event: any) => {
+
         event.preventDefault()
         clearError()
         const isValid = validation(validationAuthForm)
@@ -31,6 +43,7 @@ export const LoginPage: FC = () => {
         }
         try {
             const data: IData = await request(loginRequest, 'POST', {...form})
+
             if (!data) {
                 return
             }
@@ -75,8 +88,19 @@ export const LoginPage: FC = () => {
                         disabled={loading}
                         className="btn btn-primary btn-block" type="submit">Log In
                     </button>
+                    <div className="text-center pt-2">
+                        or
+                        <GoogleLogin
+                            clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+                            buttonText="Login"
+                            onSuccess={responseGoogle}
+                            onFailure={() => {
+                            }}
+                        />
+                    </div>
                 </div>
             </form>
+
         </>
     )
 }

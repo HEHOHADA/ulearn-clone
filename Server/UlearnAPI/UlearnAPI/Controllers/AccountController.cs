@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using UlearnAPI.AOP;
 using UlearnData.Models;
 using UlearnServices.Models.Account;
 using UlearnServices.Services;
@@ -42,6 +44,14 @@ namespace UlearnAPI.Controllers
             _appEnvironment = appEnvironment;
         }
 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Get()
+        {
+            var userId = User.FindFirstValue("sub");
+            return Ok(await _accountService.Get(userId));
+        }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
@@ -62,13 +72,6 @@ namespace UlearnAPI.Controllers
                 }
 
                 model.Login = user.UserName;
-            }
-            else
-            {
-                if (!new Regex(@"^[a-zA-Z0-9]*$").IsMatch(model.Login))
-                {
-                    return BadRequest(new {Message = new[] {"Username is not valid"}});
-                }
             }
 
             var result = await _signInManager.PasswordSignInAsync(model.Login, model.Password, false, false);
@@ -95,6 +98,10 @@ namespace UlearnAPI.Controllers
 
             if (result.Succeeded)
             {
+                Console.WriteLine($"Account with username {model.UserName} " +
+                                  $"email {model.Email} " +
+                                  $"and password {model.Password} " +
+                                  $"was successfully created");
                 await _signInManager.SignInAsync(user, false);
                 return Ok(new {Token = await GenerateJwtToken(user)});
             }
@@ -108,54 +115,125 @@ namespace UlearnAPI.Controllers
         }
 
         [HttpPut("updateData")]
-        [Authorize]
-        public async Task<IActionResult> UpdateData([FromBody] UserInfoDto model)
+        [SensitiveAuthorize]
+        public async Task<IActionResult> UpdateData([FromBody] FullUserInfoDto model)
         {
             var userId = User.FindFirstValue("sub");
-            var user = await _userManager.FindByIdAsync(userId);
-            await _userManager.SetUserNameAsync(user, model.Username);
-            await _userManager.SetEmailAsync(user, model.Email);
-            await _accountService.Update(userId, new UserInfo
-            {
-                Firstname = model.Firstname, Lastname = model.Lastname
-            });
-            return Ok();
+            await _accountService.Update(userId, model);
+            return Ok(new { });
         }
 
         [HttpPost("changePassword")]
-        [Authorize]
+        [SensitiveAuthorize]
         public async Task<IActionResult> ChangePassword(PasswordDto model)
         {
             var userId = User.FindFirstValue("sub");
             var user = await _userManager.FindByIdAsync(userId);
-            await _userManager.ChangePasswordAsync(user, model.Current, model.Password);
-            return Ok();
+            var result = await _userManager.ChangePasswordAsync(user, model.Current, model.Password);
+            if (result.Succeeded)
+            {
+                return Ok(new { });
+            }
+
+            return BadRequest();
         }
 
         [HttpPost("setImage")]
         [Authorize]
         public async Task<IActionResult> SetImage(IFormFile file)
         {
-            string fileName = new Guid() + new FileInfo(file.FileName).Extension;
-            using (var fileStream = new FileStream(_appEnvironment.WebRootPath + "/Files/" + fileName, FileMode.Create))
+            string fileName = Guid.NewGuid() + new FileInfo(file.FileName).Extension;
+            //TODO: Не хош проверочку добавить на существование папки?
+            var directoryPath = _appEnvironment.ContentRootPath + "/Files/";
+            Directory.CreateDirectory(Path.GetDirectoryName(directoryPath));
+            using (var fileStream = new FileStream(directoryPath + fileName, FileMode.Create))
             {
                 await file.CopyToAsync(fileStream);
             }
-            
+
             var userId = User.FindFirstValue("sub");
             await _accountService.SetImage(userId, fileName);
-            return Ok();
+            return Ok(new {fileName = fileName});
         }
 
         [HttpPost("confirmTeacher")]
-        [Authorize]
+        [SensitiveAuthorize]
         public async Task<IActionResult> ConfirmTeacher()
         {
             var userId = User.FindFirstValue("sub");
             await _accountService.ConfirmTeacher(userId);
-            return Ok();
+            var user = await _userManager.FindByIdAsync(userId);
+            return Ok(new {Token = await GenerateJwtToken(user)});
         }
-        
+
+        [HttpPost("auth/google")]
+        public async Task<IActionResult> GoogleLogin(GoogleLogin request)
+        {
+            try
+            {
+                var user = await GetOrCreateExternalLoginUser("google", request.Subject, request.Email,
+                    request.GivenName, request.FamilyName);
+
+                return Ok(new {Token = await GenerateJwtToken(user)});
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        /*[HttpPost("auth/google")]
+        public async Task<IActionResult> GoogleLogin(GoogleLogin request)
+        {
+            try
+            {
+                var payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken,
+                    new GoogleJsonWebSignature.ValidationSettings
+                    {
+                        Audience = new[] {_configuration["Authentication:Google:ClientId"]}
+                    });
+                var user = await GetOrCreateExternalLoginUser("google", payload.Subject, payload.Email,
+                    payload.GivenName, payload.FamilyName);
+
+                return Ok(new {Token = await GenerateJwtToken(user)});
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }*/
+
+        private async Task<User> GetOrCreateExternalLoginUser(string provider, string key, string email,
+            string firstName, string lastName)
+        {
+            // Login already linked to a user
+            var user = await _userManager.FindByLoginAsync(provider, key);
+            if (user != null)
+                return user;
+
+            user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                // No user exists with this email address, we create a new one
+                user = new User
+                {
+                    Email = email,
+                    UserName = email,
+                    Firstname = firstName,
+                    Lastname = lastName
+                };
+
+                await _userManager.CreateAsync(user);
+            }
+
+            // Link the user to this login
+            var info = new UserLoginInfo(provider, key, provider.ToUpperInvariant());
+            var result = await _userManager.AddLoginAsync(user, info);
+            if (result.Succeeded)
+                return user;
+            return null;
+        }
+
 
         private async Task<string> GenerateJwtToken(User user)
         {
@@ -185,7 +263,31 @@ namespace UlearnAPI.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        [HttpGet("checkSubscription/{courseId}")]
+        [Authorize]
+        public async Task<ActionResult<bool>> CheckSubscription(int courseId)
+        {
+            var userId = User.FindFirstValue("sub");
+            var result = await _accountService.IsCourseAvailable(userId, courseId);
+            if (result.HasAccess)
+                return Ok(new {HasAccess = true});
+            return Ok(new {SubscriptionId = result.course.Subscription.Id});
+        }
     }
+
+    public class GoogleLogin
+    {
+        public string Email { get; set; }
+        public string GivenName { get; set; }
+        public string FamilyName { get; set; }
+        public string Subject { get; set; }
+    }
+
+    /*public class GoogleLogin
+    {
+        public string IdToken { get; set; }
+    }*/
 
     public class LoginDto
     {
@@ -203,14 +305,6 @@ namespace UlearnAPI.Controllers
         [Required]
         [StringLength(100, ErrorMessage = "PASSWORD_MIN_LENGTH", MinimumLength = 6)]
         public string Password { get; set; }
-    }
-
-    public class UserInfoDto
-    {
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string Firstname { get; set; }
-        public string Lastname { get; set; }
     }
 
     public class PasswordDto

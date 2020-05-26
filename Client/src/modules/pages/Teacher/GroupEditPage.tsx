@@ -1,26 +1,31 @@
-import React, {useEffect} from 'react'
-import {GroupCreateForm} from "../../components/teacher/Group/GroupCreateForm";
-import {useHttp} from "../../hooks/http.hook";
-import {useParams} from 'react-router-dom';
+import React from 'react'
+import {GroupCreateForm} from "../../components/teacher/Group/GroupCreateForm"
+import {useHttp} from "../../hooks/http.hook"
+import {useParams, useHistory} from 'react-router-dom'
+import {groupRequest} from "../../shared/request"
+import {useFetch} from "../../hooks/fetch.hook"
+import {IGroup} from "../../shared/interface"
 
 
 export const GroupEditPage = () => {
     const {request} = useHttp()
     const {id} = useParams()
+    const history = useHistory()
 
-    useEffect(() => {
-        //const data = request(`api/groups/${id}`,'GET')
-    }, [id])
+    const {fetched, isBusy} = useFetch<IGroup>(`${groupRequest}/${id}`)
 
-    const onSubmit = (event: any, form: any) => {
+    const onSubmit = async (event: any, form: any) => {
         event.preventDefault()
 
-        const response = request('api/groups/edit', 'POST', form)
+        await request(`${groupRequest}/${id}`, 'PUT', {...form})
+        history.push('/groups')
     }
+
     return (
         <main className="page">
             <div className="container pt-5">
-                <GroupCreateForm onSubmit={onSubmit}/>
+                {!isBusy && <GroupCreateForm initialValues={fetched}
+                                             onSubmit={onSubmit}/>}
             </div>
         </main>
     )
