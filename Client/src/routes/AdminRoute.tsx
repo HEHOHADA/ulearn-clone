@@ -10,9 +10,8 @@ import {CoursePage} from '../modules/pages/Admin/Courses/CoursePage'
 import {CourseCreate} from '../modules/pages/Admin/Courses/CourseCreate'
 import {CourseEdit} from '../modules/pages/Admin/Courses/CourseEdit'
 import {ModuleCreate} from '../modules/pages/Admin/Modules/ModuleCreate'
-import {Theme} from "../modules/pages/User/course/Theme";
-import {ModulePage} from "../modules/pages/Admin/Modules/ModulePage";
-import {ThemePage} from "../modules/pages/Admin/Theme/ThemePage";
+import {ModulePage} from "../modules/pages/Admin/Modules/ModulePage"
+import {ThemePage} from "../modules/pages/Admin/Theme/ThemePage"
 
 
 export const useAdminRoute = () => {

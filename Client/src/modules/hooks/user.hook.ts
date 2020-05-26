@@ -11,7 +11,7 @@ export const useUser = () => {
         module !== undefined && setModule(module)
         theme !== undefined && setTheme(theme)
     }, [])
-
+    console.log(theme, module, course)
     return {theme, module, course, chooseTheme}
 
 }

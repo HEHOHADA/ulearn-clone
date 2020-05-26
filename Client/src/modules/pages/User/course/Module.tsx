@@ -1,5 +1,8 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Link} from 'react-router-dom'
+import {useFetch} from "../../../hooks/fetch.hook";
+import {IModule} from "../../../shared/interface";
+import {moduleRequest} from "../../../shared/request";
 
 interface Props {
     onChooseTheme: (data: { theme?: any, module?: any, course?: any }) => void
@@ -8,6 +11,7 @@ interface Props {
     theme?: any
 }
 
+type typeTasks = "codeTasks" | "videoTasks" | "testTasks"
 export const Module = (props: Props) => {
 
     const array = [
@@ -15,27 +19,27 @@ export const Module = (props: Props) => {
         {id: 2, name: "qq1", points: 5, maxPoints: 5},
     ]
 
-    const {onChooseTheme, course, theme = array} = props
-
+    const {onChooseTheme, course, id} = props
+    const {fetched, isBusy} = useFetch<IModule>(`${moduleRequest}/${id}`)
 
     const onClickBackHandler = () => {
         onChooseTheme({module: null})
     }
 
-    const onChooseThemaHandler = (id: any) => {
-        const current = theme.filter((t: any) => t.id === id)[0]
-        onChooseTheme({course: course, theme: current})
+    const onChooseThemaHandler = (theme: any) => {
+
+        onChooseTheme({course: course, module: id, theme: theme})
     }
 
-    const renderModules = () => {
-        return array.map((m, index) => (
+    const renderModules = (type: typeTasks) => {
+        return fetched && (fetched[type] as any).map((m: any) => (
             <li key={`${m.id}-${m.name}`} className="list-group-item module">
                 <Link to={`/course/${course}/${m.id}`}
                       className="btn btn-link"
-                      onClick={() => onChooseThemaHandler(m.id)}>
+                      onClick={() => onChooseThemaHandler(m)}>
                     <div>{m.name}</div>
                 </Link>
-                <span>{m.points}/{m.maxPoints}</span>
+                <span>{m.points}</span>
             </li>
         ))
     }
@@ -46,8 +50,10 @@ export const Module = (props: Props) => {
                 <h3>Header</h3>
             </header>
             <div>
-                {renderModules()}
-            </div>
+                {renderModules("testTasks")}
+                {renderModules("codeTasks")}
+
+            </div> {renderModules("videoTasks")}
         </div>
     )
 }

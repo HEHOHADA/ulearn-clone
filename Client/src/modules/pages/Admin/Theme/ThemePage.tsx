@@ -2,7 +2,7 @@ import {useHttp} from "../../../hooks/http.hook";
 import {useHistory, useParams} from "react-router-dom";
 import {useFetch} from "../../../hooks/fetch.hook";
 import {IModule} from "../../../shared/interface";
-import {codeTaskRequest, moduleRequest, testTackRequest, videoTaskRequest} from "../../../shared/request";
+import {codeTaskRequest, moduleRequest, testTaskRequest, videoTaskRequest} from "../../../shared/request";
 import React, {useEffect, useState} from "react";
 import {VideoElement} from "../../../shared/utils/VideoElement";
 import {CodeEditor} from "../../../shared/utils/CodeEditor";
@@ -30,7 +30,7 @@ export const ThemePage = () => {
             newModule.videoTasks = newModule.videoTasks.filter(x => x.id !== id)
         }
         if (option === Options.Test) {
-            await request(`${testTackRequest}/${id}`, 'DELETE')
+            await request(`${testTaskRequest}/${id}`, 'DELETE')
             newModule.testTasks = newModule.testTasks.filter(x => x.id !== id)
         }
         if (option === Options.Code) {

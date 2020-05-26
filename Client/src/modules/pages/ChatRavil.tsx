@@ -4,13 +4,15 @@ import {URL} from "../shared/request"
 import {FormInput} from "../shared/utils/FormInput"
 
 export const ChatRavil = () => {
+
     const username = 'Ravil'
     const [hubConnection, setHubConnection] = useState<HubConnection>()
-    const [message, setMessage] = useState('')
-    const [messages, setMessages] = useState<string[]>([])
-    const submit = (event: any) => {
+    const [something, setSomething] = useState('')
+    const [messages, setMessages] = useState<string[]>(['dasdas', 'dasdas'])
+    const submit = async (event: any) => {
         event.preventDefault()
-        hubConnection!.send('newMessage', username, message)
+        setSomething('')
+        await hubConnection!.send('newMessage', username, something)
     }
 
     useEffect(() => {
@@ -21,18 +23,15 @@ export const ChatRavil = () => {
             try {
                 await hubConnect.start()
                 console.log('Connection successful!')
-                hubConnect.on('messageRecieved',
+                hubConnect.on('messageReceived',
                     (username: string, message: string) => {
-                        const newMessages = messages
-                        newMessages.push(message)
-                        setMessages(newMessages)
+                        setMessages(x => [...x, message])
                     })
             } catch (err) {
                 console.log(err)
             }
             setHubConnection(hubConnect)
         }
-
         createHubConnection()
     }, [])
 
@@ -41,14 +40,16 @@ export const ChatRavil = () => {
             <div className="container">
                 <form onSubmit={submit}>
                     <div className="card-body">
-                        {messages.map(m => {
+                        {messages && messages.map((m, i) => {
                             return (
-                                <span>{m}</span>
+                                <div className="card" key={`${m}-${i}`}>{m}</div>
                             )
                         })}
                     </div>
-                    <FormInput onChange={(event) => setMessage(event.target.value)
-                    } name={'message'} formValue={message}/>
+                    <FormInput onChange={(event) => {
+                        setSomething(event.target.value)
+                    }}
+                               name={'message'} formValue={something}/>
                     <button>send</button>
                 </form>
             </div>
