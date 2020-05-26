@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useState} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import {ISubscription} from "../../../shared/interface"
 import {useForm} from "../../../hooks/form.hook";
 import {useHttp} from "../../../hooks/http.hook";
@@ -32,8 +32,12 @@ export const CourseForm: FC<IProps> = (props: IProps) => {
     const {loading} = useHttp()
     const {request} = useHttp()
     const [subscriptions, setSubscriptions] = useState<Array<ISubscription>>([])
-    const {fetched, isBusy} = useFetch(subscriptionRequest)
-
+    const {fetched, isBusy} = useFetch<Array<ISubscription>>(subscriptionRequest)
+    useEffect(() => {
+        if (!isBusy) {
+            setSubscriptions(fetched!)
+        }
+    }, [isBusy])
     // useEffect(() => {
     //     if (!isBusy) {
     //         setSubscriptions(fetched)
@@ -41,17 +45,17 @@ export const CourseForm: FC<IProps> = (props: IProps) => {
     //     }
     // }, [isBusy])
 
-    const fetchCourse = useCallback(async () => {
-        try {
-            setSubscriptions(await request(subscriptionRequest, 'GET'))
-        } catch (e) {
-            console.log(e)
-        }
-    }, [])
-
-    useEffect(() => {
-        fetchCourse()
-    }, [])
+    // const fetchCourse = useCallback(async () => {
+    //     try {
+    //         setSubscriptions(await request(subscriptionRequest, 'GET'))
+    //     } catch (e) {
+    //         console.log(e)
+    //     }
+    // }, [])
+    //
+    // useEffect(() => {
+    //     fetchCourse()
+    // }, [])
 
     const {initialValues = defaultCourseValue, onSubmit, title} = props
 
@@ -62,7 +66,7 @@ export const CourseForm: FC<IProps> = (props: IProps) => {
         >
             {generateInputs(undefined, ["name",
                 "description"])}
-            {!isBusy && <SelectInput
+            <SelectInput
                 optionName={subscriptionNames(subscriptions)}
                 name={'courseName'}
                 onSelect={(selectedItem: any) => {
@@ -70,7 +74,7 @@ export const CourseForm: FC<IProps> = (props: IProps) => {
                 }}
                 value={form.subscriptionId}
                 data={subscriptions.map(x => x.id)}
-                label={'chose course'}/>}
+                label={'chose course'}/>
             <button
                 disabled={loading}
                 className="btn btn-primary btn-block" type="submit">{title}

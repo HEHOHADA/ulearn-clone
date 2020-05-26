@@ -1,20 +1,15 @@
 import React from 'react'
 import {SubscriptionView} from "../components/pay/SubscriptionView"
-import {useHttp} from "../hooks/http.hook"
 import {subscriptionRequest} from "../shared/request"
 import {useFetch} from "../hooks/fetch.hook"
 import {ISubscription} from "../shared/interface";
+import {useHistory} from 'react-router-dom'
 
 export const SubscriptionPage = () => {
-    const {request} = useHttp()
-    const {fetched} = useFetch<Array<ISubscription>>(subscriptionRequest)
-
-    const onClickSubscription = async (id: number) => {
-        try {
-
-        } catch (e) {
-            console.log(e)
-        }
+    const {fetched, isBusy} = useFetch<Array<ISubscription>>(subscriptionRequest)
+    const history = useHistory()
+    const onClickSubscription = (id: number) => {
+        history.push(`pay/${id}`)
     }
 
     return (
@@ -27,8 +22,9 @@ export const SubscriptionPage = () => {
                             in, mattis vitae leo.</p>
                     </div>
                     <div className="row">
+                        {!isBusy &&
                         <SubscriptionView loading={true} subscription={fetched} onClick={onClickSubscription}
-                                          text={"Buy now"}/>
+                                          text={"Buy now"}/>}
                     </div>
                 </div>
             </section>
