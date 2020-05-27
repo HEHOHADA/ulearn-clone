@@ -15,7 +15,7 @@ WORKDIR /src/UlearnAPI
 # dotnet ef tool
 RUN dotnet tool update --global dotnet-ef --version 3.0.0-preview7.19362.6
 RUN dotnet tool restore
-ENV PATH="$PATH:/root/.dotnet/tools"
+ENV PATH="${PATH}:/root/.dotnet/tools"
 RUN dotnet ef database update
 
 RUN dotnet publish -c Release -o /src/publish
