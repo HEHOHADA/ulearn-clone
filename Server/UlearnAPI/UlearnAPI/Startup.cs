@@ -33,9 +33,11 @@ namespace UlearnAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IWebHostEnvironment _env;
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -44,23 +46,26 @@ namespace UlearnAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSignalR();
-            Console.WriteLine($"URL 1 IS {Environment.GetEnvironmentVariable("DATABASE_URL")}");
-            Console.WriteLine($"URL 2 IS {Configuration["DATABASE_URL"]}");
-            var builder = new PostgreSqlConnectionStringBuilder(Environment.GetEnvironmentVariable("DATABASE_URL"))
-            //var builder = new PostgreSqlConnectionStringBuilder("postgres://inercyilgnsbbb:fe7a72cd2d12a9794b760c1a988accb3c549f878183740d0d95cc9fb596d3e81@ec2-54-217-236-206.eu-west-1.compute.amazonaws.com:5432/db5isp5cqn5ghg")
+
+            if (_env.IsProduction())
             {
-                Pooling = true,
-                TrustServerCertificate = true,
-                SslMode = SslMode.Require
-            };
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(builder.ConnectionString,
+                var builder = new PostgreSqlConnectionStringBuilder(Configuration["DATABASE_URL"])
+                {
+                    Pooling = true,
+                    TrustServerCertificate = true,
+                    SslMode = SslMode.Require
+                };
+                services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseNpgsql(builder.ConnectionString,
                     b => b.MigrationsAssembly("UlearnAPI")));
-/*
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("SqliteLocal"),
-                    b => b.MigrationsAssembly("UlearnAPI")));
-*/
+            }
+            if (_env.IsDevelopment())
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlite(Configuration.GetConnectionString("SqliteLocal"),
+                        b => b.MigrationsAssembly("UlearnAPI")));
+            }
+
             services.AddIdentity<User, IdentityRole>(options => { options.User.RequireUniqueEmail = true; })
                 .AddRoles<IdentityRole>()
                 .AddRoleManager<RoleManager<IdentityRole>>()
@@ -127,16 +132,26 @@ namespace UlearnAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //тут монга
+            UpdateDatabase(app);
+            
             app.UseMiddleware<MongoLogMiddleware>();
 
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
             if (env.IsDevelopment())
             {
-                app.UseCors(builder => builder.WithOrigins("http://localhost:3000").AllowCredentials().AllowAnyMethod()
+                app.UseCors(builder => builder.WithOrigins("http://localhost:3000")
+                    .AllowCredentials()
+                    .AllowAnyMethod()
                     .AllowAnyHeader());
                 app.UseDeveloperExceptionPage();
+            }
+            if (env.IsProduction())
+            {
+                app.UseCors(builder => builder.WithOrigins(Configuration["CLIENT_URL"])
+                    .AllowCredentials()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
             }
 
             app.UseRouting();
@@ -157,12 +172,26 @@ namespace UlearnAPI
             app.UseOpenApi();
             app.UseSwaggerUi3();
 
-            using var scope = app.ApplicationServices.CreateScope();
-            CreateRoles(scope.ServiceProvider.GetService<IServiceProvider>()).Wait();
+            CreateRoles(app).Wait();
+        }
+        
+        private static void UpdateDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
         }
 
-        private async Task CreateRoles(IServiceProvider serviceProvider)
+        private async Task CreateRoles(IApplicationBuilder app)
         {
+            IServiceProvider serviceProvider = app.ApplicationServices
+                .CreateScope().ServiceProvider.GetService<IServiceProvider>();
             var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             string[] roleNames = {"Admin", "Teacher"};
