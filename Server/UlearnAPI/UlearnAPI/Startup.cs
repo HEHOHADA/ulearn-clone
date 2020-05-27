@@ -53,7 +53,7 @@ namespace UlearnAPI
                 TrustServerCertificate = true,
                 SslMode = SslMode.Require
             };
-            services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(builder.ConnectionString,
                     b => b.MigrationsAssembly("UlearnAPI")));
 /*
