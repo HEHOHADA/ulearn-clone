@@ -1,4 +1,4 @@
-export const URL = "https://ulearnclone.azurewebsites.net/"
+export const URL = "https://ulearnclone.herokuapp.com/"
 
 export const api = URL + "api"
 export const registerRequest = URL + "api/account/register"
