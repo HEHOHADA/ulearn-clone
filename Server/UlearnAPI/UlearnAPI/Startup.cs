@@ -1,23 +1,15 @@
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using UlearnAPI.Chat;
@@ -34,6 +26,7 @@ namespace UlearnAPI
     public class Startup
     {
         private readonly IWebHostEnvironment _env;
+
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
@@ -47,24 +40,15 @@ namespace UlearnAPI
         {
             services.AddSignalR();
 
-            if (_env.IsProduction())
-            {
-                var builder = new PostgreSqlConnectionStringBuilder(Configuration["DATABASE_URL"])
-                {
-                    Pooling = true,
-                    TrustServerCertificate = true,
-                    SslMode = SslMode.Require
-                };
-                services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseNpgsql(builder.ConnectionString,
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseNpgsql(_env.IsDevelopment()
+                        ? Configuration.GetConnectionString("DevelopPostgres")
+                        : new PostgreSqlConnectionStringBuilder(Configuration["DATABASE_URL"])
+                        {
+                            Pooling = true, TrustServerCertificate = true, SslMode = SslMode.Require
+                        }.ConnectionString,
                     b => b.MigrationsAssembly("UlearnAPI")));
-            }
-            if (_env.IsDevelopment())
-            {
-                services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlite(Configuration.GetConnectionString("SqliteLocal"),
-                        b => b.MigrationsAssembly("UlearnAPI")));
-            }
+
 
             services.AddIdentity<User, IdentityRole>(options => { options.User.RequireUniqueEmail = true; })
                 .AddRoles<IdentityRole>()
@@ -104,17 +88,13 @@ namespace UlearnAPI
             // requires using Microsoft.Extensions.Options
             services.Configure<UlearnDatabaseSettings>(
                 Configuration.GetSection(nameof(UlearnDatabaseSettings)));
-
             services.AddSingleton<IUlearnDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<UlearnDatabaseSettings>>().Value);
-
             services.AddAuthorization();
             services.AddControllers();
             services.AddSwaggerDocument();
-
             services.AddMemoryCache();
             services.AddResponseCompression();
-
             services.AddScoped<SubscriptionsService>();
             services.AddScoped<ModulesService>();
             services.AddScoped<TestTasksService>();
@@ -129,15 +109,13 @@ namespace UlearnAPI
             services.AddScoped<TestTaskResultService>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             UpdateDatabase(app);
             
             app.UseMiddleware<MongoLogMiddleware>();
-
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
-
             if (env.IsDevelopment())
             {
                 app.UseCors(builder => builder.WithOrigins("http://localhost:3000")
@@ -146,6 +124,7 @@ namespace UlearnAPI
                     .AllowAnyHeader());
                 app.UseDeveloperExceptionPage();
             }
+
             if (env.IsProduction())
             {
                 app.UseCors(builder => builder.WithOrigins(Configuration["CLIENT_URL"])
@@ -155,26 +134,20 @@ namespace UlearnAPI
             }
 
             app.UseRouting();
-
             app.UseResponseCompression();
-
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseHttpsRedirection();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute("DefaultRoute", "api/{controller}/{action}/{id?}");
                 endpoints.MapHub<ChatHub>("/api/chat");
             });
-
             app.UseOpenApi();
             app.UseSwaggerUi3();
-
             CreateRoles(app).Wait();
         }
-        
+
         private static void UpdateDatabase(IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices
@@ -192,10 +165,11 @@ namespace UlearnAPI
         {
             IServiceProvider serviceProvider = app.ApplicationServices
                 .CreateScope().ServiceProvider.GetService<IServiceProvider>();
+
             var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            string[] roleNames = {"Admin", "Teacher"};
 
+            string[] roleNames = {"Admin", "Teacher"};
             foreach (var roleName in roleNames)
             {
                 if (!await roleManager.RoleExistsAsync(roleName))
@@ -205,7 +179,6 @@ namespace UlearnAPI
             }
 
             User user = await userManager.FindByEmailAsync("admin@mail.ru");
-
             if (user == null)
             {
                 var admin = new User()

@@ -10,8 +10,8 @@ using UlearnData;
 namespace UlearnAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200527163643_initPostgresAfterSqliteDrop")]
-    partial class initPostgresAfterSqliteDrop
+    [Migration("20200527220819_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
