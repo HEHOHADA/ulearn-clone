@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace UlearnAPI.Migrations
 {
-    public partial class init : Migration
+    public partial class initAfterFullDrop : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -76,6 +76,10 @@ namespace UlearnAPI.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(type: "TEXT", nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
                     AccessFailedCount = table.Column<int>(type: "INTEGER", nullable: false),
+                    Firstname = table.Column<string>(type: "TEXT", nullable: true),
+                    Lastname = table.Column<string>(type: "TEXT", nullable: true),
+                    ImageSrc = table.Column<string>(type: "TEXT", nullable: true),
+                    SubscriptionBoughtDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     SubscriptionId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
@@ -95,6 +99,8 @@ namespace UlearnAPI.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
                     SubscriptionId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
@@ -267,6 +273,8 @@ namespace UlearnAPI.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
+                    InitialCode = table.Column<string>(type: "TEXT", nullable: true),
+                    Points = table.Column<int>(type: "INTEGER", nullable: false),
                     ModuleId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
@@ -288,6 +296,7 @@ namespace UlearnAPI.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
+                    Points = table.Column<int>(type: "INTEGER", nullable: false),
                     ModuleId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
@@ -307,6 +316,7 @@ namespace UlearnAPI.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    VideoHref = table.Column<string>(type: "TEXT", nullable: true),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     ModuleId = table.Column<int>(type: "INTEGER", nullable: true)
@@ -328,6 +338,8 @@ namespace UlearnAPI.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    Points = table.Column<int>(type: "INTEGER", nullable: false),
+                    Code = table.Column<string>(type: "TEXT", nullable: true),
                     CodeTaskId = table.Column<int>(type: "INTEGER", nullable: true),
                     SenderId = table.Column<string>(type: "TEXT", nullable: true),
                     GroupId = table.Column<int>(type: "INTEGER", nullable: true)
@@ -362,6 +374,7 @@ namespace UlearnAPI.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Text = table.Column<string>(type: "TEXT", nullable: true),
+                    Points = table.Column<int>(type: "INTEGER", nullable: false),
                     TaskId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
@@ -369,6 +382,40 @@ namespace UlearnAPI.Migrations
                     table.PrimaryKey("PK_TestQuestions", x => x.Id);
                     table.ForeignKey(
                         name: "FK_TestQuestions_TestTasks_TaskId",
+                        column: x => x.TaskId,
+                        principalTable: "TestTasks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TestTaskResults",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Points = table.Column<int>(type: "INTEGER", nullable: false),
+                    TaskId = table.Column<int>(type: "INTEGER", nullable: true),
+                    SenderId = table.Column<string>(type: "TEXT", nullable: true),
+                    GroupId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TestTaskResults", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TestTaskResults_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TestTaskResults_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TestTaskResults_TestTasks_TaskId",
                         column: x => x.TaskId,
                         principalTable: "TestTasks",
                         principalColumn: "Id",
@@ -603,6 +650,21 @@ namespace UlearnAPI.Migrations
                 column: "TaskId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TestTaskResults_GroupId",
+                table: "TestTaskResults",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TestTaskResults_SenderId",
+                table: "TestTaskResults",
+                column: "SenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TestTaskResults_TaskId",
+                table: "TestTaskResults",
+                column: "TaskId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TestTasks_ModuleId",
                 table: "TestTasks",
                 column: "ModuleId");
@@ -660,6 +722,9 @@ namespace UlearnAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "QuestionAnswerResults");
+
+            migrationBuilder.DropTable(
+                name: "TestTaskResults");
 
             migrationBuilder.DropTable(
                 name: "UserGroup");
