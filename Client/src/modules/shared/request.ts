@@ -1,4 +1,4 @@
-export const URL = "https://localhost:5001/"
+export const URL = "https://ulearnclone.azurewebsites.net/"
 
 export const api = URL + "api"
 export const registerRequest = URL + "api/account/register"
