@@ -18,7 +18,7 @@ namespace UlearnAPI.Controllers
         }
 
         [HttpGet("download")]
-        public async Task<IActionResult> Download(string fileName)  
+        public IActionResult Download(string fileName)  
         {  
             if (fileName == null)  
                 return Content("filename not present");  
