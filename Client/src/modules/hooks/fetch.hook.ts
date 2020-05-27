@@ -22,9 +22,7 @@ export const useFetch = <T>(url: string) => {
 
     useEffect(() => {
         let mount = true
-        fetch().finally(() => {
-
-        })
+        setTimeout(() => fetch(), 1)
         return () => {
             mount = false
         }

@@ -5,25 +5,30 @@ import {FormInput} from "../shared/utils/FormInput"
 import {useAuth} from "../hooks/auth.hook";
 import jwt from "jsonwebtoken";
 import {Token} from "../shared/interface";
-import {useHttp} from "../hooks/http.hook";
+
+interface IMessage {
+    username: string
+    message: string
+}
 
 export const ChatRavil = () => {
     const a = useAuth().token
     const decoded = jwt.decode(a! as string)
     const tokenItems = decoded as Token
-    const [username, setUsername] = useState("")
     const [hubConnection, setHubConnection] = useState<HubConnection>()
     const [something, setSomething] = useState('')
-    const [messages, setMessages] = useState<string[]>([])
+    const [messages, setMessages] = useState<Array<IMessage>>([])
 
     const submit = async (event: any) => {
         event.preventDefault()
         setSomething('')
-        await hubConnection!.send('newMessage', tokenItems.name, something)
+        await hubConnection!.send('newMessage', tokenItems && tokenItems.name ? tokenItems.name
+            :
+            "Anonymous", something
+        )
     }
 
     useEffect(() => {
-        setUsername(tokenItems?.name ?? "")
         const createHubConnection = async () => {
             const hubConnect = new HubConnectionBuilder()
                 .withUrl(URL + 'api/chat')
@@ -33,7 +38,8 @@ export const ChatRavil = () => {
                 console.log('Connection successful!')
                 hubConnect.on('messageReceived',
                     (username: string, message: string) => {
-                        setMessages(x => [...x, message])
+                        setMessages(x => [...x, {username, message}])
+
                     })
                 await hubConnect.send('getAll')
             } catch (err) {
@@ -51,7 +57,12 @@ export const ChatRavil = () => {
                     <div className="card-body">
                         {messages && messages.map((m, i) => {
                             return (
-                                <div className="card" key={`${m}-${i}`}>{m}</div>
+                                <div className="card" key={`${m}-${i}`}>
+                                    <div className="card-body">
+                                        <strong className="m-1">{m.username}:</strong>
+                                        <span className="m-1">{m.message}</span>
+                                    </div>
+                                </div>
                             )
                         })}
                     </div>
