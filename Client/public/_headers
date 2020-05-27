@@ -1,0 +1,3 @@
+ for = "/*"
+    [headers.values]
+    Access-Control-Allow-Origin = https://ulearnclone.azurewebsites.net/
