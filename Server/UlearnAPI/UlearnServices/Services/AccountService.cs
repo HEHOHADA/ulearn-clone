@@ -61,18 +61,17 @@ namespace UlearnServices.Services
 
         public async Task<(bool HasAccess, Course course)> IsCourseAvailable(string userId, int courseId)
         {
-            var subscription = _context.Users
+            var user = _context.Users
                 .Include(x => x.Subscription)
-                .First(x => x.Id == userId)
-                .Subscription;
+                .First(x => x.Id == userId);
             var course = await _context.Courses
                 .Include(x => x.Subscription)
                 .FirstOrDefaultAsync(c => c.Id == courseId);
             if (course == default)
                 throw new ArgumentException("No courseId passed");
             return (
-                (subscription?.Level ?? 0) >= course.Subscription.Level &&
-                (DateTime.Now - (subscription?.BoughtDate ?? DateTime.MinValue)).TotalDays <= 30, course);
+                (user.Subscription?.Level ?? 0) >= course.Subscription.Level &&
+                (DateTime.Now - user.SubscriptionBoughtDate).TotalDays <= 30, course);
         }
     }
 }
