@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.StaticFiles;
 
 namespace UlearnAPI.Controllers
 {
-    [Route("api/{controller}")]
+    [Route("api/[controller]")]
     [ApiController]
     public class FilesController : ControllerBase
     {
@@ -18,7 +18,7 @@ namespace UlearnAPI.Controllers
         }
 
         [HttpGet("download")]
-        public async Task<IActionResult> Download(string fileName)  
+        public IActionResult Download(string fileName)  
         {  
             if (fileName == null)  
                 return Content("filename not present");  

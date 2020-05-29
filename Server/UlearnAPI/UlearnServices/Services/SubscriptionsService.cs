@@ -71,7 +71,7 @@ namespace UlearnServices.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Subscription>> GetSortedAsync(SearchQuery query)
+        public List<Subscription> GetSorted(SearchQuery query)
         {
             IQueryable<Subscription> subscriptions = _context.Subscriptions;
             if (query.SortType.HasValue)
