@@ -1,4 +1,4 @@
-export const URL = "https://ulearnclone.azurewebsites.net/"
+export const URL = `${process.env.REACT_APP_SERVER_URL}/`
 
 export const api = URL + "api"
 export const registerRequest = URL + "api/account/register"

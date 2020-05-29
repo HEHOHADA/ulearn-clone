@@ -12,7 +12,7 @@ export const useHttp = () => {
 
             if (!headers['Authorization'])
                 headers['Authorization'] = `Bearer ${auth.token}`
-
+            headers['Access-Control-Allow-Origin'] = 'https://ulearnclone.azurewebsites.net'
             if (body && !headers['Content-Type']) {
                 body = JSON.stringify(body)
                 headers['Content-Type'] = 'application/json'
