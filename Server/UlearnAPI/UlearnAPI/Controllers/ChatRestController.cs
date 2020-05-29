@@ -7,11 +7,11 @@ namespace UlearnAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ChatController : ControllerBase
+    public class ChatRestController : ControllerBase
     {
         private readonly ChatService _chatService;
 
-        public ChatController(ChatService chatService)
+        public ChatRestController(ChatService chatService)
         {
             _chatService = chatService;
         }
