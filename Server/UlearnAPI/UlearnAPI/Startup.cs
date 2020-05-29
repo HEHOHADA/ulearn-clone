@@ -85,20 +85,26 @@ namespace UlearnAPI
                     };
                 });
 
-            // requires using Microsoft.Extensions.Options
-            services.AddSingleton<UlearnDatabaseSettings>();
             services.Configure<UlearnDatabaseSettings>(options =>
             {
                 options.DatabaseName = Configuration["Mongo:DatabaseName"];
                 options.LogsCollectionName = Configuration["Mongo:LogsCollectionName"];
                 options.MessagesCollectionName = Configuration["Mongo:MessagesCollectionName"];
-                options.ConnectionString = Configuration["MONGO_CONNECTION_STRING"];
+                options.ConnectionString = _env.IsDevelopment()
+                    ? Configuration["Mongo:ConnectionString"]
+                    : Configuration["MONGO_CONNECTION_STRING"];
             });
+            services.AddSingleton(sp =>
+                sp.GetRequiredService<IOptions<UlearnDatabaseSettings>>().Value);
+            
             services.AddAuthorization();
             services.AddControllers();
+            
             services.AddSwaggerDocument();
+            
             services.AddMemoryCache();
             services.AddResponseCompression();
+            
             services.AddScoped<SubscriptionsService>();
             services.AddScoped<ModulesService>();
             services.AddScoped<TestTasksService>();
@@ -118,7 +124,7 @@ namespace UlearnAPI
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             UpdateDatabase(app);
-            
+
             app.UseMiddleware<MongoLogMiddleware>();
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
             if (env.IsDevelopment())
