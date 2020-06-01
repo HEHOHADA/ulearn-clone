@@ -44,12 +44,12 @@ namespace UlearnServices.Services
 
         public List<ChatMessage> GetAmount(int amount)
         {
-            return _messagess
+            var result = _messagess
                 .AsQueryable()
                 .OrderByDescending(message => message.Id)
                 .Take(amount)
                 .ToList();
-            
+            return result.OrderBy(message => message.Id).ToList();
         }
     }
 }
