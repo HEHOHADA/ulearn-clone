@@ -10,7 +10,7 @@
     "@types/react-credit-cards": "^0.8.0",
     "bootstrap": "^4.4.1",
     "jsonwebtoken": "^8.5.1",
-    "prismjs": "^1.20.0",
+    "prismjs": "^1.21.0",
     "react": "^16.13.1",
     "react-ace": "^8.1.0",
     "react-credit-cards": "^0.8.2",
