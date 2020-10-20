@@ -1,23 +1,23 @@
 import React from 'react'
-import {Redirect, Switch} from 'react-router-dom'
+import { Redirect, Switch } from 'react-router-dom'
 
-import {AppRoute} from "./AppRoute"
-import {ReviewPage} from "../modules/pages/Teacher/ReviewPage"
-import {MainLayout} from "../modules/shared/layout/MainLayout"
-import {GroupCreatePage} from "../modules/pages/Teacher/GroupCreatePage"
-import {GroupReviewPage} from "../modules/pages/Teacher/GroupReviewPage"
-import {GroupsPage} from "../modules/pages/Teacher/GroupsPage"
-import {GroupEditPage} from "../modules/pages/Teacher/GroupEditPage"
+import { AppRoute } from './AppRoute'
+import MainLayout from '../modules/shared/layout/MainLayout'
 
+const ReviewPage = React.lazy(() => import('../modules/pages/Teacher/ReviewPage'))
+const GroupCreatePage = React.lazy(() => import('../modules/pages/Teacher/GroupCreatePage'))
+const GroupsPage = React.lazy(() => import('../modules/pages/Teacher/GroupsPage'))
+const GroupEditPage = React.lazy(() => import('../modules/pages/Teacher/GroupEditPage'))
+const GroupReviewPage = React.lazy(() => import('../modules/pages/Teacher/GroupReviewPage'))
 
 export const useTeacherRoute = () => {
     return (
         <Switch>
-            <AppRoute exact path={"/code/:id"} component={ReviewPage} layout={MainLayout}/>
-            <AppRoute exact path={"/group/create"} component={GroupCreatePage} layout={MainLayout}/>
-            <AppRoute exact path={"/group/edit/:id"} component={GroupEditPage} layout={MainLayout}/>
-            <AppRoute exact path={"/groups"} component={GroupsPage} layout={MainLayout}/>
-            <AppRoute exact path={"/group/:id"} component={GroupReviewPage} layout={MainLayout}/>
+            <AppRoute exact path={ '/code/:id' } component={ ReviewPage } layout={ MainLayout }/>
+            <AppRoute exact path={ '/group/create' } component={ GroupCreatePage } layout={ MainLayout }/>
+            <AppRoute exact path={ '/group/edit/:id' } component={ GroupEditPage } layout={ MainLayout }/>
+            <AppRoute exact path={ '/groups' } component={ GroupsPage } layout={ MainLayout }/>
+            <AppRoute exact path={ '/group/:id' } component={ GroupReviewPage } layout={ MainLayout }/>
             <Redirect to="/"/>
         </Switch>
     )

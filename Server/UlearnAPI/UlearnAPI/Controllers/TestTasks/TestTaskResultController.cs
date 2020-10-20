@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
 using UlearnData.Models.Tasks.CodeTasks;
 using UlearnData.Models.Tasks.TestTasks;
 using UlearnServices.Models.Tasks.CodeTasks;
@@ -11,9 +10,9 @@ using UlearnServices.Services.TestTasks;
 
 namespace UlearnAPI.Controllers.TestTasks
 {
-    [Route("api/[controller]")]
+    [Route("api/{controller}")]
     [ApiController]
-    public class TestTaskResultController : ControllerBase
+    public class TestTaskResultController : Controller
     {
         private readonly TestTaskResultService _testTaskResultService;
 
@@ -22,9 +21,10 @@ namespace UlearnAPI.Controllers.TestTasks
             _testTaskResultService = testTaskResultService;
         }
 
+
         [HttpPost("confirm")]
         [Authorize]
-        public async Task<IActionResult> Confirm([FromBody] TestTaskResultDto model)
+        public async Task<IActionResult> Confirm(TestTaskResultDto model)
         {
             var userId = User.FindFirstValue("sub");
             await _testTaskResultService.Confirm(userId, model);

@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 const storageName = 'userData'
 
@@ -16,7 +16,6 @@ export const useAuth = () => {
         }))
     }, [])
     const logout = useCallback(() => {
-        debugger
         setToken(null)
         setUserId(null)
         setRole(null)

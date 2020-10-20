@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react'
-import {CheckboxInput} from "../../../shared/utils/CheckboxInput"
-import {IAnswer, IQuestion} from "../../../shared/interface"
+import React, { useEffect, useState } from 'react'
+import { CheckboxInput } from '../../utils/CheckboxInput'
+import { IAnswer, IQuestion } from '../../../shared/interface'
 
 interface Props {
     question: string
@@ -15,12 +15,10 @@ export const TestItem = (props: Props) => {
 
     const {question, answers, isSubmitting, change, id} = props
 
-    const initialClasses = answers.reduce(function (result: Map<string, string>, item: IAnswer) {
+    const [classes, setClasses] = useState<Map<string, string>>(() => answers.reduce(function (result: Map<string, string>, item: IAnswer) {
         result.set(item.text, '')
         return result
-    }, new Map<string, string>())
-
-    const [classes, setClasses] = useState<Map<string, string>>(initialClasses)
+    }, new Map<string, string>()))
 
     const [point, setPoint] = useState(1)
 
@@ -37,14 +35,12 @@ export const TestItem = (props: Props) => {
                 setAnswers(null)
             }
         } else {
-
             const newResult = answer ? [...answer, ans!] : [ans!]
             setAnswers(newResult)
             if (!ans!.isRight) {
                 setPoint(0)
             }
         }
-
     }
 
     useEffect(() => {
@@ -57,25 +53,22 @@ export const TestItem = (props: Props) => {
     }, [answer, isSubmitting])
 
     useEffect(() => {
-        if (isSubmitting)
-            validate()
+        if (isSubmitting) {
+            let classe: Map<string, string> = new Map()
+            answer && answer.forEach((a) => {
+                const inputClass = a.isRight ? 'alert-success' : 'alert-danger'
+                classe.set(a.text, inputClass)
+            })
+            setClasses(classe)
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSubmitting])
 
 
-    const validate = () => {
-        let classe: Map<string, string> = new Map()
-        answer && answer.forEach((a) => {
-            const inputClass = a.isRight ? "alert-success" : 'alert-danger'
-            classe.set(a.text, inputClass)
-        })
-        setClasses(classe)
-    }
-
     return (
         <div className="input-group mb-3">
-            <CheckboxInput classes={classes} name={question} options={answers}
-                           onChange={changeHandler}/>
+            <CheckboxInput classes={ classes } name={ question } options={ answers }
+                           onChange={ changeHandler }/>
         </div>
     )
 }

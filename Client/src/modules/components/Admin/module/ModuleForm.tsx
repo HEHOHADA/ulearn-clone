@@ -1,15 +1,15 @@
-import React, {FC} from 'react'
-import {useForm} from "../../../hooks/form.hook";
+import React, { FC } from 'react'
+import { useForm } from '../../../hooks/form.hook'
 
 export const defaultModuleValue = {
-    name: ""
+    name: ''
 }
 
 interface IProps {
     initialValues?: IVisibleModule,
     onSubmit: (event: any, form: IVisibleModule) => void
     title?: string
-    loading: boolean
+    loading?: boolean
 }
 
 export interface IVisibleModule {
@@ -18,17 +18,14 @@ export interface IVisibleModule {
 
 export const ModuleForm: FC<IProps> = (props: IProps) => {
     const {initialValues = defaultModuleValue, onSubmit, title} = props
-
-
     const {form, generateInputs} = useForm<IVisibleModule>(initialValues)
     return (
         <form
-            onSubmit={(event) => onSubmit(event, form)}
+            onSubmit={ (event) => onSubmit(event, form) }
         >
-            {generateInputs()}
+            { generateInputs() }
             <button
-                //disabled={loading}
-                className="btn btn-primary btn-block" type="submit">{title}
+                className="btn btn-primary btn-block" type="submit">{ title }
             </button>
         </form>
     )

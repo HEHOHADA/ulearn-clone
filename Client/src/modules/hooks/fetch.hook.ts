@@ -1,5 +1,5 @@
-import {useCallback, useEffect, useState} from "react"
-import {useHttp} from "./http.hook"
+import { useCallback, useEffect, useState } from 'react'
+import { useHttp } from './http.hook'
 
 export const useFetch = <T>(url: string) => {
     const [fetched, setFetched] = useState<T>()
@@ -22,7 +22,9 @@ export const useFetch = <T>(url: string) => {
 
     useEffect(() => {
         let mount = true
-        setTimeout(() => fetch(), 1)
+        fetch().finally(() => {
+
+        })
         return () => {
             mount = false
         }

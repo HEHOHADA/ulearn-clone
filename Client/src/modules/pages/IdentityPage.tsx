@@ -1,14 +1,17 @@
-import React, {useContext} from 'react'
-import {Link} from "react-router-dom"
-import jwt from "jsonwebtoken"
-import {IdentityForm} from "../components/identity/IdentityForm"
-import {IdentityPicture} from "../components/identity/IdentityPicture"
-import {AuthContext} from "../context/AuthContext"
-import {useHttp} from "../hooks/http.hook"
-import {accountRequest, fileDownloadRequest, groupGetRequest, groupRequest, teacherConfirm} from "../shared/request"
-import {useFetch} from "../hooks/fetch.hook"
-import {GoogleMap} from "../shared/utils/GoogleMap"
-import {Token} from "../shared/interface"
+import React, { Component } from 'react'
+import jwt from 'jsonwebtoken'
+import { connect } from 'react-redux'
+import { IdentityPicture } from '../components/identity/IdentityPicture'
+import { fileDownloadRequest, groupRequest, teacherConfirm } from '../../shared/request'
+import { GoogleMap } from '../components/utils/GoogleMap'
+import { Token } from '../shared/interface'
+import { fetchIdentity, updateData, updatePassword } from '../../store/actions/identity'
+import { Loader } from '../components/utils/Loader'
+import { IdentitySettings } from '../components/identity/IdentitySettings'
+import { IdentityGroups } from '../components/identity/IdentityGroup'
+import { authActions } from '../../store/actions/auth'
+import axios from '../../axios/axios'
+import { fetchData } from '../../store/actions/shared'
 
 
 interface settings {
@@ -17,103 +20,104 @@ interface settings {
 }
 
 
-export const IdentityPage = () => {
-    const auth = useContext(AuthContext)
-    const {request, loading, error} = useHttp()
+class IdentityPage extends Component<any> {
 
-
-    const settings: Array<settings> = [
-        {name: "Profile settings", value: ["username", "email", "lastname", "firstname"]},
-        {name: "Password settings", value: ["current", "password", "repeat Password"]}
-    ]
-
-    const {fetched: fetchedIdentity, isBusy} = useFetch<any>(accountRequest)
-
-    const {fetched} = useFetch<any>(groupGetRequest)
-
-    const teachersGroup = () => {
-        return fetched && fetched.map((g: any) => (
-            <Link to={`/group/${g.id}`} key={`${g.name}-${g.courseId}`} className="module p-3 border">
-                <p className="text-primary m-0 font-weight-bold text-lg-left ">{g.name}</p>
-                <span className="text-primary">{g.course}</span>
-            </Link>
-        ))
+    async componentDidMount() {
+        if (!this.props.identityState?.email) {
+            await this.props.fetchIdentity()
+        }
+        if (!this.props.groups?.length) {
+            await this.props.fetchGroups()
+        }
     }
 
-    const submitData = async (event: any, form: any) => {
+    settings: Array<settings> = [
+        {name: 'Profile settings', value: ['username', 'email', 'lastname', 'firstname']},
+        {name: 'Password settings', value: ['current', 'password', 'repeat Password']}
+    ]
+
+    submitData = async (event: any, form: any) => {
         event.preventDefault()
         if (form.password) {
-            await request(`${accountRequest}/changePassword`, 'POST', {
+            await this.props.updatePassword({
                 password: form.password,
                 current: form.current
             })
+
         } else {
-            await request(`${accountRequest}/updateData`, 'PUT', {...form})
+            await this.props.updateData({...form})
+            this.props.fetchIdentity()
         }
     }
 
-    const confirmTeacherAccount = async () => {
-        const token: any = await request(teacherConfirm, "POST")
+    confirmTeacherAccount = async () => {
+        const {data: token}: any = await axios.post(teacherConfirm)
         if (token && token.token) {
             const decoded = jwt.decode(token.token as string)
             const tokenItems = decoded as Token
-            auth.login(token.token, tokenItems.sub, tokenItems.role)
+            this.props.authSuccess({token: token.token, userId: tokenItems.sub, role: tokenItems.role})
         }
     }
-
-    const settingsCreate = () => {
-        let flag = ''
-        let props = {}
-        return settings.map(({value, name}, index) => {
-            if (index === 1) {
-                flag = 'mb-3'
-            } else {
-                props = {
-                    initialValues: {...fetchedIdentity}
-                }
-            }
-            return (
-                <div className={`card shadow ${flag}`} key={`${name}-${index}`}>
-                    <div className="card-header py-3">
-                        <p className="text-primary m-0 font-weight-bold">{name}</p>
-                    </div>
-                    <IdentityForm {...props} loading={loading} error={error} submit={submitData} formNames={value}/>
-                </div>
-            )
-        })
-    }
-
-    return (
-        <main className="page">
-            <div className="container">
-                <h3 className="text-dark mb-4">Profile</h3>
-                <div className="row mb-3">
-                    <div className="col-lg-4">
-                        <div className="card mb-3">
-                            {!isBusy && <IdentityPicture initialValue={`${fileDownloadRequest}?filename=${fetchedIdentity.imageSrc}`}/>}
-                        </div>
-                        <div>
+    render() {
+        const {role, groupLoading, groups, identityState} = this.props
+        const {loading, error, imageSrc, ...identity} = identityState
+        return (
+            <main className="page">
+                <div className="container">
+                    <h3 className="text-dark mb-4">Profile</h3>
+                    <div className="row mb-3">
+                        <div className="col-lg-4">
+                            <div className="card mb-3">
+                                { !loading && identity.imageSrc && <IdentityPicture
+                                    initialValue={ `${ fileDownloadRequest }?filename=${ identity.imageSrc }` }/> }
+                            </div>
                             <div className="card mb-3">
                                 <div className="card-body text-center shadow justify-content-between">
-                                    {auth.role === 'Teacher' || auth.role === 'Admin' ? teachersGroup() :
-                                        <button disabled={loading} className="btn btn-info"
-                                                onClick={confirmTeacherAccount}>Confirm
-                                            teacher account</button>}
                                     <GoogleMap/>
+                                    { groupLoading ? <Loader/> : role === 'Teacher' || role === 'Admin' ?
+                                        !groups ? <p className="center">Нет групп</p> : <IdentityGroups
+                                            fetched={ groups }/> :
+                                        <button disabled={ loading } className="btn btn-info"
+                                                onClick={ this.confirmTeacherAccount }>Confirm*
+                                            teacher account</button> }
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-lg-8">
+                            <div className="row">
+                                <div className="col">
+                                    { error && <span className="alert-warning">{ error }</span> }
+                                    { loading ? <Loader/> : <IdentitySettings
+                                        loading={ loading }
+                                        identity={ identity }
+                                        settings={ this.settings }
+                                        submitData={ this.submitData }
+                                    /> }
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="col-lg-8">
-                        <div className="row">
-                            <div className="col">
-                                {error && <span className="alert-warning">{error}</span>}
-                                {!isBusy && settingsCreate()}
-                            </div>
-                        </div>
-                    </div>
                 </div>
-            </div>
-        </main>
-    )
+            </main>
+        )
+    }
 }
+
+const mapStateToProps = (state: any) => ({
+    groupLoading: state.shared.loading,
+    role: state.auth.role,
+    groups: state.shared.groups,
+    identityState: state.identity
+})
+
+
+const mapDispatchToProps = (dispatch: any) => ({
+    fetchGroups: () => dispatch(fetchData(groupRequest)),
+    fetchIdentity: () => dispatch(fetchIdentity()),
+    authSuccess: (data: any) => dispatch(authActions.authSuccess({...data})),
+    updateData: (data: any) => dispatch(updateData({...data})),
+    updatePassword: (data: any) => dispatch(updatePassword({...data}))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(IdentityPage)

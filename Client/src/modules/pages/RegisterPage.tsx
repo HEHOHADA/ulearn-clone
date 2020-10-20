@@ -1,51 +1,30 @@
-import React, {FC, useContext} from 'react'
-import jwt from 'jsonwebtoken'
-import {useHistory} from 'react-router-dom'
-import {IData, RegisterModel, Token} from "../shared/interface"
-import {useHttp} from "../hooks/http.hook"
-import {useForm} from "../hooks/form.hook"
-import {AuthContext} from "../context/AuthContext"
-import {registerRequest} from "../shared/request"
+import React from 'react'
+import { useHistory } from 'react-router-dom'
+import { RegisterModel } from '../shared/interface'
+import { useForm } from '../hooks/form.hook'
+import { useDispatch } from 'react-redux'
+import { auth } from '../../store/actions/auth'
 
-export const RegisterPage: FC = () => {
-
+export default () => {
     const history = useHistory()
-
+    const dispatch = useDispatch()
     const initialValues = {
         email: '',
         username: '',
         password: ''
     }
 
-    const {loading, request, error, clearError} = useHttp()
-    const auth = useContext(AuthContext)
     const {form, generateInputs} = useForm<RegisterModel>(initialValues)
-
 
     const registerHandler = async (event: any) => {
         event.preventDefault()
-        clearError()
         try {
-            const data: IData = await request(registerRequest, "POST", {...form})
-            if (!data) {
-                return
-            }
-
-            const decoded = jwt.decode(data.token!)
-            if (!decoded) {
-                return
-            }
-            const token = decoded as Token
-
-            auth.login(data.token, token.sub)
-
+            await dispatch(auth({...form}, false))
             history.push('/')
-
         } catch (e) {
             console.log('HERE ERROR', e)
         }
     }
-
 
     return (
         <>
@@ -53,24 +32,19 @@ export const RegisterPage: FC = () => {
                 <h2 className="text-info">Регистрация</h2>
                 <p>Пожалуйста зарегистрируйтесь</p>
             </div>
-            {error &&
-            < div className="alert alert-danger" role="alert">
-                <strong>{error || 'Введите правильное значение'}</strong>
-            </div>
-            }
-            <form
-                onSubmit={registerHandler}
-            >
+            {/*{error &&*/}
+            {/*< div className="alert alert-danger" role="alert">*/}
+            {/*    <strong>{error || 'Введите правильное значение'}</strong>*/}
+            {/*</div>*/}
+            {/*}*/}
+            <form onSubmit={registerHandler}>
                 {generateInputs((key: string) => {
                     if (key === 'password') {
                         return 'password'
                     }
                     return 'text'
                 })}
-
                 <button
-                    disabled={loading}
-
                     className="btn btn-primary btn-block" type="submit">Register
                 </button>
             </form>

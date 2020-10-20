@@ -1,10 +1,10 @@
 import React, {FC, useState} from "react"
-import {SelectInput} from "../../../shared/utils/SelectInput"
+import {SelectInput} from "../../utils/SelectInput"
 import {Question, TestForm} from "./TestForm"
-import {VideoElement} from "../../../shared/utils/VideoElement"
+import {VideoElement} from "../../utils/VideoElement"
 
 
-import {CodeEditor} from "../../../shared/utils/CodeEditor"
+import {CodeEditor} from "../../utils/CodeEditor"
 
 const options = ["video", "code", "test"]
 

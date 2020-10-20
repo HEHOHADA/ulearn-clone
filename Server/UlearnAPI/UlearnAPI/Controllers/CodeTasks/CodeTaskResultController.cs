@@ -10,9 +10,9 @@ using UlearnServices.Services.CodeTasks;
 
 namespace UlearnAPI.Controllers.CodeTasks
 {
-    [Route("api/[controller]")]
+    [Route("api/{controller}")]
     [ApiController]
-    public class CodeTaskResultController : ControllerBase
+    public class CodeTaskResultController : Controller
     {
         private readonly CodeTaskResultService _codeTaskResultService;
 

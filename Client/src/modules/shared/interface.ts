@@ -1,4 +1,4 @@
-import {Question} from "../components/Admin/theme/TestForm";
+import {Question} from '../components/Admin/theme/TestForm'
 
 export interface Token {
     aud: string
@@ -21,13 +21,13 @@ export interface Footer {
     name: string
 }
 
-export interface LoginModel {
+export type LoginModel = {
     login: string
     password: string
 }
 
 
-export interface RegisterModel {
+export type RegisterModel = {
     username: string
     email: string
     password: string
@@ -39,7 +39,6 @@ export interface IData {
 }
 
 export interface Course {
-
     name: string
     id: string
     description: string
@@ -102,7 +101,7 @@ export interface IQuestion {
     text: string
     answers: Array<IAnswer>
     points: number
-    id?:number
+    id?: number
 }
 
 export interface IAnswer {
@@ -114,7 +113,7 @@ export interface IGroup {
     name: string
     courseId?: any
     emails?: Array<string>
-    id?:number
+    id?: number
 }
 
 
@@ -122,7 +121,7 @@ export interface ObjectKeys {
     [key: string]: string
 }
 
-type picture = "image/png" | "image/jped"
+type picture = 'image/png' | 'image/jped'
 
 export interface Picture {
     lastModified: number

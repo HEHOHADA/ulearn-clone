@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
-import {CodeEditor} from "../../../shared/utils/CodeEditor"
+import {CodeEditor} from "../../utils/CodeEditor"
 import {useHttp} from "../../../hooks/http.hook";
-import {codeTaskRequest} from "../../../shared/request";
+import {codeTaskRequest} from "../../../../shared/request";
 
 interface Props {
     name: string
