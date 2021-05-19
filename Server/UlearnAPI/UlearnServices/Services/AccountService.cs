@@ -70,7 +70,9 @@ namespace UlearnServices.Services
                 .FirstOrDefaultAsync(c => c.Id == courseId);
             if (course == default)
                 throw new ArgumentException("No courseId passed");
-            return ((subscription?.Level ?? 0) >= course.Subscription.Level, course);
+            return (
+                (subscription?.Level ?? 0) >= course.Subscription.Level &&
+                (DateTime.Now - (subscription?.BoughtDate ?? DateTime.MinValue)).TotalDays <= 30, course);
         }
     }
 }
