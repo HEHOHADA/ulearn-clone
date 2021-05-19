@@ -29,11 +29,6 @@ namespace UlearnServices.Services
 
         public async Task<List<FullGroupDto>> GetAsync()
         {
-            var a = (await _context.Groups
-                .Include(x => x.Course)
-                .Include(x => x.UserGroups)
-                .ThenInclude(x => x.User)
-                .ToListAsync());
             return (await _context.Groups
                     .Include(x => x.Course)
                     .Include(x => x.UserGroups)
@@ -84,7 +79,7 @@ namespace UlearnServices.Services
 
             group.UserGroups = (await Task.WhenAll(model.Emails
                     .Select(x => _userManager.FindByEmailAsync(x))))
-                    .Where(x => x != null)
+                .Where(x => x != null)
                 .Select(x => new UserGroup
                 {
                     Group = group,
@@ -115,7 +110,7 @@ namespace UlearnServices.Services
             {
                 throw new ArgumentException();
             }
-            
+
             group.UserGroups = (await Task.WhenAll(model.Emails
                     .Select(x => _userManager.FindByEmailAsync(x))))
                 .Select(x => new UserGroup
@@ -149,7 +144,7 @@ namespace UlearnServices.Services
                     .ToList()
             };
         }
-        
+
         public async Task<bool> HasUser(User user, int groupId)
         {
             var group = await _context.Groups
@@ -159,6 +154,27 @@ namespace UlearnServices.Services
 
             return group.UserGroups
                 .FirstOrDefault(userGroup => userGroup.User.Id == user.Id) != default;
+        }
+
+        public async Task<List<FullGroupDto>> GetByUser(string userId)
+        {
+            return (await _context.Groups
+                    .Include(x => x.Course)
+                    .Include(x => x.UserGroups)
+                    .ThenInclude(x => x.User)
+                    .ToListAsync())
+                .Where(x => x.UserGroups != null &&
+                            x.UserGroups.Any(y => y.User != null && y.User.Id == userId))
+                .Select(x => new FullGroupDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    CourseId = x.Course.Id,
+                    Emails = x.UserGroups
+                        .Select(y => y.User.Email)
+                        .ToList()
+                })
+                .ToList();
         }
     }
 }
