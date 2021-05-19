@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -57,17 +58,18 @@ namespace UlearnServices.Services
             await _userManager.AddToRoleAsync(user, "Teacher");
         }
 
-        public async Task<bool?> IsCourseAvailable(string userId, int courseId)
+        public async Task<(bool HasAccess, Course course)> IsCourseAvailable(string userId, int courseId)
         {
             var subscription = _context.Users
                 .Include(x => x.Subscription)
                 .First(x => x.Id == userId)
                 .Subscription;
             var course = await _context.Courses
+                .Include(x => x.Subscription)
                 .FirstOrDefaultAsync(c => c.Id == courseId);
             if (course == default)
-                return null;
-            return subscription.Level >= course.Subscription.Level;
+                throw new ArgumentException("No courseId passed");
+            return ((subscription?.Level ?? 0) >= course.Subscription.Level, course);
         }
     }
 }

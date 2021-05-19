@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UlearnAPI.AOP;
 using UlearnData.Models;
+using UlearnServices.Models;
 using UlearnServices.Models.Subscription;
 using UlearnServices.Services;
 
@@ -97,6 +99,14 @@ namespace UlearnAPI.Controllers
         public async Task<ActionResult<List<Subscription>>> GetSorted([FromQuery] SearchQuery query)
         {
             return await _subscriptionsService.GetSortedAsync(query);
+        }
+
+        [HttpPost("pay")]
+        [Authorize]
+        public async Task<IActionResult> Pay(PaymentRequest paymentRequest)
+        {
+            await _subscriptionsService.Pay(User.FindFirstValue("sub"), paymentRequest);
+            return Ok();
         }
     }
 }

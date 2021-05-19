@@ -4,19 +4,21 @@ import {useForm} from "../../hooks/form.hook"
 
 interface Props {
     changeFormHandler: (form: any) => void
-    isSubmitting: boolean
+    isSubmitting: boolean,
+    product: number
 }
 
 export const CreditCard = (props: Props) => {
 
+    const {isSubmitting, changeFormHandler, product} = props
     const initialValues = {
         cardHolder: '',
         month: '',
         year: '',
         cardNumber: '',
-        cVC: ''
+        cVC: '',
+        product: product
     }
-    const {isSubmitting, changeFormHandler} = props
 
     const {form, changeHandler} = useForm(initialValues)
 
@@ -30,6 +32,7 @@ export const CreditCard = (props: Props) => {
         <div className="card-details">
             <h3 className="title">Credit Card Details</h3>
             <div className="form-row">
+                <FormInput type="hidden" onChange={changeHandler} name={'product'} formValue={form.product}/>
                 <div className="col-sm-8">
                     <FormInput onChange={changeHandler} name={'cardNumber'} formValue={form.cardNumber}/>
                 </div>
