@@ -25,6 +25,9 @@ using UlearnAPI.Middleware;
 using UlearnData;
 using UlearnData.Models;
 using UlearnServices.Services;
+using UlearnServices.Services.CodeTasks;
+using UlearnServices.Services.TestTasks;
+using UlearnServices.Services.VideoTasks;
 
 namespace UlearnAPI
 {
