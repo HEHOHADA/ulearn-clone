@@ -1,24 +1,35 @@
 import React, {useEffect, useState} from 'react'
 import {useParams} from 'react-router-dom'
 import {CreditCard} from "../components/pay/CreditCard"
-import {ISubscription} from "../shared/interface"
+import {ICourse, ISubscription} from "../shared/interface"
 import {useHttp} from "../hooks/http.hook"
+import {RouteComponentProps} from "react-router"
+import {useFetch} from "../hooks/fetch.hook";
+import {courseRequest, paySubscription, subscriptionRequest} from "../shared/request";
+import {FormInput} from "../shared/utils/FormInput";
 
 
-export const PaymentPage = () => {
+export const PaymentPage = (props: RouteComponentProps) => {
 
     const {id} = useParams()
     useEffect(() => {
         //request to api
+
     }, [id])
     const {request} = useHttp()
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const {fetched, isBusy} = useFetch<ISubscription>(subscriptionRequest+'/'+id)
+    const {history} = props
+
     // const {isBusy, fetched, loading} = useFetch('')
     let subscription: ISubscription | any = []
     const changeFormHandler = async (form: any) => {
-        form.product = ''
         console.log(form)
-       await request('payment')
+        if(form.cvc!== ''){
+            const data = await request(paySubscription, 'POST', form)
+            console.log("data" + data)
+            history.push('/login')
+        }
     }
     return (
         <main className="page payment-page">
@@ -29,21 +40,25 @@ export const PaymentPage = () => {
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor
                             in, mattis vitae leo.</p>
                     </div>
-                    <form onSubmit={(event) => {
+                    <form onSubmit={async (event) => {
                         event.preventDefault()
                         setIsSubmitting(true)
                     }
                     }>
-                        <div className="products">
-                            <h3 className="title">Checkout</h3>
-                            <div className="item"><span className="price">{subscription.price}</span>
-                                <p className="item-name">{subscription.name}</p>
-                                <p className="item-description">{subscription.level}</p>
+                        {
+                            !isBusy &&
+                            <div className="products">
+                                <h3 className="title">Checkout</h3>
+                                <div className="item"><span className="price">{fetched ? fetched.price : subscription.price}</span>
+                                    <p className="item-name">{fetched ? fetched.name : subscription.name}</p>
+                                    <p className="item-description">{fetched ? fetched.level : subscription.level}</p>
+                                </div>
+                                <div className="total"><span>Total</span><span className="price">{fetched ? fetched.price : subscription.price}</span>
+                                </div>
                             </div>
-                            <div className="total"><span>Total</span><span className="price">{subscription.price}</span>
-                            </div>
-                        </div>
-                        <CreditCard isSubmitting={isSubmitting} changeFormHandler={changeFormHandler}/>
+                        }
+                            <CreditCard product={parseInt(id!)} isSubmitting={isSubmitting} changeFormHandler={changeFormHandler}/>
+
 
                     </form>
                 </div>
