@@ -25,11 +25,19 @@ export const UserCoursePage = () => {
     useEffect(() => {
         const themeFetch = async () => {
             if (themeId) {
+                const splits = themeId.split('-')
+
+                const result = await request(`${api}/${splits[1]}result/${splits[0]}`)
+                let response
                 if (!theme) {
-                    const splits = themeId.split('-')
-                    const response = await request(`${api}/${splits[1]}/${splits[0]}`)
-                    chooseTheme({theme: response})
+                    response = await request(`${api}/${splits[1]}/${splits[0]}`)
+
                 }
+                const theme1 = {theme: {...response, receivedPoints: result?.points ?? 0}}
+                const a = splits[1] === "codeTask" && result?.usersCode
+                    ? theme1.theme.initailCode = result.usersCode
+                    : splits[1] === "testTask" && result?.answers ? theme1.theme.questions = result.answers : {}
+                chooseTheme(theme1)
             }
         }
         themeFetch()
@@ -42,7 +50,8 @@ export const UserCoursePage = () => {
                     {module ?
                         <Module id={module} course={course ? course : id}
                                 onChooseTheme={chooseTheme}/> :
-                        !isBusyCourse && <Course loading={courseLoading} course={courseItem!} onChooseModule={chooseTheme}/>}
+                        !isBusyCourse &&
+                        <Course loading={courseLoading} course={courseItem!} onChooseModule={chooseTheme}/>}
                     <div className="col-md-8 col-xs-12">
                         <div className="container">
                             <Theme loading={loading} theme={theme} nextThema={chooseTheme}/>

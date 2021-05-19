@@ -8,6 +8,8 @@ interface Props {
     initialCode?: string
     description?: string
     id: number
+    points: number
+    receivedPoints: number
 }
 
 export const CodeTheme = (props: Props) => {

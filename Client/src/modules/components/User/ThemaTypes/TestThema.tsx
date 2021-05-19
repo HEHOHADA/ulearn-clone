@@ -7,11 +7,13 @@ import {useHttp} from "../../../hooks/http.hook"
 interface Props {
     test: Array<IQuestion>
     id: number
+    points: number
+    receivedPoints: number
 }
 
 export const TestThema = (props: Props) => {
 
-    const {test, id} = props
+    const {test, id, points, receivedPoints} = props
     const [form, setForm] = useState<Array<IQuestion>>()
     const {request} = useHttp()
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -60,7 +62,7 @@ export const TestThema = (props: Props) => {
                 <h1 className="header-standard ">
                     <div>Test</div>
                 </h1>
-                <span className="text-monospace center m-3">0/6</span>
+                <span className="text-monospace center m-3">{receivedPoints}/{points}</span>
             </div>
 
             <form onSubmit={(event) => {

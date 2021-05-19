@@ -19,9 +19,9 @@ export const Theme = (props: Props) => {
 
     return (
         <div>
-            {theme && theme.questions && <TestThema id={theme.id} test={theme.questions}/>}
+            {theme && theme.questions && <TestThema id={theme.id} test={theme.questions} receivedPoints={theme.receivedPoints} points={theme.points}/>}
             {theme && theme.videoHref && <VideoThema url={theme.videoHref} name={"video"}/>}
-            {theme && theme.initialCode && <CodeTheme id={theme.id} description={theme.description} name={theme.name} initialCode={theme.initialCode}/>}
+            {theme && theme.initialCode && <CodeTheme id={theme.id} description={theme.description} name={theme.name} initialCode={theme.initialCode} receivedPoints={theme.receivedPoints} points={theme.points}/>}
         </div>
     )
 }
