@@ -73,13 +73,6 @@ namespace UlearnAPI.Controllers
 
                 model.Login = user.UserName;
             }
-            else
-            {
-                if (!new Regex(@"^[a-zA-Z0-9]*$").IsMatch(model.Login))
-                {
-                    return BadRequest(new {Message = new[] {"Username is not valid"}});
-                }
-            }
 
             var result = await _signInManager.PasswordSignInAsync(model.Login, model.Password, false, false);
 
