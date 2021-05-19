@@ -1,6 +1,5 @@
-import React, {FC, useCallback, useEffect, useState} from 'react'
+import React, {FC} from 'react'
 import {useForm} from "../../../hooks/form.hook";
-import {useParams} from "react-router-dom";
 
 export const defaultModuleValue = {
     name: ""
@@ -21,7 +20,7 @@ export const ModuleForm: FC<IProps> = (props: IProps) => {
     const {initialValues = defaultModuleValue, onSubmit, title} = props
 
 
-    const {form, generateInputs, setForm} = useForm<IVisibleModule>(initialValues)
+    const {form, generateInputs} = useForm<IVisibleModule>(initialValues)
     return (
         <form
             onSubmit={(event) => onSubmit(event, form)}

@@ -1,20 +1,20 @@
 import React, {useEffect, useState} from 'react'
-import {IQuestion} from "../../../shared/interface";
-import {TestItem} from '../Test/TestItem';
-import {testTaskRequest} from "../../../shared/request";
-import {useHttp} from "../../../hooks/http.hook";
+import {IQuestion} from "../../../shared/interface"
+import {TestItem} from '../Test/TestItem'
+import {testTaskRequest} from "../../../shared/request"
+import {useHttp} from "../../../hooks/http.hook"
 
 interface Props {
     test: Array<IQuestion>
+    id: number
 }
 
 export const TestThema = (props: Props) => {
 
-    const {test} = props
+    const {test, id} = props
     const [form, setForm] = useState<Array<IQuestion>>()
     const {request} = useHttp()
     const [isSubmitting, setIsSubmitting] = useState(false)
-
     const selectedChange = (question: IQuestion) => {
         const newForm = form?.filter(f => f.text !== question.text)
         if (newForm !== form) {
@@ -33,10 +33,9 @@ export const TestThema = (props: Props) => {
     }, [isSubmitting])
 
     const submitForm = async (event: any) => {
-        console.log(form)
         event.preventDefault()
         try {
-            const response = await request(`${testTaskRequest}/confirm`, 'POST', {...form})
+            await request(`${testTaskRequest}result/confirm`, 'POST', {...form, testTaskId: id})
         } catch (e) {
             console.log(e)
         }

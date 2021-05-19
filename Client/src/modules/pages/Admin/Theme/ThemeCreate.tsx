@@ -1,9 +1,9 @@
 import React from 'react'
 import {Options, ThemeForm} from "../../../components/Admin/theme/ThemeForm"
 import {useHttp} from "../../../hooks/http.hook";
-import {useParams, useHistory} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 import {Question} from "../../../components/Admin/theme/TestForm";
-import {api, moduleRequest, testTaskRequest} from "../../../shared/request";
+import {api} from "../../../shared/request";
 
 export const ThemeCreate = () => {
     const {request} = useHttp()

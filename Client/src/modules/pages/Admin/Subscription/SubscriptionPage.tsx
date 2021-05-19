@@ -17,7 +17,6 @@ export const SubscriptionPage = () => {
     const [page, setPage] = useState(1)
     useEffect(() => {
         if (!isBusy) {
-            console.log('fetched', fetched)
             setSubscriptions(fetched)
         }
     }, [isBusy])

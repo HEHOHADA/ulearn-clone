@@ -21,28 +21,9 @@ export const defaultGroupFormValues = {
 
 export const GroupCreateForm = (props: Props) => {
 
-    // const {request, loading} = useHttp()
-    const {fetched = [], isBusy} = useFetch<Array<ICourse>>(courseRequest)
-
-    // const fetchCourse = useCallback(async () => {
-    //     try {
-    //         setCourses(await request(courseRequest, 'GET'))
-    //
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    // }, [])
-    //
-    // useEffect(() => {
-    //     fetchCourse()
-    // }, [])
-// useEffect(()=>{
-//     setCourses()
-// },[isBusy])
+    const {fetched = []} = useFetch<Array<ICourse>>(courseRequest)
     const {initialValues = defaultGroupFormValues, onSubmit} = props
-
     const {form, changeHandler, setForm} = useForm<IGroup>(initialValues)
-    console.log(form, 'form')
     const selectedTags = (userGroups: Array<string>) => {
         setForm({...form, emails: userGroups})
     }
