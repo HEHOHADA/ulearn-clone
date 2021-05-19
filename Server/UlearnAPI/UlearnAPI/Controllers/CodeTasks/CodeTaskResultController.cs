@@ -8,6 +8,8 @@ using UlearnServices.Services.CodeTasks;
 
 namespace UlearnAPI.Controllers.CodeTasks
 {
+    [Route("api/{controller}")]
+    [ApiController]
     public class CodeTaskResultController : Controller
     {
         private readonly CodeTaskResultService _codeTaskResultService;
