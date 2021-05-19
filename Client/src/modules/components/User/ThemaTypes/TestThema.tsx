@@ -7,11 +7,13 @@ import {useHttp} from "../../../hooks/http.hook"
 interface Props {
     test: Array<IQuestion>
     id: number
+    points: number
+    receivedPoints: number
 }
 
 export const TestThema = (props: Props) => {
 
-    const {test, id} = props
+    const {test, id, points, receivedPoints} = props
     const [form, setForm] = useState<Array<IQuestion>>()
     const {request} = useHttp()
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -35,7 +37,7 @@ export const TestThema = (props: Props) => {
     const submitForm = async (event: any) => {
         event.preventDefault()
         try {
-            await request(`${testTaskRequest}result/confirm`, 'POST', {...form, testTaskId: id})
+            await request(`${testTaskRequest}result/confirm`, 'POST', {questions: form, testTaskId: id})
         } catch (e) {
             console.log(e)
         }
@@ -47,7 +49,7 @@ export const TestThema = (props: Props) => {
             return (
                 <div key={`${i}-${t.answers}`}>
                     <h4 className="header-line m-2">{i + 1}.<strong> {t.text}</strong></h4>
-                    <TestItem isSubmitting={isSubmitting} change={selectedChange} question={t.text} number={i}
+                    <TestItem id={t.id!} isSubmitting={isSubmitting} change={selectedChange} question={t.text} number={i}
                               answers={t.answers}/>
                 </div>
             )
@@ -60,12 +62,12 @@ export const TestThema = (props: Props) => {
                 <h1 className="header-standard ">
                     <div>Test</div>
                 </h1>
-                <span className="text-monospace center m-3">0/6</span>
+                <span className="text-monospace center m-3">{receivedPoints}/{points}</span>
             </div>
 
-            <form onSubmit={(event) => {
+            <form onSubmit={async (event) => {
                 setIsSubmitting(true)
-                submitForm(event)
+                await submitForm(event)
             }}>
                 {testGenerator()}
                 <button className="btn btn-primary" disabled={isSubmitting}>Проверить

@@ -8,10 +8,12 @@ interface Props {
     initialCode?: string
     description?: string
     id: number
+    points: number
+    receivedPoints: number
 }
 
 export const CodeTheme = (props: Props) => {
-    const {name, initialCode = '', description = '', id} = props
+    const {receivedPoints,points,name, initialCode = '', description = '', id} = props
     const [code, setCode] = useState(initialCode)
     const propsCode = {
         onChange: (code: any) => setCode(code)
@@ -33,6 +35,7 @@ export const CodeTheme = (props: Props) => {
     return (
         <div>
             <h2 className="text-center m-5">{name}</h2>
+            <span className="text-monospace center m-3">{receivedPoints}/{points}</span>
             <p>{description}</p>
             <form onSubmit={onSubmit}>
                 <CodeEditor code={code} {...propsCode}/>
