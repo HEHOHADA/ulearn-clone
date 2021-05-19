@@ -19,7 +19,6 @@ export const SubscriptionPage = () => {
         if (!isBusy) {
             setSubscriptions(fetched)
         }
-        // eslint-disable-next-line
     }, [isBusy])
 
     const onEditHandler = (id: number) => {

@@ -14,7 +14,6 @@ export const IdentityPicture = () => {
             'POST', formData, {'Content-Type': 'multipart/form-data'})
 
         console.log(response)
-        // eslint-disable-next-line
     }, [])
 
     return (

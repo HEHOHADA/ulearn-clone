@@ -1,5 +1,5 @@
 import React, {FC} from 'react'
-import {BrowserRouter, Route, Switch} from "react-router-dom"
+import {BrowserRouter, Switch, Route} from "react-router-dom"
 import {MainLayout} from "./modules/shared/layout/MainLayout"
 import {AppRoute} from "./routes/AppRoute"
 import {HomePage} from "./modules/pages/HomePage"
@@ -15,8 +15,8 @@ import {useTeacherRoute} from "./routes/TeacherRoute"
 import {UserContext} from './modules/context/UserContext'
 import {useUser} from "./modules/hooks/user.hook"
 import {PaymentPage} from "./modules/pages/PaymentPage"
-import {ChatRavil} from "./modules/pages/ChatRavil";
-import {SubscriptionPage} from "./modules/pages/SubscriptionPage";
+import {ChatRavil} from "./modules/pages/ChatRavil"
+import {SubscriptionPage} from "./modules/pages/SubscriptionPage"
 
 
 const App: FC = () => {
@@ -26,7 +26,6 @@ const App: FC = () => {
 
     let isAdmin = role === 'Admin'
     let isAuth = !!token
-    console.log(token)
     let isTeacher = role === 'teacher'
     const teacherRoutes = useTeacherRoute()
 
