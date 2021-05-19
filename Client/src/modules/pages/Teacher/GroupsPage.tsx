@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {Link, useHistory} from 'react-router-dom'
-import {groupRequest} from "../../shared/request"
+import {groupGetRequest, groupRequest} from "../../shared/request"
 import {useFetch} from "../../hooks/fetch.hook"
 import {Loader} from "../../shared/utils/Loader"
 import {IGroup} from "../../shared/interface";
@@ -8,7 +8,7 @@ import {useHttp} from "../../hooks/http.hook";
 
 export const GroupsPage = () => {
 
-    const {fetched, loading, isBusy} = useFetch<Array<IGroup>>(groupRequest)
+    const {fetched, loading, isBusy} = useFetch<Array<IGroup>>(groupGetRequest)
     const {request} = useHttp()
     const [groups, setGroups] = useState<Array<IGroup>>()
     const history = useHistory()

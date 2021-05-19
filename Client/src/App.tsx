@@ -26,7 +26,7 @@ const App: FC = () => {
 
     let isAdmin = role === 'Admin'
     let isAuth = !!token
-    let isTeacher = role === 'teacher'
+    let isTeacher = role === 'Teacher'
     const teacherRoutes = useTeacherRoute()
 
     return (

@@ -7,27 +7,32 @@ import {Textarea} from "../../../shared/utils/Textarea"
 interface Props {
     initialValues?: {
         points: number
-        comment: string
+        text: string
     }
     onSubmit: (event: any, form: any) => void
+    maxPoints: number
 }
 
 export const defaultReviewForm = {
     points: 0,
-    comment: ''
+    text: ''
 }
 export const ReviewCode = (props: Props) => {
 
-    const {initialValues = defaultReviewForm, onSubmit} = props
+    const {initialValues = defaultReviewForm, onSubmit, maxPoints} = props
     const {form, changeHandler} = useForm(initialValues)
 
 
     return (
         <form onSubmit={(event: any) => onSubmit(event, form)}>
-            <FormInput onChange={changeHandler} name={'points'} formValue={form.points} type={"number"}/>
-            <Textarea onChange={changeHandler} name={"comment"} formValue={form.comment}/>
+
+            <div className="d-flex">
+                <FormInput onChange={changeHandler} name={'points'} formValue={form.points} type={"number"}/>
+                <span className="mt-4 p-2">/{maxPoints}</span>
+            </div>
+            <Textarea onChange={changeHandler} name={"text"} formValue={form.text}/>
             <button
-                className="btn btn-primary btn-block" type="submit">Send
+                className="btn btn-primary btn-block mb-2" type="submit">Send
             </button>
         </form>
     )

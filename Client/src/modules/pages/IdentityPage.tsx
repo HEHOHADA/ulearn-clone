@@ -1,12 +1,14 @@
-import React, {useContext, useState} from 'react'
+import React, {useContext} from 'react'
 import {Link} from "react-router-dom"
 import {IdentityForm} from "../components/identity/IdentityForm"
 import {IdentityPicture} from "../components/identity/IdentityPicture"
 import {AuthContext} from "../context/AuthContext"
 import {useHttp} from "../hooks/http.hook"
-import {accountRequest, groupRequest, teacherConfirm} from "../shared/request"
+import {accountRequest, groupGetRequest, teacherConfirm} from "../shared/request"
 import {useFetch} from "../hooks/fetch.hook"
 import {GoogleMap} from "../shared/utils/GoogleMap"
+import jwt from "jsonwebtoken";
+import {Token} from "../shared/interface";
 
 
 interface settings {
@@ -18,7 +20,7 @@ interface settings {
 export const IdentityPage = () => {
     const auth = useContext(AuthContext)
     const {request, loading, error} = useHttp()
-    // const [errors, setErrors] = useState()
+
 
     const settings: Array<settings> = [
         {name: "Profile settings", value: ["username", "email", "lastname", "firstname"]},
@@ -27,7 +29,7 @@ export const IdentityPage = () => {
 
     const {fetched: fetchedIdentity, isBusy} = useFetch<any>(accountRequest)
 
-    const {fetched} = useFetch<any>(groupRequest)
+    const {fetched} = useFetch<any>(groupGetRequest)
 
     const teachersGroup = () => {
         return fetched && fetched.map((g: any) => (
@@ -48,11 +50,15 @@ export const IdentityPage = () => {
         } else {
             await request(`${accountRequest}/updateData`, 'PUT', {...form})
         }
-        // const response = await request('/teacher/confirm', "POST", form)
     }
 
     const confirmTeacherAccount = async () => {
-        await request(teacherConfirm, "POST")
+        const token: any = await request(teacherConfirm, "POST")
+        if (token && token.token) {
+            const decoded = jwt.decode(token.token as string)
+            const tokenItems = decoded as Token
+            auth.login(token.token, tokenItems.sub, tokenItems.role)
+        }
     }
 
     const settingsCreate = () => {
@@ -61,7 +67,6 @@ export const IdentityPage = () => {
         return settings.map(({value, name}, index) => {
             if (index === 1) {
                 flag = 'mb-3'
-
             } else {
                 props = {
                     initialValues: {...fetchedIdentity}
@@ -90,7 +95,7 @@ export const IdentityPage = () => {
                         <div>
                             <div className="card mb-3">
                                 <div className="card-body text-center shadow justify-content-between">
-                                    {auth.role === 'teacher' || auth.role === 'Admin' ? teachersGroup() :
+                                    {auth.role === 'Teacher' || auth.role === 'Admin' ? teachersGroup() :
                                         <button disabled={loading} className="btn btn-info"
                                                 onClick={confirmTeacherAccount}>Confirm
                                             teacher account</button>}

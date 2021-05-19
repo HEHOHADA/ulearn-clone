@@ -54,7 +54,7 @@ export const HomePage = (props: RouteComponentProps) => {
                     </div>
                     <div className="content">
                         <div className="row">
-                            <div className="col-md-9">
+                            <div className="col-md-12">
                                 <div className="products">
                                     <div className="row no-gutters">
                                         {!isBusy && <HomeCourses
