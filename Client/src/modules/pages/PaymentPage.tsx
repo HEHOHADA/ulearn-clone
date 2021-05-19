@@ -23,11 +23,9 @@ export const PaymentPage = (props: RouteComponentProps) => {
     // const {isBusy, fetched, loading} = useFetch('')
     let subscription: ISubscription | any = []
     const changeFormHandler = async (form: any) => {
-        console.log(form)
         if (form.cvc !== '') {
-            const data = await request(paySubscription, 'POST', form)
-            console.log("data" + data)
-            history.push('/login')
+            await request(paySubscription, 'POST', form)
+            history.push('/')
         }
     }
     return (
@@ -60,8 +58,6 @@ export const PaymentPage = (props: RouteComponentProps) => {
                         }
                         <CreditCard product={parseInt(id!)} isSubmitting={isSubmitting}
                                     changeFormHandler={changeFormHandler}/>
-
-
                     </form>
                 </div>
             </section>

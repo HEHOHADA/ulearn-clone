@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react'
+import React, {useContext} from 'react'
 import {HomeCourses} from '../components/home/HomeCourse/HomeCourses'
 import {ICourse} from '../shared/interface'
 import {RouteComponentProps} from "react-router"
@@ -30,7 +30,7 @@ export const HomePage = (props: RouteComponentProps) => {
             chooseTheme({course: id})
             history.push(link)
         } else {
-            if(data.subscriptionId){
+            if (data.subscriptionId) {
                 history.push(`pay/${data.subscriptionId}`)
             }
             // redirect to payment page
@@ -38,7 +38,6 @@ export const HomePage = (props: RouteComponentProps) => {
 
     }
 
-// will be replace for api connect
     const courses: ICourse[] = [
         {description: "321321321 312 321 312 3123 213 123", id: 1, name: "3"},
         {description: "321321321 312 321 312 3123 213 123", id: 2, name: "3"},
@@ -58,9 +57,10 @@ export const HomePage = (props: RouteComponentProps) => {
                             <div className="col-md-9">
                                 <div className="products">
                                     <div className="row no-gutters">
-                                        {!isBusy && <HomeCourses courses={fetched && fetched.length ? fetched : courses}
-                                                                 onClick={onClickHandler}
-                                                                 loading={loading}/>
+                                        {!isBusy && <HomeCourses
+                                            courses={fetched && fetched.length ? fetched : courses}
+                                            onClick={onClickHandler}
+                                            loading={loading}/>
                                         }
                                     </div>
                                 </div>

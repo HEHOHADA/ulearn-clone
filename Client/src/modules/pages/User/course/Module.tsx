@@ -10,16 +10,11 @@ interface Props {
     course?: any
     id?: any
     theme?: any
-    loading: boolean
+    loading?: boolean
 }
 
 type typeTasks = "codeTasks" | "videoTasks" | "testTasks"
 export const Module = (props: Props) => {
-
-    const array = [
-        {id: 1, name: "qq", points: 1, maxPoints: 5},
-        {id: 2, name: "qq1", points: 5, maxPoints: 5},
-    ]
 
     const {onChooseTheme, course, id, loading} = props
     const {fetched, isBusy} = useFetch<IModule>(`${moduleRequest}/${id}`)
@@ -45,7 +40,7 @@ export const Module = (props: Props) => {
             </li>
         ))
     }
-    if (loading) {
+    if (loading || isBusy) {
         return <Loader/>
     }
     return (
