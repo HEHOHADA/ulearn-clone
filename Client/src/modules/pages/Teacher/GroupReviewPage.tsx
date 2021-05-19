@@ -1,17 +1,12 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import {Link, useParams} from "react-router-dom"
-import {useHttp} from "../../hooks/http.hook"
 import {useFetch} from "../../hooks/fetch.hook"
 import {groupReviewRequest} from "../../shared/request"
 
 export const GroupReviewPage = () => {
 
     const {id} = useParams()
-    const {request} = useHttp()
 
-    useEffect(() => {
-        // request(`api/groups/${id}`, "GET")
-    }, [id])
     const {fetched} = useFetch<any>(`${groupReviewRequest}/${id}`)
     const onEditHandler = () => {
 

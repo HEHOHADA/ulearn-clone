@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react'
+import React, {useContext} from 'react'
 import {Link} from "react-router-dom"
 import {IdentityForm} from "../components/identity/IdentityForm"
 import {IdentityPicture} from "../components/identity/IdentityPicture"
