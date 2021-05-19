@@ -40,7 +40,11 @@ export const UserCoursePage = () => {
                 chooseTheme(theme1)
             }
         }
-        themeFetch()
+        let mount = true
+        setTimeout(() => themeFetch(), 400)
+        return () => {
+            mount = false
+        }
         // eslint-disable-next-line
     }, [themeId])
     return (

@@ -15,8 +15,8 @@ import {useTeacherRoute} from "./routes/TeacherRoute"
 import {UserContext} from './modules/context/UserContext'
 import {useUser} from "./modules/hooks/user.hook"
 import {PaymentPage} from "./modules/pages/PaymentPage"
-import {ChatRavil} from "./modules/pages/ChatRavil";
-import {SubscriptionPage} from "./modules/pages/SubscriptionPage";
+import {ChatRavil} from "./modules/pages/ChatRavil"
+import {SubscriptionPage} from "./modules/pages/SubscriptionPage"
 
 
 const App: FC = () => {
