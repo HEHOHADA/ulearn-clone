@@ -8,12 +8,23 @@ export const IdentityPicture = () => {
     const onDrop = useCallback(async ([acceptedFiles]) => {
         const formData = new FormData()
 
-        formData.append('file', acceptedFiles)
+        console.log(acceptedFiles)
+        formData.append("file", acceptedFiles)
 
-        const response = await request(`${accountRequest}/setImage`,
-            'POST', formData, {'Content-Type': 'multipart/form-data'})
+        console.log(formData.getAll("file"))
 
-        console.log(response)
+        fetch(`${accountRequest}/setImage`, {
+            headers: {
+                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0YjhiZTQzOS04Y2VjLTQ2NWQtODZkYS0yMzg2ZGNhODlkYmUiLCJzdWIiOiI2ZDI2OWQ4OS05YWVlLTRhNTQtYmYwNS1iOTIzMDIxZDE1ZGEiLCJuYW1lIjoiQWRtaW4iLCJyb2xlIjoiQWRtaW4iLCJleHAiOjE1OTMwNzgzNDgsImlzcyI6Imh0dHBzOi8vdWxlYXJuQ2xvbmUuY29tIiwiYXVkIjoiaHR0cHM6Ly91bGVhcm5DbG9uZS5jb20ifQ.CstYB6UbQMCw-UJiuClc24NXMVeecJPVzGdrSA4DytM`
+            },
+            method: 'POST',
+            body: formData
+        })
+
+        /*const response = await request(`${accountRequest}/setImage`,
+            'POST', formData,{'Content-Type':'multipart/form-data; boundary=---------------------------320766478615479559063564873044'})*/
+
+        //console.log(response)
     }, [])
 
     return (

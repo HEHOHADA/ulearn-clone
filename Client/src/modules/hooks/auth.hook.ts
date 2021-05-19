@@ -16,6 +16,7 @@ export const useAuth = () => {
         }))
     }, [])
     const logout = useCallback(() => {
+        debugger
         setToken(null)
         setUserId(null)
         setRole(null)
