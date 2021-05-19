@@ -153,7 +153,7 @@ namespace UlearnAPI.Controllers
 
             var userId = User.FindFirstValue("sub");
             await _accountService.SetImage(userId, fileName);
-            return Ok(new { });
+            return Ok(new {fileName = fileName});
         }
 
         [HttpPost("confirmTeacher")]

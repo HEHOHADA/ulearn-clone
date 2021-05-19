@@ -1,35 +1,38 @@
-import React, {useCallback} from 'react'
+import React, {useCallback, useState} from 'react'
 import {Dropzone} from '../../shared/utils/Dropzone'
 import {useHttp} from '../../hooks/http.hook'
-import {accountRequest} from "../../shared/request"
+import {accountRequest, fileDownloadRequest} from "../../shared/request"
 
-export const IdentityPicture = () => {
-    const {request} = useHttp()
+interface IProps {
+    initialValue: string
+}
+
+export const IdentityPicture = (props: IProps) => {
+    const {initialValue} = props
+    const [imageSrc, setImageSrc] = useState<string>(initialValue);
+
     const onDrop = useCallback(async ([acceptedFiles]) => {
         const formData = new FormData()
-
-        console.log(acceptedFiles)
         formData.append("file", acceptedFiles)
 
-        console.log(formData.getAll("file"))
-
-        fetch(`${accountRequest}/setImage`, {
+        const token = JSON.parse(localStorage.getItem("userData")!).token
+        console.log(token)
+        await fetch(`${accountRequest}/setImage`, {
             headers: {
-                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0YjhiZTQzOS04Y2VjLTQ2NWQtODZkYS0yMzg2ZGNhODlkYmUiLCJzdWIiOiI2ZDI2OWQ4OS05YWVlLTRhNTQtYmYwNS1iOTIzMDIxZDE1ZGEiLCJuYW1lIjoiQWRtaW4iLCJyb2xlIjoiQWRtaW4iLCJleHAiOjE1OTMwNzgzNDgsImlzcyI6Imh0dHBzOi8vdWxlYXJuQ2xvbmUuY29tIiwiYXVkIjoiaHR0cHM6Ly91bGVhcm5DbG9uZS5jb20ifQ.CstYB6UbQMCw-UJiuClc24NXMVeecJPVzGdrSA4DytM`
+                'Authorization': `Bearer ${token}`
             },
             method: 'POST',
             body: formData
+        }).then(async (resp: any) => {
+            const a = await resp.json()
+            setImageSrc(`${fileDownloadRequest}?filename=${a.fileName}`)
         })
-
-        /*const response = await request(`${accountRequest}/setImage`,
-            'POST', formData,{'Content-Type':'multipart/form-data; boundary=---------------------------320766478615479559063564873044'})*/
-
-        //console.log(response)
     }, [])
 
     return (
         <div className="card-body text-center shadow">
-            <img alt="/"
+            <img src={imageSrc}
+                 alt="/"
                  className="rounded-circle mb-3 mt-4"
                  width="160"
                  height="160"/>
