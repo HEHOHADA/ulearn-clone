@@ -16,12 +16,21 @@ export const Theme = (props: Props) => {
     if (loading) {
         return <Loader/>
     }
-
+    console.log(theme)
     return (
         <div>
-            {theme && theme.questions && <TestThema id={theme.id} test={theme.questions} receivedPoints={theme.receivedPoints} points={theme.points}/>}
+            {theme && theme.questions &&
+            <TestThema id={theme.id} test={theme.questions} receivedPoints={theme.receivedPoints}
+                       points={theme.points}/>}
             {theme && theme.videoHref && <VideoThema url={theme.videoHref} name={"video"}/>}
-            {theme && theme.initialCode && <CodeTheme id={theme.id} description={theme.description} name={theme.name} initialCode={theme.initialCode} receivedPoints={theme.receivedPoints} points={theme.points}/>}
+            {theme && theme.initialCode && <CodeTheme
+                sended={!!theme.code}
+                id={theme.id}
+                description={theme.description}
+                name={theme.name}
+                initialCode={theme.code ?? theme.initialCode}
+                receivedPoints={theme.receivedPoints}
+                points={theme.points}/>}
         </div>
     )
 }

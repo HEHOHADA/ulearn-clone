@@ -12,9 +12,10 @@ export const ModulePage = () => {
 
     useEffect(() => {
         if (!isBusy) {
-            fetched?.modules!.map(module => {
+            fetched?.modules!.forEach(module => {
                 module.maxPoints = module.codeTasks.map(task => task.points).reduce((a, b) => a + b, 0)
                     + module.testTasks.map(task => task.points!).reduce((a, b) => a + b, 0)
+
             })
             setModules(fetched?.modules!)
         }

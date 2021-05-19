@@ -21,7 +21,11 @@ export const useFetch = <T>(url: string) => {
     }, [url])
 
     useEffect(() => {
-        fetch().finally(() => console.log(fetched))
+        let mount = true
+        fetch().finally(() => console.log('data'))
+        return () => {
+            mount = false
+        }
         // eslint-disable-next-line
     }, [])
 
