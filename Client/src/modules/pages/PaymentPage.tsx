@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react'
 import {useParams} from 'react-router-dom'
 import {CreditCard} from "../components/pay/CreditCard"
-import {ICourse, ISubscription} from "../shared/interface"
+import {ISubscription} from "../shared/interface"
 import {useHttp} from "../hooks/http.hook"
 import {RouteComponentProps} from "react-router"
 import {useFetch} from "../hooks/fetch.hook";
-import {courseRequest, paySubscription, subscriptionRequest} from "../shared/request";
-import {FormInput} from "../shared/utils/FormInput";
+import {paySubscription, subscriptionRequest} from "../shared/request";
 
 
 export const PaymentPage = (props: RouteComponentProps) => {
@@ -18,14 +17,14 @@ export const PaymentPage = (props: RouteComponentProps) => {
     }, [id])
     const {request} = useHttp()
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const {fetched, isBusy} = useFetch<ISubscription>(subscriptionRequest+'/'+id)
+    const {fetched, isBusy} = useFetch<ISubscription>(subscriptionRequest + '/' + id)
     const {history} = props
 
     // const {isBusy, fetched, loading} = useFetch('')
     let subscription: ISubscription | any = []
     const changeFormHandler = async (form: any) => {
         console.log(form)
-        if(form.cvc!== ''){
+        if (form.cvc !== '') {
             const data = await request(paySubscription, 'POST', form)
             console.log("data" + data)
             history.push('/login')
@@ -49,15 +48,18 @@ export const PaymentPage = (props: RouteComponentProps) => {
                             !isBusy &&
                             <div className="products">
                                 <h3 className="title">Checkout</h3>
-                                <div className="item"><span className="price">{fetched ? fetched.price : subscription.price}</span>
+                                <div className="item"><span
+                                    className="price">{fetched ? fetched.price : subscription.price}</span>
                                     <p className="item-name">{fetched ? fetched.name : subscription.name}</p>
                                     <p className="item-description">{fetched ? fetched.level : subscription.level}</p>
                                 </div>
-                                <div className="total"><span>Total</span><span className="price">{fetched ? fetched.price : subscription.price}</span>
+                                <div className="total"><span>Total</span><span
+                                    className="price">{fetched ? fetched.price : subscription.price}</span>
                                 </div>
                             </div>
                         }
-                            <CreditCard product={parseInt(id!)} isSubmitting={isSubmitting} changeFormHandler={changeFormHandler}/>
+                        <CreditCard product={parseInt(id!)} isSubmitting={isSubmitting}
+                                    changeFormHandler={changeFormHandler}/>
 
 
                     </form>
