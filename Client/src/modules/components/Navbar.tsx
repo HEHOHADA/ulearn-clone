@@ -1,19 +1,17 @@
 import React, {useContext, useState} from 'react'
-import {NavLink} from "react-router-dom";
-import {ILink} from "../shared/interface";
-import {AuthContext} from "../context/AuthContext";
+import {NavLink, useHistory} from "react-router-dom"
+import {ILink} from "../shared/interface"
+import {AuthContext} from "../context/AuthContext"
 
+export const Navbar = () => {
 
-interface Props {
-
-}
-
-
-export const Navbar = (props: any) => {
-
-    // const history = useHistory()
+    const history = useHistory()
     const auth = useContext(AuthContext)
     const [classes, setClasses] = useState([''])
+    const onLogoutHandler = () => {
+        auth.logout()
+        history.push('/')
+    }
     const navbarHandler = () => {
         let links: ILink[] = []
         if (!auth.isAuth) {
@@ -22,10 +20,13 @@ export const Navbar = (props: any) => {
                 link: "/register"
             }]
         } else {
-            links = [{name: "home", link: "/"}, {name: "account", link: "/account"}, {name: "LOGOUT", link: "/logout"}]
+            links = [{name: "home", link: "/"}, {name: "account", link: "/account"}]
         }
-        if (auth.role === 'admin') {
+        if (auth.role === 'Admin') {
             links.push({name: "admin", link: '/admin'})
+        }
+        if (auth.role === 'Admin' || auth.role === 'Teacher') {
+            links.push({name: 'groups', link: '/groups'})
         }
         return (
             <ul className="nav navbar-nav ml-auto">
@@ -35,6 +36,9 @@ export const Navbar = (props: any) => {
                         className="nav-link"
                         to={m.link}>{m.name}</NavLink></li>
                 ))}
+                {auth.isAuth && <button className="nav-link"
+                                        onClick={onLogoutHandler}>LOGOUT
+                </button>}
             </ul>)
     }
 

@@ -5,10 +5,12 @@ interface Props {
     name: string
     formValue: any
     type?: string
+    onFocus?: any
 }
+
 export const FormInput = (props: Props) => {
 
-    const {onChange, name, formValue, type = "text"} = props
+    const {onFocus, onChange, name, formValue, type = "text"} = props
     const label = name.charAt(0).toUpperCase() + name.slice(1)
     const htmlFor = `${name}-${Math.random()}`
 
@@ -18,8 +20,9 @@ export const FormInput = (props: Props) => {
             <input
                 required
                 id={htmlFor}
+                onFocus={onFocus && onFocus}
                 onChange={onChange}
-                value={formValue}
+                value={formValue || ''}
                 name={name}
                 placeholder={label}
                 className="form-control"

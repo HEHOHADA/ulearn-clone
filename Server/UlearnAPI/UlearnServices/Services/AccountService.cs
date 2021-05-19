@@ -1,5 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using UlearnData;
 using UlearnData.Models;
 using UlearnServices.Models.Account;
@@ -17,11 +21,28 @@ namespace UlearnServices.Services
             _userManager = userManager;
         }
 
-        public async Task Update(string userId, UserInfo model)
+        public async Task<FullUserInfoDto> Get(string userId)
         {
-            var user = await _context.Users.FindAsync(userId);
+            var user = await _userManager.FindByIdAsync(userId);
+            return new FullUserInfoDto
+            {
+                Email = user.Email,
+                Username = user.UserName,
+                Firstname = user.Firstname,
+                Lastname = user.Lastname,
+                ImageSrc = user.ImageSrc
+            };
+        }
+
+        public async Task Update(string userId, FullUserInfoDto model)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            await _userManager.SetUserNameAsync(user, model.Username);
+            await _userManager.SetEmailAsync(user, model.Email);
             user.Firstname = model.Firstname;
             user.Lastname = model.Lastname;
+
             await _context.SaveChangesAsync();
         }
 
@@ -36,6 +57,20 @@ namespace UlearnServices.Services
         {
             var user = await _context.Users.FindAsync(userId);
             await _userManager.AddToRoleAsync(user, "Teacher");
+        }
+
+        public async Task<(bool HasAccess, Course course)> IsCourseAvailable(string userId, int courseId)
+        {
+            var subscription = _context.Users
+                .Include(x => x.Subscription)
+                .First(x => x.Id == userId)
+                .Subscription;
+            var course = await _context.Courses
+                .Include(x => x.Subscription)
+                .FirstOrDefaultAsync(c => c.Id == courseId);
+            if (course == default)
+                throw new ArgumentException("No courseId passed");
+            return ((subscription?.Level ?? 0) >= course.Subscription.Level, course);
         }
     }
 }

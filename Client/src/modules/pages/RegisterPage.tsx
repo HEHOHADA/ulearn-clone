@@ -1,12 +1,11 @@
 import React, {FC, useContext} from 'react'
+import jwt from 'jsonwebtoken'
+import {useHistory} from 'react-router-dom'
 import {IData, RegisterModel, Token} from "../shared/interface"
 import {useHttp} from "../hooks/http.hook"
-import {useHistory} from 'react-router-dom'
 import {useForm} from "../hooks/form.hook"
-import jwt from 'jsonwebtoken'
 import {AuthContext} from "../context/AuthContext"
 import {registerRequest} from "../shared/request"
-import {validationAuthForm} from "../shared/validation/validationAuthForm"
 
 export const RegisterPage: FC = () => {
 
@@ -20,16 +19,12 @@ export const RegisterPage: FC = () => {
 
     const {loading, request, error, clearError} = useHttp()
     const auth = useContext(AuthContext)
-    const {form, generateInputs, validation, errors} = useForm<RegisterModel>(initialValues)
+    const {form, generateInputs} = useForm<RegisterModel>(initialValues)
 
 
     const registerHandler = async (event: any) => {
         event.preventDefault()
         clearError()
-        const isValid = validation(validationAuthForm)
-        if (errors && !isValid) {
-            return
-        }
         try {
             const data: IData = await request(registerRequest, "POST", {...form})
             if (!data) {

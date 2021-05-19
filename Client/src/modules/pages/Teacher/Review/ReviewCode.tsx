@@ -1,37 +1,38 @@
 import React from 'react'
-import {useForm} from "../../../hooks/form.hook";
-import {FormInput} from "../../../shared/utils/FormInput";
-import {Textarea} from "../../../shared/utils/Textarea";
+import {useForm} from "../../../hooks/form.hook"
+import {FormInput} from "../../../shared/utils/FormInput"
+import {Textarea} from "../../../shared/utils/Textarea"
 
 
 interface Props {
     initialValues?: {
         points: number
-        comment: string
+        text: string
     }
+    onSubmit: (event: any, form: any) => void
+    maxPoints: number
 }
 
 export const defaultReviewForm = {
     points: 0,
-    comment: ''
+    text: ''
 }
 export const ReviewCode = (props: Props) => {
 
-    const {initialValues = defaultReviewForm} = props
+    const {initialValues = defaultReviewForm, onSubmit, maxPoints} = props
     const {form, changeHandler} = useForm(initialValues)
 
 
-    const onSubmit = (event: any) => {
-        event.preventDefault()
-        console.log(form)
-    }
-
     return (
-        <form onSubmit={onSubmit}>
-            <FormInput onChange={changeHandler} name={'points'} formValue={form.points} type={"number"}/>
-            <Textarea onChange={changeHandler} name={"comment"} formValue={form.comment}/>
+        <form onSubmit={(event: any) => onSubmit(event, form)}>
+
+            <div className="d-flex">
+                <FormInput onChange={changeHandler} name={'points'} formValue={form.points} type={"number"}/>
+                <span className="mt-4 p-2">/{maxPoints}</span>
+            </div>
+            <Textarea onChange={changeHandler} name={"text"} formValue={form.text}/>
             <button
-                className="btn btn-primary btn-block" type="submit">Send
+                className="btn btn-primary btn-block mb-2" type="submit">Send
             </button>
         </form>
     )
