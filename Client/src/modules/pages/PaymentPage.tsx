@@ -1,10 +1,33 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
+import {useParams} from 'react-router-dom'
+import {CreditCard} from "../components/pay/CreditCard"
+import {ISubscription} from "../shared/interface"
+import {useHttp} from "../hooks/http.hook"
+import {RouteComponentProps} from "react-router"
+import {useFetch} from "../hooks/fetch.hook";
+import {paySubscription, subscriptionRequest} from "../shared/request";
 
-export const PaymentPage = () => {
 
+export const PaymentPage = (props: RouteComponentProps) => {
 
+    const {id} = useParams()
+    useEffect(() => {
+        //request to api
 
+    }, [id])
+    const {request} = useHttp()
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const {fetched, isBusy} = useFetch<ISubscription>(subscriptionRequest + '/' + id)
+    const {history} = props
 
+    // const {isBusy, fetched, loading} = useFetch('')
+    let subscription: ISubscription | any = []
+    const changeFormHandler = async (form: any) => {
+        if (form.cvc !== '') {
+            await request(paySubscription, 'POST', form)
+            history.push('/')
+        }
+    }
     return (
         <main className="page payment-page">
             <section className="clean-block payment-form dark">
@@ -14,51 +37,27 @@ export const PaymentPage = () => {
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor
                             in, mattis vitae leo.</p>
                     </div>
-                    <form>
-                        <div className="products">
-                            <h3 className="title">Checkout</h3>
-                            <div className="item"><span className="price">$200</span>
-                                <p className="item-name">Product 1</p>
-                                <p className="item-description">Lorem ipsum dolor sit amet</p>
-                            </div>
-                            <div className="item"><span className="price">$120</span>
-                                <p className="item-name">Product 2</p>
-                                <p className="item-description">Lorem ipsum dolor sit amet</p>
-                            </div>
-                            <div className="total"><span>Total</span><span className="price">$320</span></div>
-                        </div>
-                        <div className="card-details">
-                            <h3 className="title">Credit Card Details</h3>
-                            <div className="form-row">
-                                <div className="col-sm-7">
-                                    <div className="form-group"><label htmlFor="card-holder">Card Holder</label><input
-                                        className="form-control" type="text" placeholder="Card Holder"/></div>
+                    <form onSubmit={async (event) => {
+                        event.preventDefault()
+                        setIsSubmitting(true)
+                    }
+                    }>
+                        {
+                            !isBusy &&
+                            <div className="products">
+                                <h3 className="title">Checkout</h3>
+                                <div className="item"><span
+                                    className="price">{fetched ? fetched.price : subscription.price}</span>
+                                    <p className="item-name">{fetched ? fetched.name : subscription.name}</p>
+                                    <p className="item-description">{fetched ? fetched.level : subscription.level}</p>
                                 </div>
-                                <div className="col-sm-5">
-                                    <div className="form-group"><label>Expiration date</label>
-                                        <div className="input-group expiration-date"><input className="form-control"
-                                                                                            type="text"
-                                                                                            placeholder="MM"/><input
-                                            className="form-control" type="text" placeholder="YY"/></div>
-                                    </div>
-                                </div>
-                                <div className="col-sm-8">
-                                    <div className="form-group"><label htmlFor="card-number">Card Number</label><input
-                                        className="form-control" type="text" id="card-number"
-                                        placeholder="Card Number"/>
-                                    </div>
-                                </div>
-                                <div className="col-sm-4">
-                                    <div className="form-group"><label htmlFor="cvc">CVC</label><input
-                                        className="form-control" type="text" id="cvc" placeholder="CVC"/></div>
-                                </div>
-                                <div className="col-sm-12">
-                                    <div className="form-group">
-                                        <button className="btn btn-primary btn-block" type="submit">Proceed</button>
-                                    </div>
+                                <div className="total"><span>Total</span><span
+                                    className="price">{fetched ? fetched.price : subscription.price}</span>
                                 </div>
                             </div>
-                        </div>
+                        }
+                        <CreditCard product={parseInt(id!)} isSubmitting={isSubmitting}
+                                    changeFormHandler={changeFormHandler}/>
                     </form>
                 </div>
             </section>

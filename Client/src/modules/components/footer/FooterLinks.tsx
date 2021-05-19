@@ -1,11 +1,17 @@
 import React from 'react'
-import {Footer} from "../../shared/interface";
-import {Link} from "react-router-dom";
+import {Link} from "react-router-dom"
+import {Footer} from "../../shared/interface"
 import './Footer.module.css'
 
 export const FooterLinks = () => {
 
-    const links: Footer[] = [{name: "Get started", link: [{link: "/", name: "Home"}]}]
+    const links: Footer[] = [{
+        name: "Get started",
+        link: [{link: "/", name: "Home"}, {link: "/subscription", name: "Subscription"}]
+    }, {
+        name: "Usage",
+        link: [{link: "/chat", name: "Chat"}, {link: 'account', name: "Account"}]
+    }]
 
 
     const footerHandler = (footer: Footer) => (
@@ -24,7 +30,7 @@ export const FooterLinks = () => {
         <footer className="page-footer dark fle">
             <div className="container">
                 <div className="row">
-                    {links.map(m=>footerHandler(m))}
+                    {links.map(m => footerHandler(m))}
                 </div>
             </div>
             <div className="footer-copyright">

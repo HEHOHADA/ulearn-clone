@@ -1,15 +1,38 @@
 import React from 'react'
-// import {useHistory, useParams} from 'react-router-dom'
-import {defaultSubscriptionFormValues, SubscriptionForm} from "../shared/SubscriptionForm";
+import {useParams, useHistory} from 'react-router-dom'
+import {SubscriptionForm} from "../../../components/pay/SubscriptionForm"
+import {useFetch} from "../../../hooks/fetch.hook"
+import {subscriptionRequest} from "../../../shared/request"
+import {Loader} from "../../../shared/utils/Loader"
+import {useHttp} from "../../../hooks/http.hook"
+import {ISubscription} from "../../../shared/interface"
 
 export const SubscriptionEdit = () => {
 
-    // const history = useHistory()
-    // const query = useParams()
+    const {id} = useParams()
+    const history = useHistory()
+    const {fetched, loading: loading1, isBusy} = useFetch<ISubscription>(`${subscriptionRequest}/${id}`)
 
+    const {request, loading} = useHttp()
 
+    const submit = async (event: any, form: any) => {
+        event.preventDefault()
+        const response = await request(`${subscriptionRequest}/${id}`, 'PUT', {...form})
+        if (response) {
+            history.push('/admin/subscription')
+        }
+    }
+    if (loading) {
+        return <Loader/>
+    }
 
-    return (//params find by id
-        <SubscriptionForm  initialValues={defaultSubscriptionFormValues}/>
+    return (
+        <>
+            {!isBusy ? <SubscriptionForm
+                loading={loading || loading1}
+                onSubmit={submit}
+                title={"Edit"}
+                initialValues={fetched}/> : <Loader/>}
+        </>
     )
 }

@@ -1,10 +1,15 @@
 import React from 'react'
-import {SubscriptionView} from "../components/pay/SubscriptionView";
+import {SubscriptionView} from "../components/pay/SubscriptionView"
+import {subscriptionRequest} from "../shared/request"
+import {useFetch} from "../hooks/fetch.hook"
+import {ISubscription} from "../shared/interface";
+import {useHistory} from 'react-router-dom'
 
 export const SubscriptionPage = () => {
-
-    const onClickSubscription = () => {
-
+    const {fetched, isBusy} = useFetch<Array<ISubscription>>(subscriptionRequest)
+    const history = useHistory()
+    const onClickSubscription = (id: number) => {
+        history.push(`pay/${id}`)
     }
 
     return (
@@ -16,8 +21,10 @@ export const SubscriptionPage = () => {
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor
                             in, mattis vitae leo.</p>
                     </div>
-                    <div className="row justify-content-center">
-                        <SubscriptionView onClick={onClickSubscription} text={"Buy now"}/>
+                    <div className="row">
+                        {!isBusy &&
+                        <SubscriptionView loading={true} subscription={fetched} onClick={onClickSubscription}
+                                          text={"Buy now"}/>}
                     </div>
                 </div>
             </section>

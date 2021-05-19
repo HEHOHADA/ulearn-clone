@@ -1,68 +1,79 @@
-import React, {FC, useState} from 'react'
-import { RegisterModel} from "../shared/interface";
-
+import React, {FC, useContext} from 'react'
+import jwt from 'jsonwebtoken'
+import {useHistory} from 'react-router-dom'
+import {IData, RegisterModel, Token} from "../shared/interface"
+import {useHttp} from "../hooks/http.hook"
+import {useForm} from "../hooks/form.hook"
+import {AuthContext} from "../context/AuthContext"
+import {registerRequest} from "../shared/request"
 
 export const RegisterPage: FC = () => {
 
+    const history = useHistory()
 
-    const [form, setForm] = useState<RegisterModel>({
-        username: '',
+    const initialValues = {
         email: '',
+        username: '',
         password: ''
-    })
-
-
-    const changeHandler = (event: any) => {
-        setForm({...form, [event.target.name]: event.target.value})
     }
 
-    const registerHandler = async () => {
-        try {
-            //Login with api
-        } catch (e) {
+    const {loading, request, error, clearError} = useHttp()
+    const auth = useContext(AuthContext)
+    const {form, generateInputs} = useForm<RegisterModel>(initialValues)
 
+
+    const registerHandler = async (event: any) => {
+        event.preventDefault()
+        clearError()
+        try {
+            const data: IData = await request(registerRequest, "POST", {...form})
+            if (!data) {
+                return
+            }
+
+            const decoded = jwt.decode(data.token!)
+            if (!decoded) {
+                return
+            }
+            const token = decoded as Token
+
+            auth.login(data.token, token.sub)
+
+            history.push('/')
+
+        } catch (e) {
+            console.log('HERE ERROR', e)
         }
     }
 
+
     return (
-        <form>
-            <div className="form-group">
-                <label htmlFor="userName">Username</label>
-                <input
-                    onChange={changeHandler}
-                    value={form.username}
-                    name="userName"
-
-                    placeholder="Username"
-                    className="form-control item"
-                    type="userName"/></div>
-            <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input
-                    onChange={changeHandler}
-                    value={form.email}
-                    name="email"
-
-                    placeholder="Email"
-                    className="form-control item"
-                    type="email"/></div>
-            <div className="form-group">
-                <label htmlFor="password">
-                    Password
-                </label>
-                <input
-                    onChange={changeHandler}
-                    name="password"
-                    placeholder="Password"
-                    type="password"
-                    value={form.password}
-                    className="form-control"
-                />
+        <>
+            <div className="block-heading">
+                <h2 className="text-info">Регистрация</h2>
+                <p>Пожалуйста зарегистрируйтесь</p>
             </div>
-            <button
+            {error &&
+            < div className="alert alert-danger" role="alert">
+                <strong>{error || 'Введите правильное значение'}</strong>
+            </div>
+            }
+            <form
                 onSubmit={registerHandler}
-                className="btn btn-primary btn-block" type="submit">Log In
-            </button>
-        </form>
+            >
+                {generateInputs((key: string) => {
+                    if (key === 'password') {
+                        return 'password'
+                    }
+                    return 'text'
+                })}
+
+                <button
+                    disabled={loading}
+
+                    className="btn btn-primary btn-block" type="submit">Register
+                </button>
+            </form>
+        </>
     )
 }
