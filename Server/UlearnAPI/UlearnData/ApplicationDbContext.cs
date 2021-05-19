@@ -22,6 +22,8 @@ namespace UlearnData
         public DbSet<VideoTask> VideoTasks { get; set; }
         public DbSet<VideoTaskResult> VideoTaskResults { get; set; }
         
+        public DbSet<TestTaskResult> TestTaskResults { get; set; }
+         
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Module> Modules { get; set; }
