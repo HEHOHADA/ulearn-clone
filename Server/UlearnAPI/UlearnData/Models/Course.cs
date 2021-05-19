@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
 using UlearnData.Models.Tasks;
-using UlearnData.Models.Tasks.CodeTask;
-using UlearnData.Models.Tasks.TestTask;
-using UlearnData.Models.Tasks.VideoTask;
 
 namespace UlearnData.Models
 {

@@ -37,7 +37,7 @@ export const TestThema = (props: Props) => {
     const submitForm = async (event: any) => {
         event.preventDefault()
         try {
-            await request(`${testTaskRequest}result/confirm`, 'POST', {...form, testTaskId: id})
+            await request(`${testTaskRequest}result/confirm`, 'POST', {questions: form, testTaskId: id})
         } catch (e) {
             console.log(e)
         }
@@ -49,7 +49,7 @@ export const TestThema = (props: Props) => {
             return (
                 <div key={`${i}-${t.answers}`}>
                     <h4 className="header-line m-2">{i + 1}.<strong> {t.text}</strong></h4>
-                    <TestItem isSubmitting={isSubmitting} change={selectedChange} question={t.text} number={i}
+                    <TestItem id={t.id!} isSubmitting={isSubmitting} change={selectedChange} question={t.text} number={i}
                               answers={t.answers}/>
                 </div>
             )
@@ -65,9 +65,9 @@ export const TestThema = (props: Props) => {
                 <span className="text-monospace center m-3">{receivedPoints}/{points}</span>
             </div>
 
-            <form onSubmit={(event) => {
+            <form onSubmit={async (event) => {
                 setIsSubmitting(true)
-                submitForm(event)
+                await submitForm(event)
             }}>
                 {testGenerator()}
                 <button className="btn btn-primary" disabled={isSubmitting}>Проверить

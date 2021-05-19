@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using UlearnData.Models.Tasks.CodeTask;
-using UlearnData.Models.Tasks.TestTask;
-using UlearnData.Models.Tasks.VideoTask;
+using UlearnData.Models.Tasks.CodeTasks;
+using UlearnData.Models.Tasks.TestTasks;
+using UlearnData.Models.Tasks.VideoTasks;
 
 namespace UlearnData.Models
 {

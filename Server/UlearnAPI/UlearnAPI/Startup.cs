@@ -25,6 +25,9 @@ using UlearnAPI.Middleware;
 using UlearnData;
 using UlearnData.Models;
 using UlearnServices.Services;
+using UlearnServices.Services.CodeTasks;
+using UlearnServices.Services.TestTasks;
+using UlearnServices.Services.VideoTasks;
 
 namespace UlearnAPI
 {
@@ -105,6 +108,8 @@ namespace UlearnAPI
             services.AddScoped<VideoTasksService>();
             services.AddScoped<AccountService>();
             services.AddScoped<LoggingService>();
+            services.AddScoped<CodeTaskResultService>();
+            services.AddScoped<VideoTaskResultService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -8,11 +8,12 @@ interface Props {
     answers: Array<IAnswer>
     change: (question: IQuestion) => void
     isSubmitting: boolean
+    id: number
 }
 
 export const TestItem = (props: Props) => {
 
-    const {question, answers, isSubmitting, change} = props
+    const {question, answers, isSubmitting, change, id} = props
 
     const initialClasses = answers.reduce(function (result: Map<string, string>, item: IAnswer) {
         result.set(item.text, '')
@@ -48,9 +49,9 @@ export const TestItem = (props: Props) => {
 
     useEffect(() => {
         if (answer) {
-            change({text: question, points: point, answers: answer!})
+            change({text: question, points: point, answers: answer!, id: id})
         } else {
-            change({text: question, points: 0, answers: answer!})
+            change({text: question, points: 0, answers: answer!, id: id})
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [answer, isSubmitting])
