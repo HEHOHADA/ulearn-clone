@@ -83,7 +83,8 @@ namespace UlearnAPI.Controllers
         [LogAuthorizeRoles("Admin,Teacher")]
         public async Task<ActionResult<FullGroupDto>> PostGroup(GroupDto group)
         {
-            var newGroup = await _groupsService.CreateAsync(group);
+            var userId = User.FindFirstValue("sub");
+            var newGroup = await _groupsService.CreateAsync(userId, group);
             return CreatedAtAction("GetGroup", new {id = newGroup.Id}, newGroup);
         }
 

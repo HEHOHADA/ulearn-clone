@@ -64,7 +64,7 @@ namespace UlearnServices.Services
             };
         }
 
-        public async Task<FullGroupDto> CreateAsync(GroupDto model)
+        public async Task<FullGroupDto> CreateAsync(string userId, GroupDto model)
         {
             var group = new Group
             {
@@ -76,9 +76,13 @@ namespace UlearnServices.Services
             {
                 throw new ArgumentException();
             }
-
-            group.UserGroups = (await Task.WhenAll(model.Emails
+            
+            var users = (await Task.WhenAll(model.Emails
                     .Select(x => _userManager.FindByEmailAsync(x))))
+                .ToList();
+            users.Add(await _context.Users.FindAsync(userId));
+            
+            group.UserGroups = users
                 .Where(x => x != null)
                 .Select(x => new UserGroup
                 {
