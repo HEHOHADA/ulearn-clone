@@ -1,14 +1,14 @@
 import React, {useContext} from 'react'
 import {Link} from "react-router-dom"
+import jwt from "jsonwebtoken"
 import {IdentityForm} from "../components/identity/IdentityForm"
 import {IdentityPicture} from "../components/identity/IdentityPicture"
 import {AuthContext} from "../context/AuthContext"
 import {useHttp} from "../hooks/http.hook"
-import {accountRequest, fileDownloadRequest, groupRequest, teacherConfirm} from "../shared/request"
+import {accountRequest, fileDownloadRequest, groupGetRequest, groupRequest, teacherConfirm} from "../shared/request"
 import {useFetch} from "../hooks/fetch.hook"
 import {GoogleMap} from "../shared/utils/GoogleMap"
-import jwt from "jsonwebtoken";
-import {Token} from "../shared/interface";
+import {Token} from "../shared/interface"
 
 
 interface settings {
@@ -33,7 +33,7 @@ export const IdentityPage = () => {
 
     const teachersGroup = () => {
         return fetched && fetched.map((g: any) => (
-            <Link to={`/group/${g.id}`} key={`${g.name}-${g.course}`} className="module p-3 border">
+            <Link to={`/group/${g.id}`} key={`${g.name}-${g.courseId}`} className="module p-3 border">
                 <p className="text-primary m-0 font-weight-bold text-lg-left ">{g.name}</p>
                 <span className="text-primary">{g.course}</span>
             </Link>
