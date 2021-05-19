@@ -8,5 +8,6 @@ namespace UlearnServices.Models.Account
         [Required] public string Username { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
+        public string ImageSrc { get; set; }
     }
 }
