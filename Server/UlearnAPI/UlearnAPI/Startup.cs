@@ -108,6 +108,8 @@ namespace UlearnAPI
             services.AddScoped<VideoTasksService>();
             services.AddScoped<AccountService>();
             services.AddScoped<LoggingService>();
+            services.AddScoped<CodeTaskResultService>();
+            services.AddScoped<VideoTaskResultService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
