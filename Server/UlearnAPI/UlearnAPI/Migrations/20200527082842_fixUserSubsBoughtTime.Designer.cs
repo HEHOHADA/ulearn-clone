@@ -9,8 +9,8 @@ using UlearnData;
 namespace UlearnAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200526225225_AddFromToSubscr")]
-    partial class AddFromToSubscr
+    [Migration("20200527082842_fixUserSubsBoughtTime")]
+    partial class fixUserSubsBoughtTime
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -211,9 +211,6 @@ namespace UlearnAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("BoughtDate")
-                        .HasColumnType("TEXT");
 
                     b.Property<int>("Level")
                         .HasColumnType("INTEGER");
@@ -541,6 +538,9 @@ namespace UlearnAPI.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("SubscriptionBoughtDate")
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("SubscriptionId")
