@@ -58,7 +58,7 @@ export const ChatRavil = () => {
                         {messages && messages.map((m, i) => {
                             return (
                                 <div className="card" key={`${m}-${i}`}>
-                                    <div className="card-body">
+                                    <div className="card-body alert-dark">
                                         <strong className="m-1">{m.username}:</strong>
                                         <span className="m-1">{m.message}</span>
                                     </div>
@@ -70,7 +70,7 @@ export const ChatRavil = () => {
                         setSomething(event.target.value)
                     }}
                                name={'message'} formValue={something}/>
-                    <button>send</button>
+                    <button className="btn btn-primary m-1">Send message</button>
                 </form>
             </div>
         </main>
