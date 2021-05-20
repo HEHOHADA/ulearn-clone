@@ -37,7 +37,7 @@ namespace UlearnAPI
         {
             Configuration = configuration;
         }
-        
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -45,11 +45,20 @@ namespace UlearnAPI
         {
             services.AddSignalR();
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection"),
+            var builder = new PostgreSqlConnectionStringBuilder(Configuration["DATABASE_URL"])
+            {
+                Pooling = true,
+                TrustServerCertificate = true,
+                SslMode = SslMode.Require
+            };
+            services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(options =>
+                options.UseNpgsql(builder.ConnectionString,
                     b => b.MigrationsAssembly("UlearnAPI")));
-
+/*
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlite(Configuration.GetConnectionString("SqliteLocal"),
+                    b => b.MigrationsAssembly("UlearnAPI")));
+*/
             services.AddIdentity<User, IdentityRole>(options => { options.User.RequireUniqueEmail = true; })
                 .AddRoles<IdentityRole>()
                 .AddRoleManager<RoleManager<IdentityRole>>()
@@ -84,7 +93,7 @@ namespace UlearnAPI
                         ClockSkew = TimeSpan.Zero
                     };
                 });
-            
+
             // requires using Microsoft.Extensions.Options
             services.Configure<UlearnDatabaseSettings>(
                 Configuration.GetSection(nameof(UlearnDatabaseSettings)));
@@ -95,7 +104,7 @@ namespace UlearnAPI
             services.AddAuthorization();
             services.AddControllers();
             services.AddSwaggerDocument();
-            
+
             services.AddMemoryCache();
             services.AddResponseCompression();
 
@@ -118,17 +127,18 @@ namespace UlearnAPI
         {
             //тут монга
             app.UseMiddleware<MongoLogMiddleware>();
-            
+
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
             if (env.IsDevelopment())
             {
-                app.UseCors(builder => builder.WithOrigins("http://localhost:3000").AllowCredentials().AllowAnyMethod().AllowAnyHeader());
+                app.UseCors(builder => builder.WithOrigins("http://localhost:3000").AllowCredentials().AllowAnyMethod()
+                    .AllowAnyHeader());
                 app.UseDeveloperExceptionPage();
             }
 
             app.UseRouting();
-            
+
             app.UseResponseCompression();
 
             app.UseAuthentication();
@@ -153,7 +163,7 @@ namespace UlearnAPI
         {
             var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            string[] roleNames = {"Admin","Teacher"};
+            string[] roleNames = {"Admin", "Teacher"};
 
             foreach (var roleName in roleNames)
             {
