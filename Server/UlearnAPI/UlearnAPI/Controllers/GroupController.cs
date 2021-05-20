@@ -54,7 +54,8 @@ namespace UlearnAPI.Controllers
         [LogAuthorizeRoles("Admin,Teacher")]
         public async Task<IActionResult> PutGroup(int id, GroupDto group)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var userId = User.FindFirstValue("sub");
+            var user = await _userManager.FindByIdAsync(userId);
             if (!await _userManager.IsInRoleAsync(user, "Admin") && !await _groupsService.HasUser(user, id))
             {
                 return Unauthorized();
@@ -94,7 +95,8 @@ namespace UlearnAPI.Controllers
         [LogAuthorizeRoles("Admin,Teacher")]
         public async Task<ActionResult<FullGroupDto>> DeleteGroup(int id)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var userId = User.FindFirstValue("sub");
+            var user = await _userManager.FindByIdAsync(userId);
             if (!await _userManager.IsInRoleAsync(user, "Admin") && !await _groupsService.HasUser(user, id))
             {
                 return Unauthorized();
