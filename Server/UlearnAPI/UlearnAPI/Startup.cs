@@ -33,11 +33,9 @@ namespace UlearnAPI
 {
     public class Startup
     {
-        private readonly ILogger<Startup> _logger;
-        public Startup(IConfiguration configuration, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _logger = logger;
         }
 
         public IConfiguration Configuration { get; }
@@ -46,8 +44,8 @@ namespace UlearnAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSignalR();
-            _logger.LogInformation($"URL 1 IS {Environment.GetEnvironmentVariable("DATABASE_URL")}");
-            _logger.LogInformation($"URL 2 IS {Configuration["DATABASE_URL"]}");
+            Console.WriteLine($"URL 1 IS {Environment.GetEnvironmentVariable("DATABASE_URL")}");
+            Console.WriteLine($"URL 2 IS {Configuration["DATABASE_URL"]}");
             var builder = new PostgreSqlConnectionStringBuilder(Environment.GetEnvironmentVariable("DATABASE_URL"))
             //var builder = new PostgreSqlConnectionStringBuilder("postgres://inercyilgnsbbb:fe7a72cd2d12a9794b760c1a988accb3c549f878183740d0d95cc9fb596d3e81@ec2-54-217-236-206.eu-west-1.compute.amazonaws.com:5432/db5isp5cqn5ghg")
             {
