@@ -1,5 +1,5 @@
 import React, {FC} from 'react'
-import {BrowserRouter, Switch, Route} from "react-router-dom"
+import {BrowserRouter, Route, Switch} from "react-router-dom"
 import {MainLayout} from "./modules/shared/layout/MainLayout"
 import {AppRoute} from "./routes/AppRoute"
 import {HomePage} from "./modules/pages/HomePage"
@@ -43,7 +43,7 @@ const App: FC = () => {
                         <AppRoute path={'/course/:id'} component={UserCoursePage} layout={MainLayout}/>
                         <AppRoute path={'/subscription'} component={SubscriptionPage} layout={MainLayout}/>
                         {isAuth && <AppRoute exact path={'/account'} component={IdentityPage} layout={MainLayout}/>}
-                        {isAuth && <AppRoute exact path={'/chat'} component={ChatRavil} layout={MainLayout}/>}
+                        <AppRoute exact path={'/chat'} component={ChatRavil} layout={MainLayout}/>
                         {!isAuth && <AppRoute exact path={'/login'} component={LoginPage} layout={AuthLayout}/>}
                         {!isAuth && <AppRoute exact path={'/register'} component={RegisterPage} layout={AuthLayout}/>}
                         {isAdmin && <Route path={'/admin'} component={useAdminRoute}/>}
