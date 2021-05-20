@@ -24,7 +24,7 @@ namespace UlearnServices.Services
 
         public bool GroupExists(int id)
         {
-            return _context.Modules.Any(e => e.Id == id);
+            return _context.Groups.Any(e => e.Id == id);
         }
 
         public async Task<List<FullGroupDto>> GetAsync()
