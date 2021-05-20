@@ -11,6 +11,7 @@ COPY . ./
 
 FROM build AS publish
 WORKDIR /src/UlearnAPI
+RUN dotnet tool install --global dotnet-ef
 RUN dotnet publish -c Release -o /src/publish
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
