@@ -86,10 +86,14 @@ namespace UlearnAPI
                 });
 
             // requires using Microsoft.Extensions.Options
-            services.Configure<UlearnDatabaseSettings>(
-                Configuration.GetSection(nameof(UlearnDatabaseSettings)));
-            services.AddSingleton<IUlearnDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<UlearnDatabaseSettings>>().Value);
+            services.AddSingleton<UlearnDatabaseSettings>();
+            services.Configure<UlearnDatabaseSettings>(options =>
+            {
+                options.DatabaseName = Configuration["Mongo:DatabaseName"];
+                options.LogsCollectionName = Configuration["Mongo:LogsCollectionName"];
+                options.MessagesCollectionName = Configuration["Mongo:MessagesCollectionName"];
+                options.ConnectionString = Configuration["MONGO_CONNECTION_STRING"];
+            });
             services.AddAuthorization();
             services.AddControllers();
             services.AddSwaggerDocument();
@@ -107,6 +111,7 @@ namespace UlearnAPI
             services.AddScoped<CodeTaskResultService>();
             services.AddScoped<VideoTaskResultService>();
             services.AddScoped<TestTaskResultService>();
+            services.AddScoped<ChatService>();
         }
 
 // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
