@@ -21,7 +21,6 @@ index.txt
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.env.production
 .idea/inspectionProfiles/
 .idea/vcs.xml
 Thema/
