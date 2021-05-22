@@ -2,42 +2,42 @@
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
+using UlearnData.Models.MongoModels;
+using UlearnServices.Services;
 
 namespace UlearnAPI.Chat
 {
     public class ChatHub : Hub
     {
-        private static readonly List<(string username, string message)>
-            Messages = new List<(string username, string message)>();
+        private readonly ChatService _chatService;
 
         private const int MessagesListSize = 10;
 
-        public static void AddMessage(string username, string message)
+        public ChatHub(ChatService chatService)
         {
-            Messages.Add((username, message));
-            if (Messages.Count > MessagesListSize)
-            {
-                Messages.RemoveAt(0);
-            }
+            _chatService = chatService;
         }
 
-
+        private void AddMessage(string username, string message)
+        {
+            _chatService.Create(new ChatMessage()
+            {
+                Sender = username,
+                Message = message
+            });
+        }
+        
         public async Task GetAll()
         {
-            Console.WriteLine("GetAll was called in ChatHub");
-            List<Task> tasks = new List<Task>();
-            foreach (var message in Messages)
+            foreach (var message in _chatService.GetAmount(MessagesListSize))
             {
-                tasks.Add(Clients.Caller.SendAsync(
-                    "messageReceived", message.username, message.message));
+                await Clients.Caller.SendAsync(
+                    "messageReceived", message.Sender, message.Message);
             }
-
-            await Task.WhenAll(tasks);
         }
 
         public async Task NewMessage(string username, string message)
         {
-            Console.WriteLine($"Message {message} from user with name {username} received in ChatHub");
             AddMessage(username, message);
             await Clients.All.SendAsync("messageReceived", username, message);
         }
