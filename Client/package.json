@@ -23,7 +23,6 @@
     "typescript": "^3.8.3",
     "video-react": "^0.14.1"
   },
-  "proxy": "https://ulearnclone.azurewebsites.net/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
