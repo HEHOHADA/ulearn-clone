@@ -1,7 +1,7 @@
 import React from 'react'
 import {useForm} from "../../../hooks/form.hook"
-import {FormInput} from "../../../shared/utils/FormInput"
-import {Textarea} from "../../../shared/utils/Textarea"
+import {FormInput} from "../../../components/utils/FormInput"
+import {Textarea} from "../../../components/utils/Textarea"
 
 
 interface Props {

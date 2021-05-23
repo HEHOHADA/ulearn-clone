@@ -1,18 +1,16 @@
-import {useCallback, useContext, useState} from 'react'
-import {AuthContext} from "../context/AuthContext"
+import { useCallback, useContext, useState } from 'react'
+import { AuthContext } from '../context/AuthContext'
 
 export const useHttp = () => {
 
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const auth = useContext(AuthContext)
     const request = useCallback(async (url, method = 'GET', body = null, headers = {}) => {
-        setLoading(true)
         try {
-
             if (!headers['Authorization'])
-                headers['Authorization'] = `Bearer ${auth.token}`
-            headers['Access-Control-Allow-Origin'] = 'https://ulearnclone.azurewebsites.net'
+                headers['Authorization'] = `Bearer ${ auth.token }`
+
             if (body && !headers['Content-Type']) {
                 body = JSON.stringify(body)
                 headers['Content-Type'] = 'application/json'

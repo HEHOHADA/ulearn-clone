@@ -17,7 +17,6 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0-preview.3.20181.2" />
       <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
       <PackageReference Include="MongoDB.Driver" Version="2.10.4" />
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.0-preview3" />
       <PackageReference Include="NSwag.AspNetCore" Version="13.5.0" />
     </ItemGroup>
 
@@ -25,8 +24,5 @@
       <ProjectReference Include="..\UlearnServices\UlearnServices.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Migrations" />
-    </ItemGroup>
 
 </Project>

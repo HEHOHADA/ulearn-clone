@@ -1,15 +1,15 @@
 import React from 'react'
-import {FormInput} from "../../shared/utils/FormInput"
+import {FormInput} from "../utils/FormInput"
 import {useForm} from "../../hooks/form.hook"
 import {ObjectKeys} from "../../shared/interface"
-import {getKeyValue} from "../../shared/utils/getKeyValue"
-import {Loader} from "../../shared/utils/Loader";
+import {getKeyValue} from "../utils/getKeyValue"
+import {Loader} from "../utils/Loader";
 import {validationForm} from "../../shared/validation/validationAuthForm";
 
 interface Props {
     formNames: Array<string>
     submit: (event: any, form: any) => void
-    loading: boolean
+    loading?: boolean
     initialValues?: any
     error?: any
 }

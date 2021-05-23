@@ -24,7 +24,7 @@ namespace UlearnServices.Services
 
         public bool GroupExists(int id)
         {
-            return _context.Groups.Any(e => e.Id == id);
+            return _context.Modules.Any(e => e.Id == id);
         }
 
         public async Task<List<FullGroupDto>> GetAsync()
@@ -76,13 +76,12 @@ namespace UlearnServices.Services
             {
                 throw new ArgumentException();
             }
-
+            
             var users = (await Task.WhenAll(model.Emails
                     .Select(x => _userManager.FindByEmailAsync(x))))
-                .Where(x => x != null)
                 .ToList();
             users.Add(await _context.Users.FindAsync(userId));
-
+            
             group.UserGroups = users
                 .Where(x => x != null)
                 .Select(x => new UserGroup

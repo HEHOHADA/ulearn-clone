@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {IQuestion} from "../../../shared/interface"
 import {TestItem} from '../Test/TestItem'
-import {testTaskRequest} from "../../../shared/request"
+import {testTaskRequest} from "../../../../shared/request"
 import {useHttp} from "../../../hooks/http.hook"
 
 interface Props {

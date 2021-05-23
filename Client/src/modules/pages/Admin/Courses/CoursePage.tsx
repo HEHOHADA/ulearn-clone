@@ -1,53 +1,58 @@
-import React, {useEffect, useState} from 'react'
-import {Link, useHistory} from 'react-router-dom'
-import {HomeCourses} from "../../../components/home/HomeCourse/HomeCourses"
-import {ICourse} from "../../../shared/interface"
-import {useFetch} from "../../../hooks/fetch.hook"
-import {courseRequest} from "../../../shared/request"
-import {useHttp} from "../../../hooks/http.hook"
-import {Loader} from "../../../shared/utils/Loader"
+import React, { useCallback, useEffect, useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import { HomeCourses } from '../../../components/home/HomeCourse/HomeCourses'
+import { ICourse } from '../../../shared/interface'
+import { Loader } from '../../../components/utils/Loader'
+import { useDispatch, useSelector } from 'react-redux'
+import axios from '../../../../axios/axios'
+import { fetchData } from '../../../../store/actions/shared'
+import { courseRequest } from '../../../../shared/request'
+import { removeAdminDataWithStore } from '../../../../store/actions/admin'
 
-export const CoursePage = () => {
-
-    const history = useHistory()
-    const {request, loading} = useHttp()
-    const [courses, setCourses] = useState<Array<ICourse>>()
-    const {fetched, isBusy} = useFetch<Array<ICourse>>(courseRequest)
-
+export default () => {
+    const dispatch = useDispatch()
+    const {courses: fetchedCourses, loading}: any = useSelector((s: any) => s.shared)
+    const [load, setLoad] = useState(() => true)
+    // const [courses, setCourses] = useState<Array<ICourse>>()
+    const fetch = useCallback(async () => {
+        if (!fetchedCourses.length) {
+            await dispatch(fetchData(courseRequest))
+        }
+        setLoad(false)
+    }, [fetchedCourses, dispatch])
     useEffect(() => {
-        setCourses(fetched)
-        // eslint-disable-next-line
-    }, [isBusy])
+        const source = axios.CancelToken.source()
+        fetch()
+        return () => {
+            source.cancel()
+        }
+    }, [fetch])
+    const history = useHistory()
 
     const onClickEditHandler = (course: ICourse) => {
-        const link = `${course.id}`
-        history.push(`/admin/course/edit/${link}`)
+        const link = `${ course.id }`
+        history.push(`/admin/course/edit/${ link }`)
     }
 
     const onDeleteHandler = async (course: ICourse) => {
         try {
-            const deleted = await request(`${courseRequest}/${course.id}`, 'DELETE')
-            const newSubs = courses!.filter((sub: ICourse) => sub.id !== deleted.id)
-            setCourses(newSubs)
+            await dispatch(removeAdminDataWithStore(courseRequest, course.id!))
         } catch (e) {
             console.log(e)
         }
     }
 
-    if (loading || isBusy) {
-        return <Loader/>
-    }
 
     return (
         <>
-            {!isBusy && <HomeCourses
-                onDelete={onDeleteHandler}
-                onClick={onClickEditHandler}
-                courses={courses}
-                loading={loading}/>
+            { load || loading ? <Loader/> : <HomeCourses
+                onDelete={ onDeleteHandler }
+                onClick={ onClickEditHandler }
+                courses={ fetchedCourses }
+                loading={ loading }/>
             }
-            <Link className={"btn btn-primary mt-4"}
-                  to={"/admin/course/create"}>Создать курс</Link>
+            <Link className={ 'btn btn-primary mt-4' }
+                  to={ '/admin/course/create' }>Создать курс</Link>
         </>
     )
 }

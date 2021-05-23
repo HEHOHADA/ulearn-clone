@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {FormInput} from "../../shared/utils/FormInput"
+import {FormInput} from "../utils/FormInput"
 import {useForm} from "../../hooks/form.hook"
 import Cards from 'react-credit-cards'
 import 'react-credit-cards/es/styles-compiled.css'

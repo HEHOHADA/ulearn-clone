@@ -1,7 +1,6 @@
-import React, {useCallback, useState} from 'react'
-import {Dropzone} from '../../shared/utils/Dropzone'
-import {useHttp} from '../../hooks/http.hook'
-import {accountRequest, fileDownloadRequest} from "../../shared/request"
+import React, { useCallback, useState } from 'react'
+import { Dropzone } from '../utils/Dropzone'
+import { accountRequest, fileDownloadRequest } from '../../../shared/request'
 
 interface IProps {
     initialValue: string

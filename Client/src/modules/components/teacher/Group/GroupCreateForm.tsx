@@ -1,10 +1,10 @@
 import React from 'react'
 import {ICourse, IGroup} from "../../../shared/interface"
 import {useForm} from "../../../hooks/form.hook"
-import {TagField} from "../../../shared/utils/TagField"
-import {FormInput} from "../../../shared/utils/FormInput"
-import {SelectInput} from "../../../shared/utils/SelectInput"
-import {courseRequest} from "../../../shared/request"
+import {TagField} from "../../utils/TagField"
+import {FormInput} from "../../utils/FormInput"
+import {SelectInput} from "../../utils/SelectInput"
+import {courseRequest} from "../../../../shared/request"
 import {useFetch} from "../../../hooks/fetch.hook";
 
 interface Props {

@@ -71,7 +71,7 @@ namespace UlearnServices.Services
             await _context.SaveChangesAsync();
         }
 
-        public List<Subscription> GetSorted(SearchQuery query)
+        public async Task<List<Subscription>> GetSortedAsync(SearchQuery query)
         {
             IQueryable<Subscription> subscriptions = _context.Subscriptions;
             if (query.SortType.HasValue)
@@ -91,7 +91,7 @@ namespace UlearnServices.Services
                         break;
                 }
 
-            if (query.FromLevel.HasValue && query.FromLevel != 0 &&
+            if (query.FromLevel.HasValue && query.FromLevel != 0 && 
                 query.ToLevel.HasValue && query.ToLevel != 0)
             {
                 subscriptions = subscriptions.Where(x => x.Level >= query.FromLevel && x.Level <= query.ToLevel);
@@ -103,7 +103,7 @@ namespace UlearnServices.Services
                 subscriptions = subscriptions.Where(x => x.Price >= query.FromPrice && x.Price <= query.ToPrice);
             }
 
-            if (query.Page.HasValue && query.Page != 0 &&
+            if (query.Page.HasValue && query.Page != 0 && 
                 query.PageSize.HasValue && query.PageSize != 0)
                 subscriptions = subscriptions
                     .Skip((query.Page.Value - 1) * query.PageSize.Value)
@@ -120,8 +120,6 @@ namespace UlearnServices.Services
             {
                 throw new ArgumentException("no subscriptionId passed");
             }
-
-            user.SubscriptionBoughtDate = DateTime.Now;
             await _context.SaveChangesAsync();
             Console.WriteLine($"Number {paymentRequest.CardNumber} " +
                               $"Holder {paymentRequest.CardHolder} " +

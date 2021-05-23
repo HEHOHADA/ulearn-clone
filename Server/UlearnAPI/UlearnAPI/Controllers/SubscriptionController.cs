@@ -96,9 +96,9 @@ namespace UlearnAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Subscription>> GetSorted([FromQuery] SearchQuery query)
+        public async Task<ActionResult<List<Subscription>>> GetSorted([FromQuery] SearchQuery query)
         {
-            return _subscriptionsService.GetSorted(query);
+            return await _subscriptionsService.GetSortedAsync(query);
         }
 
         [HttpPost("pay")]

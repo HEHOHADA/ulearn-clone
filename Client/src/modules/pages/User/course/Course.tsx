@@ -1,7 +1,6 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
-import {ICourse, IModule} from '../../../shared/interface'
-import {Loader} from "../../../shared/utils/Loader"
+import { Link } from 'react-router-dom'
+import { ICourse, IModule } from '../../../shared/interface'
 
 interface Props {
     course: ICourse
@@ -22,24 +21,19 @@ interface Props {
 export const Course = (props: Props) => {
 
     const {onChooseModule, course, loading} = props
-
     const onChooseModuleHandler = (id: any) => {
-        console.log('here', id)
-        onChooseModule({module: id})
+        onChooseModule(id)
     }
 
     const renderModules = () => {
         return course.modules!.map((m, index) => (
-            <li className="list-group-item module" key={`${m.id}-${m.name}`}>
-                <button className="btn btn-link" onClick={() => onChooseModuleHandler(m.id)}>
-                    <div>{m.name}</div>
+            <li className="list-group-item module" key={ `${ m.id }-${ m.name }` }>
+                <button className="btn btn-link" onClick={ () => onChooseModuleHandler(m.id) }>
+                    <div>{ m.name }</div>
                 </button>
-                <span>{m.maxPoints}</span>
+                <span>{ m.maxPoints }</span>
             </li>
         ))
-    }
-    if (loading) {
-        return <Loader/>
     }
     return (
         <div className="col-md-4 col-xs-12">
@@ -48,7 +42,7 @@ export const Course = (props: Props) => {
                 <h3>Header</h3>
             </header>
             <div>
-                {renderModules()}
+                { renderModules() }
             </div>
         </div>
     )

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
 namespace UlearnData.Models
@@ -9,8 +8,6 @@ namespace UlearnData.Models
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string ImageSrc { get; set; }
-        
-        public DateTime SubscriptionBoughtDate { get; set; }
         
         public List<UserGroup> UserGroups { get; set; }
         public Subscription Subscription { get; set; }

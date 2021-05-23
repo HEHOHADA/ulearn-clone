@@ -9,7 +9,7 @@ namespace UlearnServices.Services
     {
         private readonly IMongoCollection<Log> _logs;
 
-        public LoggingService(UlearnDatabaseSettings settings)
+        public LoggingService(IUlearnDatabaseSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);

@@ -1,13 +1,13 @@
 import React from 'react'
-import {ISubscription} from "../../shared/interface"
-import {useForm} from "../../hooks/form.hook"
-import {Loader} from "../../shared/utils/Loader"
+import { ISubscription } from '../../shared/interface'
+import { useForm } from '../../hooks/form.hook'
+import { Loader } from '../utils/Loader'
 
 
 interface Props {
     initialValues?: ISubscription
     onSubmit: (event: any, form: ISubscription) => void
-    loading: boolean
+    loading?: boolean
     title?: string
 }
 
@@ -18,7 +18,7 @@ export const defaultSubscriptionFormValues = {
 }
 
 export const SubscriptionForm = (props: Props) => {
-    const {initialValues = defaultSubscriptionFormValues, onSubmit, loading, title} = props
+    const {initialValues = defaultSubscriptionFormValues, onSubmit, loading = false, title} = props
     // @ts-ignore
     if (initialValues.id) {
         // @ts-ignore
@@ -30,16 +30,16 @@ export const SubscriptionForm = (props: Props) => {
     }
     return (
         <form
-            onSubmit={(event) => onSubmit(event, form)}
+            onSubmit={ (event) => onSubmit(event, form) }
         >
-            {generateInputs((key: string) => {
+            { generateInputs((key: string) => {
                 if (key === 'price' || key === 'level') return 'number'
                 return 'text'
-            })}
+            }) }
 
             <button
-                disabled={loading}
-                className="btn btn-primary btn-block" type="submit">{title}
+                disabled={ loading }
+                className="btn btn-primary btn-block" type="submit">{ title }
             </button>
         </form>
     )

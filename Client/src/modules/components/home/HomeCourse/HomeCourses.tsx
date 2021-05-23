@@ -1,29 +1,20 @@
 import React from 'react'
-import {Link} from "react-router-dom"
-import {ICourse} from "../../../shared/interface"
-import {Loader} from "../../../shared/utils/Loader";
+import {Link} from 'react-router-dom'
+import {ICourse} from '../../../shared/interface'
 
 
 interface Props {
-    courses?: ICourse[]
+    courses: ICourse[]
     onClick: (course: ICourse) => void
-    loading: boolean
+    loading?: boolean
     onDelete?: (course: ICourse) => void
 }
 
 // `course/${course.id}`
 export const HomeCourses = (props: Props) => {
-
     const {
-        courses = [{
-            description: "321321321 312 321 312 3123 213 123",
-            id: 1,
-            name: "3"
-        }], onClick, loading, onDelete
+        courses, onClick, loading, onDelete
     } = props
-    if (loading) {
-        return <Loader/>
-    }
     const courseHandler = (course: ICourse) =>
         (
             <div className="col-12 col-md-6 col-lg-4" key={`${course.id}`}>
@@ -58,10 +49,4 @@ export const HomeCourses = (props: Props) => {
             {(courses.map(c => courseHandler(c)))}
         </>
     )
-
-// let courses:any = []
-//     useEffect(() => {
-//         courses = props.courses
-//     }, props)
-
 }
