@@ -1,23 +1,23 @@
-import React from 'react'
-import {SubscriptionForm} from "../../../components/pay/SubscriptionForm"
-import {useHttp} from "../../../hooks/http.hook"
-import {subscriptionRequest} from "../../../shared/request"
-import {ISubscription} from "../../../shared/interface"
-import {useHistory} from 'react-router-dom'
+import React, { useCallback } from 'react'
+import { SubscriptionForm } from '../../../components/pay/SubscriptionForm'
+import { ISubscription } from '../../../shared/interface'
+import { useHistory } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { addAdminDataWIthStore } from '../../../../store/actions/admin'
+import { subscriptionRequest } from '../../../../shared/request'
 
-export const SubscriptionCreate = () => {
-    const {request,loading} = useHttp()
-    const history = useHistory()
-    const submit = async (event: any, form: ISubscription) => {
+export default () => {
+  const history = useHistory()
+  const dispatch = useDispatch()
 
-        event.preventDefault()
-        const subscription = await request(subscriptionRequest, 'POST', {...form})
-        if (subscription) {
-            history.push('/admin/subscription')
-        }
-    }
+  const submit = useCallback(
+    async (event: any, form: ISubscription) => {
+      event.preventDefault()
+      await dispatch(addAdminDataWIthStore(subscriptionRequest, { ...form }))
+      history.push('/admin/subscription')
+    },
+    [dispatch, history]
+  )
 
-    return (
-        <SubscriptionForm title={"Create"} loading={loading} onSubmit={submit}/>
-    )
+  return <SubscriptionForm title={'Create'} onSubmit={submit} />
 }

@@ -1,74 +1,82 @@
-import React, {useContext} from 'react'
-import {HomeCourses} from '../components/home/HomeCourse/HomeCourses'
-import {ICourse} from '../shared/interface'
-import {RouteComponentProps} from "react-router"
-import {useHttp} from '../hooks/http.hook'
-import {AuthContext} from '../context/AuthContext'
-import {UserContext} from '../context/UserContext'
-import {useFetch} from '../hooks/fetch.hook'
-import {checkSubscription, courseRequest} from '../shared/request'
+import React, { useCallback, useEffect, useState } from 'react'
+import { HomeCourses } from '../components/home/HomeCourse/HomeCourses'
+import { ICourse } from '../shared/interface'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
+import { fetchData } from '../../store/actions/shared'
+import { Loader } from '../components/utils/Loader'
+import { AppStateType } from '../../store/store'
+import { courseRequest } from '../../shared/request'
 
-export const HomePage = (props: RouteComponentProps) => {
+export default () => {
+  const dispatch = useDispatch()
+  const [loading1, setLoading1] = useState(() => true)
+  const { courses, loading } = useSelector((s: AppStateType) => s.shared)
 
-    const {history} = props
-    const {loading, request} = useHttp()
-    const auth = useContext(AuthContext)
-    const {chooseTheme} = useContext(UserContext)
-    const {fetched, isBusy} = useFetch<Array<ICourse>>(courseRequest)
-    const onClickHandler = async (course: ICourse) => {
-        if (!auth.isAuth) {
-            history.push('/login')
-        }
-        const id = course.id
-        const link = `course/${id}`
-        // const courseId = link.split("/")[1]
-        //substype
-        const data = await request(`${checkSubscription}/${id}`)
+  const history = useHistory()
+  const auth = useSelector((s: AppStateType) => s.auth)
 
-        //if have subscription redirect to course page
-        if (data.hasAccess) {
-            chooseTheme({course: id})
-            history.push(link)
-        } else {
-            if (data.subscriptionId) {
-                history.push(`pay/${data.subscriptionId}`)
-            }
-            // redirect to payment page
-        }
+  const onClickHandler = useCallback(
+    async (course: ICourse) => {
+      if (!auth.isAuth) {
+        history.push('/login')
+      }
+      const id = course.id
+      const link = `course/${id}`
 
+      // const data: any = await dispatch(checkSubscription(id))
+      // //if have subscription redirect to course page
+      // if (data.hasAccess) {
+      //     dispatch(userActions.choseItem({course: id}))
+      history.push(link)
+      // } else {
+      //     if (data.subscriptionId) {
+      //         history.push(`pay/${ data.subscriptionId }`)
+      //     }
+      //     // redirect to payment page
+      // }
+    },
+    [auth.isAuth, dispatch, history]
+  )
+
+  const fetch = useCallback(() => {
+    if (!courses.length) {
+      dispatch(fetchData(courseRequest))
     }
+    setLoading1(false)
+  }, [courses, dispatch])
 
-    const courses: ICourse[] = [
-        {description: "321321321 312 321 312 3123 213 123", id: 1, name: "3"},
-        {description: "321321321 312 321 312 3123 213 123", id: 2, name: "3"},
-    ]
+  useEffect(() => {
+    fetch()
+  }, [fetch])
 
-    return (
-        <main className="page catalog-page">
-            <section className="clean-block clean-catalog dark">
-                <div className="container">
-                    <div className="block-heading">
-                        <h2 className="text-info">Course Page</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor
-                            in, mattis vitae leo.</p>
-                    </div>
-                    <div className="content">
-                        <div className="row">
-                            <div className="col-md-12">
-                                <div className="products">
-                                    <div className="row no-gutters">
-                                        {!isBusy && <HomeCourses
-                                            courses={fetched && fetched.length ? fetched : courses}
-                                            onClick={onClickHandler}
-                                            loading={loading}/>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+  return (
+    <main className="page catalog-page">
+      <section className="clean-block clean-catalog dark">
+        <div className="container">
+          <div className="block-heading">
+            <h2 className="text-info">Course Page</h2>
+            <p>Вы зашли на образовательную страницу для школьников и школьниц</p>
+          </div>
+          <div className="content">
+            <div className="row">
+              <div className="col-md-12">
+                <div className="products">
+                  <div className="row no-gutters">
+                    {loading || loading1 ? (
+                      <Loader />
+                    ) : !courses.length ? (
+                      <p className="center">Нет курсов</p>
+                    ) : (
+                      <HomeCourses courses={courses} onClick={onClickHandler} />
+                    )}
+                  </div>
                 </div>
-            </section>
-        </main>
-    )
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  )
 }

@@ -5,6 +5,7 @@ body > div {
     flex-direction: column;
     min-height: 100%;
 }
+
 .tags-input {
     display: flex;
     align-items: flex-start;
