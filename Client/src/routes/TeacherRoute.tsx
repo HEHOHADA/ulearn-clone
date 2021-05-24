@@ -11,14 +11,14 @@ const GroupEditPage = React.lazy(() => import('../modules/pages/Teacher/GroupEdi
 const GroupReviewPage = React.lazy(() => import('../modules/pages/Teacher/GroupReviewPage'))
 
 export const useTeacherRoute = () => {
-    return (
-        <Switch>
-            <AppRoute exact path={ '/code/:id' } component={ ReviewPage } layout={ MainLayout }/>
-            <AppRoute exact path={ '/group/create' } component={ GroupCreatePage } layout={ MainLayout }/>
-            <AppRoute exact path={ '/group/edit/:id' } component={ GroupEditPage } layout={ MainLayout }/>
-            <AppRoute exact path={ '/groups' } component={ GroupsPage } layout={ MainLayout }/>
-            <AppRoute exact path={ '/group/:id' } component={ GroupReviewPage } layout={ MainLayout }/>
-            <Redirect to="/"/>
-        </Switch>
-    )
+  return (
+    <Switch>
+      <AppRoute exact path={'/code/:id'} component={ReviewPage} layout={MainLayout} />
+      <AppRoute exact path={'/group/create'} component={GroupCreatePage} layout={MainLayout} />
+      <AppRoute exact path={'/group/edit/:id'} component={GroupEditPage} layout={MainLayout} />
+      <AppRoute exact path={'/groups'} component={GroupsPage} layout={MainLayout} />
+      <AppRoute exact path={'/group/:id'} component={GroupReviewPage} layout={MainLayout} />
+      <Redirect to="/" />
+    </Switch>
+  )
 }
