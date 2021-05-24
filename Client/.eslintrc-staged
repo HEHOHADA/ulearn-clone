@@ -1,0 +1,7 @@
+// more strict config for commit staged files
+{
+  "extends": [".eslintrc"],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "error"
+  }
+}
